@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globotranslate</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .translator {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: calc(100% - 30px);
+            height: 80px;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            resize: none;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        .languages {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .language-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            font-size: 1em;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+            flex-grow: 1;
+        }
+
+        select:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        .swap-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .swap-button:hover {
+            background-color: #0056b3;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output-container {
+            position: relative;
+        }
+
+        .output-container button {
+            position: absolute;
+            left: 10px; /* Spostato a sinistra */
+            bottom: 10px;
+            background-color: transparent; /* Rimosso lo sfondo */
+            padding: 0;
+            font-size: 1.5em;
+            color: #007bff; /* Colore dell'icona */
+            border: none;
+            cursor: pointer;
+        }
+
+        .output-container button:hover {
+            color: #0056b3; /* Cambia colore al passaggio del mouse */
+        }
+
+        #outputText {
+            background-color: #f9f9f9;
+            border: 2px solid #ddd;
+        }
+
+        @media (max-width: 480px) {
+            .languages {
+                flex-direction: column;
+            }
+
+            .language-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .swap-button {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="translator">
+        <img src="GTLOGO.png" alt="GTLOGO" class="logo">
+        <textarea id="inputText" placeholder="Enter text here..."></textarea>
+
+        <div class="languages">
+            <div class="language-group">
+                <label for="fromLang">From:</label>
+                <select id="fromLang">
+                    <option value="auto">Auto-detect</option>
+                    <option value="it">Italian</option>
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ru">Russian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                    <option value="nl">Dutch</option>
+                    <option value="sv">Swedish</option>
+                    <option value="pl">Polish</option>
+                    <option value="tr">Turkish</option>
+                    <option value="ko">Korean</option>
+                    <option value="el">Greek</option>
+                    <option value="cs">Czech</option>
+                    <option value="fi">Finnish</option>
+                    <option value="da">Danish</option>
+                    <option value="hu">Hungarian</option>
+                    <option value="no">Norwegian</option>
+                    <option value="th">Thai</option>
+                    <option value="vi">Vietnamese</option>
+                    <!-- Add more languages here -->
+                </select>
+            </div>
+
+            <button class="swap-button" id="swapBtn">⇅</button>
+
+            <div class="language-group">
+                <label for="toLang">To:</label>
+                <select id="toLang">
+                    <option value="en">English</option>
+                    <option value="it">Italian</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ru">Russian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                    <option value="nl">Dutch</option>
+                    <option value="sv">Swedish</option>
+                    <option value="pl">Polish</option>
+                    <option value="tr">Turkish</option>
+                    <option value="ko">Korean</option>
+                    <option value="el">Greek</option>
+                    <option value="cs">Czech</option>
+                    <option value="fi">Finnish</option>
+                    <option value="da">Danish</option>
+                    <option value="hu">Hungarian</option>
+                    <option value="no">Norwegian</option>
+                    <option value="th">Thai</option>
+                    <option value="vi">Vietnamese</option>
+                    <!-- Add more languages here -->
+                </select>
+            </div>
+        </div>
+
+        <button id="translateBtn">Translate</button>
+
+        <div class="output-container">
+            <textarea id="outputText" placeholder="Translation..." readonly></textarea>
+            <button id="speakBtn">🗣️</button>
+        </div>
+    </div>
+    <script>
+        // API Key per il rilevamento automatico della lingua
+        const DETECT_LANGUAGE_API_KEY = '36dcfd4a2875bd6d1e86657d45d3f782';
+
+        // Funzione per rilevare automaticamente la lingua del testo
+        async function detectLanguage(text) {
+            try {
+                const response = await fetch('https://ws.detectlanguage.com/0.2/detect', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${DETECT_LANGUAGE_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        q: text,
+                    }),
+                });
+                const data = await response.json();
+                if (data.data && data.data.detections && data.data.detections.length > 0) {
+                    return data.data.detections[0].language; // Restituisce la lingua rilevata
+                } else {
+                    throw new Error('Language detection failed.');
+                }
+            } catch (error) {
+                console.error('Language Detection Error:', error);
+                throw error;
+            }
+        }
+
+        // Funzione per tradurre utilizzando LibreTranslate (API gratuita)
+        async function translateWithLibreTranslate(text, fromLang, toLang) {
+            try {
+                const response = await fetch('https://libretranslate.com/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        q: text,
+                        source: fromLang,
+                        target: toLang,
+                        format: 'text',
+                    }),
+                });
+                const data = await response.json();
+                return data; // Restituisce l'intera risposta JSON
+            } catch (error) {
+                console.error('LibreTranslate API Error:', error);
+                throw error;
+            }
+        }
+
+        // Funzione per tradurre utilizzando MyMemory API
+        async function translateWithMyMemory(text, fromLang, toLang) {
+            try {
+                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`);
+                const data = await response.json();
+                return data; // Restituisce l'intera risposta JSON
+            } catch (error) {
+                console.error('MyMemory API Error:', error);
+                throw error;
+            }
+        }
+
+        // Funzione principale per gestire la traduzione
+        async function translateText() {
+            const inputText = document.getElementById('inputText').value;
+            const fromLang = document.getElementById('fromLang').value;
+            const toLang = document.getElementById('toLang').value;
+
+            if (inputText.trim() === '') {
+                alert('Please enter some text to translate.');
+                return;
+            }
+
+            try {
+                let detectedLang = fromLang;
+
+                // Se la lingua di partenza è "auto", rileva automaticamente la lingua
+                if (fromLang === 'auto') {
+                    detectedLang = await detectLanguage(inputText);
+                    console.log('Detected Language:', detectedLang);
+                }
+
+                // Se la lingua rilevata è uguale alla lingua di destinazione, non tradurre
+                if (detectedLang === toLang) {
+                    document.getElementById('outputText').value = inputText;
+                    return;
+                }
+
+                // Prova prima con LibreTranslate
+                let libreResponse = await translateWithLibreTranslate(inputText, detectedLang, toLang);
+                console.log('LibreTranslate Response:', libreResponse);
+
+                // Se LibreTranslate restituisce una traduzione valida, mostra solo il testo tradotto
+                if (libreResponse.translatedText) {
+                    document.getElementById('outputText').value = libreResponse.translatedText;
+                } else {
+                    // Altrimenti, prova con MyMemory
+                    let myMemoryResponse = await translateWithMyMemory(inputText, detectedLang, toLang);
+                    console.log('MyMemory Response:', myMemoryResponse);
+
+                    // Se MyMemory restituisce una traduzione valida, mostra solo il testo tradotto
+                    if (myMemoryResponse.responseData && myMemoryResponse.responseData.translatedText) {
+                        document.getElementById('outputText').value = myMemoryResponse.responseData.translatedText;
+                    } else {
+                        // Se nessuna API restituisce una traduzione valida, mostra l'intera risposta JSON per debug
+                        document.getElementById('outputText').value = JSON.stringify(
+                            { libreResponse, myMemoryResponse },
+                            null,
+                            2
+                        );
+                    }
+                }
+            } catch (error) {
+                console.error('Translation Error:', error);
+                document.getElementById('outputText').value = `Error: ${error.message}`;
+            }
+        }
+
+        // Funzione per invertire le lingue
+        document.getElementById('swapBtn').addEventListener('click', function () {
+            const fromLang = document.getElementById('fromLang');
+            const toLang = document.getElementById('toLang');
+
+            // Se "Auto-detect" è selezionato, mostra un messaggio
+            if (fromLang.value === 'auto') {
+                alert('Please select a specific language in "From" to swap languages.');
+                return;
+            }
+
+            // Inverte i valori delle lingue
+            const temp = fromLang.value;
+            fromLang.value = toLang.value;
+            toLang.value = temp;
+        });
+
+        // Evento per il pulsante di traduzione
+        document.getElementById('translateBtn').addEventListener('click', translateText);
+
+        // Evento per il pulsante di sintesi vocale
+        document.getElementById('speakBtn').addEventListener('click', function () {
+            const outputText = document.getElementById('outputText').value;
+            const toLang = document.getElementById('toLang').value;
+
+            if (outputText.trim() !== '') {
+                const utterance = new SpeechSynthesisUtterance(outputText);
+                utterance.lang = toLang;
+                const voices = window.speechSynthesis.getVoices();
+                const voice = voices.find(v => v.lang.startsWith(toLang));
+                if (voice) {
+                    utterance.voice = voice;
+                }
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('No text to speak.');
+            }
+        });
+
+        // Carica le voci disponibili quando la pagina è pronta
+        window.speechSynthesis.onvoiceschanged = () => {
+            console.log('Voices loaded:', window.speechSynthesis.getVoices());
+        };
+    </script>
+</body>
+</html>

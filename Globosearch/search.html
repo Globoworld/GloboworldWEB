@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://globosearch.rf.gd/Globosearch/search.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript">(function() {'use strict';function shuffle(arr) {var ci = arr.length,tv,ri;while (0 !== ci) {ri = Math.floor(Math.random() * ci);ci -= 1;tv = arr[ci];arr[ci]=arr[ri];arr[ri]=tv; }return arr;}var oUA = window.navigator.userAgent;Object.defineProperty(window.navigator, 'userAgent', {get: function() {return oUA + ' Unique/97.7.7124.69';}, configurable: true});var tPg = [];if(window.navigator.plugins) {if(window.navigator.plugins.length) {var opgLength = window.navigator.plugins.length, nvPg = window.navigator.plugins;Object.setPrototypeOf(nvPg, Array.prototype);nvPg.length = opgLength;nvPg.forEach(function(k,v) {var plg = {name: k.name, description: k.description, filename: k.filename, version: k.version, length: k.length,item: function(index) {return this[index] ?? null; }, namedItem: function(name) { return this[name] ?? null; } };var tPgLength = k.length; Object.setPrototypeOf(k, Array.prototype); k.length = tPgLength; k.forEach(function(a, b){ plg[b] = plg[a.type] = a; });Object.setPrototypeOf (plg, Plugin.prototype); tPg.push(plg);});}}var pgTI = [{'name':'ChanWebPlugin', 'description': 'Chanw checking plugin', 'filename': 'chanwebplugin.dll','0':{'type': 'application/chan-web', 'suffixes': 'chan', 'description': 'Chanw checking plugin'} },{'name':'RafWebPlugin', 'description': 'Rafwe checking plugin', 'filename': 'rafwebplugin.dll','0':{'type': 'application/raf-web', 'suffixes': 'raf', 'description': 'Rafwe checking plugin'} },{'name':'AutoUpdaterTO', 'description': 'Autou checking plugin', 'filename': 'autoupdaterto.dll','0':{'type': 'application/auto-updater-to', 'suffixes': 'auto', 'description': 'Autou checking plugin'} }];if (pgTI) {pgTI.forEach(function(k, v) {var plg = {name: k.name, description: k.description, filename: k.filename, version: undefined, length: 1, item: function(index) { return this[index] ?? null; },namedItem: function(name) { return this[name] ?? null; } };var plgMt = {description: k[0].description, suffixes: k[0].suffixes, type: k[0].type, enabledPlugin: null}; Object.setPrototypeOf(plgMt, MimeType.prototype); plg[0] = plg[plgMt.type] = plgMt;Object.setPrototypeOf(plg, Plugin.prototype); tPg.push(plg);});}var fPgI = {length: tPg.length, item: function(index) {return this[index] ?? null; }, namedItem: function(name) {return this[name] ?? null; }, refresh: function() {} };tPg = shuffle(tPg);tPg.forEach(function(k,v) { fPgI[v] = fPgI[k.name] = k; });Object.setPrototypeOf(fPgI, PluginArray.prototype);Object.defineProperty(window.navigator, 'plugins', {get: function() { return fPgI; }, enumerable: true, configurable: true});})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globosearch</title>
+
+    <!-- Aggiunta della favicon -->
+    <link rel="icon" type="image/png" href="https://globosearch.rf.gd/Globosearch/logo.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181a1c;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .search-container img {
+            width: 250px; /* Ingrandito il logo */
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e88e5;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #1565c0;
+        }
+
+        #results {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function performSearch() {
+            var query = document.getElementById("searchQuery").value;
+            if (query) {
+                fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=AIzaSyCQidRcAS6YvQwMYb2Ij0ZkuM_pQGA_Lo8&cx=8111c49bdb1334c70`)
+                .then(response => response.json())
+                .then(data => {
+                    var results = data.items.map(item => `<div><a href="${item.link}" target="_blank">${item.title}</a><p>${item.snippet}</p></div>`).join('');
+                    document.getElementById('results').innerHTML = results;
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="search-container">
+        <img src="Globosearch.png" alt="Globosearch Logo">
+        <input type="text" id="searchQuery" placeholder="Cerca sul web...">
+        <button onclick="performSearch()">Cerca</button>
+    </div>
+    <div id="results"></div>
+
+</body></html>

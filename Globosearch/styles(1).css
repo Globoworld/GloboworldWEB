@@ -1,0 +1,52 @@
+/* Personalizza il contenitore della ricerca */
+.search-container {
+    width: 100%;
+    max-width: 600px; /* Modifica in base alle tue esigenze */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4; /* Modifica il colore di sfondo */
+    border-radius: 8px; /* Aggiungi angoli arrotondati */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Personalizza l'input di ricerca */
+.gsc-input-box {
+    border: 2px solid #ccc; /* Modifica il colore del bordo */
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 16px; /* Dimensione del font */
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Personalizza il pulsante di ricerca */
+.gsc-search-button {
+    background-color: #007BFF; /* Colore di sfondo */
+    border: none; /* Rimuovi il bordo */
+    color: white; /* Colore del testo */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.gsc-search-button:hover {
+    background-color: #0056b3; /* Colore di sfondo al passaggio del mouse */
+}
+
+/* Personalizza i risultati della ricerca */
+.gsc-results .gsc-result {
+    border: none; /* Rimuovi il bordo predefinito */
+    margin-bottom: 20px;
+}
+
+/* Personalizza i titoli dei risultati */
+.gsc-results .gsc-result .gsc-thumbnail-inside a {
+    color: #007BFF; /* Colore dei link */
+    font-size: 18px; /* Dimensione del font */
+}
+
+.gsc-results .gsc-result .gs-bidi-start-align {
+    color: #333; /* Colore del testo */
+    font-size: 14px; /* Dimensione del font */
+}

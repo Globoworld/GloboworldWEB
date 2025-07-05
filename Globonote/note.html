@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globotext</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .notepad {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            font-size: 1.5em;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .textarea-container {
+            flex: 1;
+            display: flex;
+            align-items: stretch;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 1em;
+            resize: none;
+            outline: none;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button.delete {
+            background-color: #dc3545;
+        }
+
+        .button.delete:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="notepad">
+        <div class="header">Globotext</div>
+        <div class="textarea-container">
+            <textarea id="noteArea" placeholder="Inizia a scrivere..."></textarea>
+        </div>
+        <div class="button-container">
+            <button class="button" onclick="saveNote()">Salva</button>
+            <button class="button delete" onclick="clearNote()">Cancella tutto</button>
+        </div>
+    </div>
+
+    <script>
+        const noteArea = document.getElementById('noteArea');
+
+        // Carica il contenuto salvato se esiste
+        window.onload = function() {
+            if (localStorage.getItem('noteContent')) {
+                noteArea.value = localStorage.getItem('noteContent');
+            }
+        };
+
+        // Salva il contenuto ogni volta che cambia
+        noteArea.addEventListener('input', function() {
+            localStorage.setItem('noteContent', noteArea.value);
+        });
+
+        // Funzione per salvare il file
+        function saveNote() {
+            const blob = new Blob([noteArea.value], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'note.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Funzione per cancellare tutto il contenuto
+        function clearNote() {
+            noteArea.value = '';
+            localStorage.removeItem('noteContent');
+        }
+    </script>
+</body>
+</html>

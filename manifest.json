@@ -8,13 +8,13 @@
   "theme_color": "#0056b3",
   "icons": [
     {
-      "src": "https://globosearch.rf.gd/logosu.png",
+      "src": "https://globoworld.github.io/GloboworldWEB/logosu.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://globosearch.rf.gd/logosu.png",
+      "src": "https://globoworld.github.io/GloboworldWEB/logosu.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

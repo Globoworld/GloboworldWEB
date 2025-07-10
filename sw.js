@@ -1,11 +1,10 @@
-const CACHE_NAME = 'globoworld-v3';
+const CACHE_NAME = 'globoworld';
 const urlsToCache = [
   '/',
   '/index.html',
   '/index1.html',
-  'https://globosearch.rf.gd/logosu.png',
-  'GW.png',
-  'Sponsor.png'
+  'https://globoworld.github.io/GloboworldWEB/logosu.png',
+  'GW.png'
 ];
 
 self.addEventListener('install', event => {

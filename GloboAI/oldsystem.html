@@ -947,12 +947,9 @@
             
             try {
                 const response = await fetch('https://api.aimlapi.com/v1', {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
-                        'Authorization': `Bearer 456bbee31f274c0bb07a90e67baedcae`,
-                        'Content-Type': 'application/json',
-                        'HTTP-Referer': window.location.href,
-                        'X-Title': 'GloboAI Chat'
+                        'Authorization': `Bearer 456bbee31f274c0bb07a90e67baedcae`
                     },
                     body: JSON.stringify({
                         model: "gpt-4o",

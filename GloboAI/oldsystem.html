@@ -623,7 +623,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
-        const API_KEY = "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";
+        // Assicurati che questa API_KEY sia corretta e privata
+        const API_KEY = "456bbee31f274c0bb07a90e67baedcae"; 
         let chats = {};
         let currentChatId = null;
         let currentAiMessageElement = null;
@@ -922,14 +923,14 @@
             currentAiMessageContent = "";
 
             try {
-                const response = await fetch('https://api.aimlapi.com/v1', {
-                    method: 'POST', // Corretto: cambiato a POST
+                const response = await fetch('https://api.aimlapi.com/v1/chat/completions', { // **Endpoint Corretto Qui**
+                    method: 'POST',
                     headers: {
-                        'Authorization': `Bearer 456bbee31f274c0bb07a90e67baedcae`,
-                        'Content-Type': 'application/json' // Aggiunto: essenziale per JSON nel body
+                        'Authorization': `Bearer ${API_KEY}`, // Usa la variabile API_KEY
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: "gpt-4o",
+                        model: "gpt-4o", // O il modello che desideri utilizzare
                         messages: chats[currentChatId].messages,
                         temperature: 0.7,
                         max_tokens: null,

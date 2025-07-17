@@ -1,109 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/logosus.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Globoworld - Our Services</title>
-    
-    <meta name="theme-color" content="#0056b3">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Globoworld">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/logosu.png">
-    <link rel="apple-touch-icon" href="https://globoworld.github.io/GloboworldWEB/logosu.png">
-    <link rel="manifest" href="https://progressier.app/huza8jHDRbGCPjTMYJmd/progressier.json"/>
-    <script defer src="https://progressier.app/huza8jHDRbGCPjTMYJmd/script.js"></script>
-    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f3; /* Sfondo grigio chiaro */
             color: #333;
-            -webkit-tap-highlight-color: transparent;
+        }
+        header {
+            background-color: #007bff; /* Colore di sfondo dell'intestazione */
+            padding: 10px 20px;
+            text-align: right; /* Allinea il contenuto a destra */
+            color: white; /* Colore del testo */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombra per profondità */
         }
         img.logo {
-            max-width: 50%;
-            height: auto;
+            max-width: 300px; /* Dimensione logo responsiva */
+            height: auto; /* Mantiene l'aspetto originale */
             display: block;
-            margin: 0 auto 20px;
+            margin: 20px auto; /* Centra il logo */
         }
         h2 {
             text-align: center;
-            color: #0056b3;
-            margin-bottom: 20px;
+            color: #0056b3; /* Colore del titolo */
+            margin: 20px 0;
+            font-size: 2em; /* Dimensione del font */
         }
         .button {
             display: inline-block;
-            padding: 15px 25px;
+            padding: 15px 30px;
             margin: 10px 5px;
             font-size: 16px;
             color: white;
-            background-color: #007bff;
+            background-color: #0155db; /* Colore verde */
             border: none;
-            border-radius: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s, transform 0.3s;
-            font-weight: bold;
-            width: 100%;
-            max-width: 400px;
+            border-radius: 50px; /* Bordo arrotondato */
+            transition: background-color 0.3s, transform 0.3s; /* Transizione */
+            font-weight: bold; /* Testo in grassetto */
+            text-decoration: none; /* Rimuove il sottolineato */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
         }
         .button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+            background-color: #218838; /* Colore scuro al passaggio del mouse */
+            transform: translateY(-2px); /* Effetto sollevato */
         }
         footer {
             margin-top: 40px;
             padding: 15px 0;
             text-align: center;
-            background-color: #e9ecef;
-            border-top: 1px solid #ccc;
+            background-color: #f8f9fa; /* Grigio molto chiaro */
+            border-top: 1px solid #ccc; /* Bordo superiore */
             font-size: 14px;
             color: #555;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Ombra per profondità */
         }
         .footer-links {
-            background-color: #E8ECEF;
-            padding: 20px;
-            text-align: center;
+            background-color: #f8f9fa; /* Colore di sfondo */
+            padding: 20px; /* Spaziatura interna */
+            text-align: center; /* Allineamento del testo */
         }
+
         .footer-links a {
-            color: #646465;
-            text-decoration: none;
-            margin: 0 15px;
+            color: #646465; /* Colore del testo */
+            text-decoration: none; /* Rimuove la sottolineatura */
+            margin: 0 15px; /* Margine tra i link */
         }
+
         .footer-links a:hover {
-            text-decoration: underline;
+            text-decoration: underline; /* Sottolinea il link al passaggio del mouse */
         }
         .switch-link {
-            position: absolute;
-            top: 2px;
-            right: 10px;
-            font-size: 14px;
-            color: Red;
-            text-decoration: underline;
+            position: absolute; /* Posizionamento assoluto */
+            top: 19px; /* Distanza dall'alto */
+            right: 20px; /* Distanza da destra */
+            font-size: 14px; /* Dimensione del font */
+            color: red; /* Colore del testo */
+            text-decoration: underline; /* Sottolineato */
         }
-        #installContainer {
-            text-align: center;
-            margin: 20px 0;
+        .container {
+            max-width: 800px; /* Larghezza massima del contenitore */
+            margin: 20px auto; /* Centra il contenitore */
+            padding: 20px;
+            background-color: white; /* Sfondo bianco per il contenitore */
+            border-radius: 8px; /* Angoli arrotondati */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
         }
-        #installButton {
-            display: none;
-            margin: 0 auto;
-        }
-        .ios-install-help {
-            text-align: center;
-            color: #555;
-            margin: 15px 0;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            display: none;
-        }
-        /* Style for the banner */
+        /* New style for the banner */
         .banner {
             display: block;
             margin: 0 auto 20px; /* Centers the banner and adds space below it */
@@ -112,106 +100,39 @@
         }
     </style>
 </head>
-<body>
-    <a href="https://globoworld.github.io/GloboworldWEB/index1.html" class="switch-link">Switch Version</a>
-    <img src="GW.png" alt="Globoworld Logo" class="logo">
-    
-    <a href="https://globoworld.mysellauth.com/product/grow-your-business">
-        <img src="3D2C6CF8-7F78-4177-96B3-BF522F0DA2D1.jpeg" alt="Adv" class="banner">
-    </a>
-    
-    <h2>Our Tools:</h2>
-    
-    <div id="installContainer">
-        <button id="installButton" class="button">
-            Install Globoworld App
-        </button>
-        <div id="iosInstallHelp" class="ios-install-help">
-            <strong>To install on iPhone/iPad:</strong><br>
-            1. Open in Safari<br>
-            2. Tap the "Share" button (box with arrow)<br>
-            3. Select "Add to Home Screen"
-        </div>
-    </div>
-
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globosearch/search.html" class="button">Globosearch: A good alternative to Google</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globomath/calculator.html" class="button">Globomath: Calculator tool</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globoclock/clock.html" class="button">Globoclock: Analog and Digital Clock</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globotranslate/translate.html" class="button">Globotranslate: Multilingual translator</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Dino/index.html" class="button">Chrome Dino: Offline Game</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globocook/index.html" class="button">Globocook: Recipe finder</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Browser/index.html" class="button">Browser Info: Technical details (BETA)</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Globonote/note.html" class="button">Globotext: Online notepad</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/GW/index.html" class="button">Globoweather: Real-Time Weather</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/Game/index.html" class="button">Games Collection: Flash Games</a></p>
-    <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/index.html" class="button">GloboAI: Our new AI Assistant</a></p>
-<div></div>
 <script src="https://static.elfsight.com/platform/platform.js" async></script>
 <div class="elfsight-app-af0229a8-22fe-429e-8e41-48d1655af9d8" data-elfsight-app-lazy></div>
+<body>
+    <header>
+        <a href="https://globoworld.github.io/GloboworldWEB/index.html" class="switch-link">Switch Version</a>
+    </header>
+    <div class="container">
+        <img src="GW.png" alt="Globoworld Logo" class="logo">
+        
+        <a href="https://globoworld.mysellauth.com/product/grow-your-business">
+            <img src="3D2C6CF8-7F78-4177-96B3-BF522F0DA2D1.jpeg" alt="Adv" class="banner">
+        </a>
+
+        <h2>Our Tools:</h2>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globosearch/search.html" class="button">Visit Globosearch: A good alternative to Google</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globomath/calculator.html" class="button">Visit Globomath: Can help you to calculate</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globoclock/clock.html" class="button">Visit Globoclock: Analog and Digital Clock</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globotranslate/translate.html" class="button">Visit Globotranslate: A Good translator to speak over the world</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Dino/index.html" class="button">Visit Chrome Dino: Chrome Offline Game</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globocook/index.html" class="button">Visit Globocook: to search your favorite food</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Browser/index.html" class="button">Check more about your browser: BETA: CAN HAVE BUGS</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Globonote/note.html" class="button">Visit Globotext: An online block notes</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/GW/index.html" class="button">Visit Globoweather: Real-Time Simple Weather APP</a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Game/index.html" class="button">Visit our games: Flash Games</a></p></a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/index.html" class="button">Visit GloboAI: Our new chat assistant</a></p>
+    </div>
     <footer>
         &copy; 2024 - 2025 Globoworld (formerly Globotools). All rights reserved.
         <div class="footer-links">
-            <a href="https://globoworld.github.io/GloboworldWEB/WE.html">About Us</a>
-            <a href="https://globoworld.github.io/GloboworldWEB/US.html">Contact Us</a>
-            <a href="https://globoworld.github.io/GloboworldWEB/Privacy.html">Privacy Policy</a>
+            <a href="https://globoworld.github.io/GloboworldWEB/WE.html">Who we are</a>
+            <a href="https://globoworld.github.io/GloboworldWEB/US.html">Contact us</a>
+            <a href="https://globoworld.github.io/GloboworldWEB/Privacy.html">Privacy Policies</a>
         </div>
     </footer>
-
-    <script>
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registered successfully');
-                    })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-            });
-        }
-
-        // Handle PWA installation
-        let deferredPrompt;
-        const installButton = document.getElementById('installButton');
-        const iosHelp = document.getElementById('iosInstallHelp');
-
-        // Show install button for Android
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installButton.style.display = 'block';
-            
-            installButton.addEventListener('click', async () => {
-                installButton.textContent = 'Installing...';
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    installButton.textContent = 'Installed!';
-                    setTimeout(() => installButton.style.display = 'none', 2000);
-                } else {
-                    installButton.textContent = 'Install Globoworld';
-                }
-                deferredPrompt = null;
-            });
-        });
-
-        // Show instructions for iOS
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.navigator.standalone) {
-            iosHelp.style.display = 'block';
-        }
-
-        // Hide button if already installed
-        window.addEventListener('appinstalled', () => {
-            installButton.style.display = 'none';
-            iosHelp.style.display = 'none';
-        });
-
-        // Check if app is already installed (iOS)
-        if (window.navigator.standalone) {
-            installButton.style.display = 'none';
-            iosHelp.style.display = 'none';
-        }
-    </script>
 </body>
 </html>

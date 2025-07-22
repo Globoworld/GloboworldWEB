@@ -110,6 +110,44 @@
             transform: translateY(0);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+        /* Data URI input and button styling */
+        .data-uri-input {
+            border: 1px solid #cbd5e0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            font-size: 1rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .data-uri-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+        .data-uri-button {
+            background: linear-gradient(45deg, #10b981, #059669); /* Green gradient */
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .data-uri-button:hover {
+            background: linear-gradient(45deg, #059669, #047857); /* Darker green on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .data-uri-button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
 
         /* Message box for "Copied!" (Toast Notification) */
         .toast-message {
@@ -203,7 +241,29 @@
                     </span>
                     <input type="file" id="imageUpload" accept="image/*">
                 </label>
+                <p id="fileNameDisplay" class="text-gray-600 mt-2 text-center"><div class="w-full space-y-4">
+                <label for="imageUpload" class="custom-file-input">
+                    <span class="custom-file-input-label">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        Upload Image
+                    </span>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </label>
                 <p id="fileNameDisplay" class="text-gray-600 mt-2 text-center"></p>
+
+                <div class="flex items-center justify-center space-x-4">
+                    <span class="text-gray-700 font-semibold">OR</span>
+                </div>
+
+                <div class="w-full flex flex-col items-center space-y-4">
+                    <label for="dataUriInput" class="block text-lg font-medium text-gray-700">Paste Image Data URI:</label>
+                    <textarea id="dataUriInput" class="data-uri-input resize-y min-h-[80px]" placeholder="e.g., data:image/png;base64,..."></textarea>
+                    <button id="loadDataUriButton" class="data-uri-button">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Load from Data URI
+                    </button>
+                </div>
+            </div></p>
             </div>
 
             <div class="w-full flex justify-center">

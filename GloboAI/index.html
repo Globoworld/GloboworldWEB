@@ -3,61 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GloboAI Closed</title>
-    <link rel="icon" href="img.png" type="image/png">
+    <title>Globopicker - Advanced Image Color Picker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Custom font import for Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%); /* Dark, sophisticated gradient background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem; /* Increased padding */
         }
-        .container {
-            background-color: #fff;
-            margin: 0 auto;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+
+        /* Main container styling */
+        .main-container {
+            background-color: #ffffff;
+            padding: 2.5rem; /* More padding */
+            border-radius: 2rem; /* More rounded corners */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+            transition: all 0.3s ease-in-out;
+            max-width: 90rem; /* Increased max-width */
+            width: 100%;
         }
-        h1 {
-            color: #d9534f;
+        .main-container:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4); /* Even deeper shadow on hover */
         }
-        p {
-            line-height: 1.6;
-        }
-        .date-range {
-            font-weight: bold;
-            color: #5cb85c;
-        }
-        .logo {
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-        .logo img {
-            max-width: 100px; /* Adjust as needed */
+
+        /* Canvas styling */
+        canvas {
+            display: block;
+            max-width: 100%;
             height: auto;
+            border: 3px solid #cbd5e0; /* More prominent border */
+            border-radius: 1.5rem; /* Very rounded corners */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+            cursor: crosshair;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
-        .logo-text {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #555;
-            margin-top: 5px;
+        canvas:hover {
+            transform: scale(1.015); /* Slightly more zoom on hover */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom file input styling */
+        .custom-file-input {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+        .custom-file-input input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .custom-file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6); /* Vibrant gradient */
+            color: white;
+            padding: 0.8rem 1.8rem; /* More padding */
+            border-radius: 1rem; /* More rounded */
+            font-weight: 700; /* Bolder font */
+            font-size: 1.1rem; /* Slightly larger font */
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .custom-file-input-label:hover {
+            background: linear-gradient(45deg, #4f46e5, #7c3aed); /* Darker gradient on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+        .custom-file-input-label:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Styling for the copy buttons */
+        .copy-button {
+            background: linear-gradient(45deg, #3b82f6, #2563eb); /* Blue gradient */
+            color: white;
+            padding: 0.7rem 1.5rem; /* More padding */
+            border-radius: 0.75rem; /* More rounded */
+            font-weight: 600; /* Bolder */
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .copy-button:hover {
+            background: linear-gradient(45deg, #2563eb, #1e40af); /* Darker blue on hover */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+        }
+        .copy-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Message box for "Copied!" (Toast Notification) */
+        .toast-message {
+            position: fixed;
+            bottom: 30px; /* Higher from bottom */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745; /* Success green */
+            color: white;
+            padding: 12px 25px; /* Larger padding */
+            border-radius: 1rem; /* More rounded */
+            opacity: 0;
+            visibility: hidden; /* Hidden by default */
+            transition: opacity 0.4s ease-out, visibility 0.4s ease-out;
+            z-index: 1000;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .toast-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .toast-message svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Styling for color code spans */
+        .color-code-span {
+            font-size: 2.25rem; /* Even larger font */
+            font-weight: 800; /* Extra bold */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+            cursor: text;
+            user-select: all; /* Allow easy selection */
+            text-align: center;
+            word-break: break-all; /* Ensure long codes wrap */
+        }
+        /* Specific colors for each code type */
+        #hexCode { background-color: #d1fae5; color: #065f46; } /* Light green, dark green */
+        #rgbCode { background-color: #fef9c3; color: #854d0e; } /* Light yellow, dark yellow */
+        #rgbaCode { background-color: #fee2e2; color: #991b1b; } /* Light red, dark red */
+
+        /* Color preview circle */
+        #colorPreview {
+            width: 140px; /* Larger */
+            height: 140px; /* Larger */
+            border-width: 8px; /* Thicker border */
+            border-color: #93c5fd; /* Lighter blue border */
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.1), 0 0 0 5px rgba(147, 197, 253, 0.5); /* Inner shadow and outer ring glow */
+        }
+
+        /* File name display */
+        #fileNameDisplay {
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #4a5568; /* Dark gray text */
+            font-weight: 500;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        /* Styling for the GP.png image */
+        .gp-logo {
+            width: 200px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 2rem; /* Space below the logo */
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); /* Subtle shadow for depth */
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>GloboAI Closed</h1>
-        <div class="logo">
-            <img src="img.png" alt="GloboAI died">
-            <div class="logo-text">2024 - 2025</div>
+    <div class="main-container flex flex-col lg:flex-row items-center lg:items-start space-y-10 lg:space-y-0 lg:space-x-12">
+        <div class="flex flex-col items-center w-full lg:w-3/5 space-y-8">
+            <img src="GP.png" alt="GP Logo" class="gp-logo">
+
+            <h1 class="text-5xl font-extrabold text-gray-900 text-center leading-tight">
+                Color Picker <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600">from Image</span>
+            </h1>
+
+            <div class="w-full">
+                <label for="imageUpload" class="custom-file-input">
+                    <span class="custom-file-input-label">
+                        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        Upload Image
+                    </span>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </label>
+                <p id="fileNameDisplay" class="text-gray-600 mt-2 text-center"></p>
+            </div>
+
+            <div class="w-full flex justify-center">
+                <canvas id="colorCanvas" class="bg-gray-200"></canvas>
+            </div>
         </div>
-        <p>We regret to inform you that <strong>GloboAI</strong> is no longer accessible. This closure is due to essential maintenance and ongoing improvements to our platform.</p>
-        <p>We extend our sincere gratitude to all users who enjoyed this feature during its operational period:</p>
-        <p class="date-range">GloboAI: August 11, 2024 - July 5, 2025</p>
-        <p>We apologize for any inconvenience this may cause and appreciate your understanding as we work to enhance your overall experience with our services.</p>
+
+        <div class="w-full lg:w-2/5 flex flex-col items-center space-y-8 mt-10 lg:mt-0">
+            <h2 class="text-4xl font-bold text-gray-800 text-center">
+                Color Details
+            </h2>
+
+            <div class="flex flex-col items-center p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-xl w-full transition-all duration-300 ease-in-out hover:shadow-2xl">
+                <p class="text-gray-700 font-semibold mb-4 text-xl">Selected Color:</p>
+                <div id="colorPreview" class="rounded-full border-6 shadow-inner ring-4 ring-blue-200" style="background-color: #ffffff;"></div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 w-full">
+                <div class="flex flex-col items-center p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl">
+                    <p class="text-gray-700 font-semibold mb-3 text-lg">Hex Code:</p>
+                    <span id="hexCode" class="color-code-span">#FFFFFF</span>
+                    <button onclick="copyToClipboard('hexCode')" class="mt-4 copy-button">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy Hex
+                    </button>
+                </div>
+
+                <div class="flex flex-col items-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl">
+                    <p class="text-gray-700 font-semibold mb-3 text-lg">RGB Code:</p>
+                    <span id="rgbCode" class="color-code-span">rgb(255, 255, 255)</span>
+                    <button onclick="copyToClipboard('rgbCode')" class="mt-4 copy-button">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy RGB
+                    </button>
+                </div>
+
+                <div class="flex flex-col items-center p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-xl">
+                    <p class="text-gray-700 font-semibold mb-3 text-lg">RGBA Code:</p>
+                    <span id="rgbaCode" class="color-code-span">rgba(255, 255, 255, 1)</span>
+                    <button onclick="copyToClipboard('rgbaCode')" class="mt-4 copy-button">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Copy RGBA
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <div id="toastMessage" class="toast-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+        </svg>
+        <span id="toastText"></span>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const imageUpload = document.getElementById('imageUpload');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const colorCanvas = document.getElementById('colorCanvas');
+        const ctx = colorCanvas.getContext('2d');
+        const colorPreview = document.getElementById('colorPreview');
+        const hexCodeSpan = document.getElementById('hexCode');
+        const rgbCodeSpan = document.getElementById('rgbCode');
+        const rgbaCodeSpan = document.getElementById('rgbaCode');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastText = document.getElementById('toastText');
+
+        let currentImage = null; // Variable to store the current image
+
+        // Function to convert RGB to Hex
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+
+        // Function to show a temporary toast message
+        function showToast(message) {
+            toastText.textContent = message;
+            toastMessage.classList.add('show');
+            setTimeout(() => {
+                toastMessage.classList.remove('show');
+            }, 2500); // Message disappears after 2.5 seconds
+        }
+
+        // Function to copy text to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText;
+            try {
+                // Use document.execCommand for iFrame compatibility
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Copied: ' + text);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                showToast('Error during copy.');
+            }
+        }
+
+        // Event handler for image upload
+        imageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                fileNameDisplay.textContent = `Selected file: ${file.name}`; // Display file name
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        currentImage = img; // Store the loaded image
+                        drawCurrentImage();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileNameDisplay.textContent = ''; // Clear file name if no file selected
+            }
+        });
+
+        // Function to draw the image on the canvas and set dimensions
+        function drawCurrentImage() {
+            if (currentImage) {
+                // Set canvas dimensions to fit the image while maintaining aspect ratio
+                const maxWidth = colorCanvas.parentElement.clientWidth; // Max width of the container
+                const aspectRatio = currentImage.width / currentImage.height;
+
+                let newWidth = maxWidth;
+                let newHeight = maxWidth / aspectRatio;
+
+                // Limit height to not exceed too much of the window
+                if (newHeight > window.innerHeight * 0.7) {
+                    newHeight = window.innerHeight * 0.7;
+                    newWidth = newHeight * aspectRatio;
+                }
+
+                colorCanvas.width = newWidth;
+                colorCanvas.height = newHeight;
+
+                // Draw the image on the canvas
+                ctx.drawImage(currentImage, 0, 0, colorCanvas.width, colorCanvas.height);
+            }
+        }
+
+        // Event handler for color selection on canvas
+        colorCanvas.addEventListener('mousemove', (event) => {
+            if (!currentImage) return; // Do nothing if no image is loaded
+
+            // Get mouse coordinates relative to the canvas
+            const rect = colorCanvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            // Scale mouse coordinates relative to the original image dimensions
+            const scaleX = currentImage.width / colorCanvas.width;
+            const scaleY = currentImage.height / colorCanvas.height;
+
+            const originalX = Math.floor(x * scaleX);
+            const originalY = Math.floor(y * scaleY);
+
+            // Create a temporary canvas to read pixels from the original image
+            // This is important to get the exact color without resizing artifacts
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = currentImage.width;
+            tempCanvas.height = currentImage.height;
+            tempCtx.drawImage(currentImage, 0, 0);
+
+            const pixelData = tempCtx.getImageData(originalX, originalY, 1, 1).data;
+
+            const r = pixelData[0];
+            const g = pixelData[1];
+            const b = pixelData[2];
+            const a = pixelData[3] / 255; // Alpha from 0-255 to 0-1
+
+            // Update color preview
+            colorPreview.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+            // Update color codes
+            hexCodeSpan.textContent = rgbToHex(r, g, b);
+            rgbCodeSpan.textContent = `rgb(${r}, ${g}, ${b})`;
+            rgbaCodeSpan.textContent = `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`; // Round alpha to 2 decimals
+        });
+
+        // Event handler for window resize
+        window.addEventListener('resize', drawCurrentImage);
+
+        // Initial setup for the canvas size (optional, if you want a default empty state)
+        // You might want to set a default size for the canvas even without an image
+        // For example:
+        // colorCanvas.width = 600;
+        // colorCanvas.height = 400;
+        // ctx.fillStyle = '#f0f0f0'; // Light gray background for empty canvas
+        // ctx.fillRect(0, 0, colorCanvas.width, colorCanvas.height);
+    </script>
 </body>
 </html>

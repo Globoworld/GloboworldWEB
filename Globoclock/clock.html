@@ -58,11 +58,11 @@
             box-shadow: 0 8px 25px var(--shadow-color);
             transition: all 0.3s ease;
         }
-        
+
         .clock-display:hover {
             box-shadow: 0 12px 30px var(--shadow-color);
         }
-
+        
         #digital-clock {
             font-size: 4em;
             font-weight: bold;
@@ -71,29 +71,33 @@
             margin: 0;
         }
 
-        #analog-clock {
-            margin-top: 10px;
+        .analog-clock-svg {
+            display: none; /* Inizialmente nascosto */
         }
-        #analog-clock .dial {
+        .analog-clock-svg.active {
+            display: block; /* Mostra solo l'orologio attivo */
+        }
+
+        .analog-clock-svg .dial {
             stroke: var(--border-color);
             stroke-width: 5;
             fill: none;
         }
-        #analog-clock .hour, #analog-clock .minute {
+        .analog-clock-svg .hour, .analog-clock-svg .minute {
             stroke: var(--text-color);
             stroke-linecap: round;
             stroke-width: 4;
             transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
-        #analog-clock .second {
+        .analog-clock-svg .second {
             stroke: #f44336;
             stroke-linecap: round;
             stroke-width: 2;
         }
-        #analog-clock .center {
+        .analog-clock-svg .center {
             fill: var(--text-color);
         }
-        #analog-clock .number {
+        .analog-clock-svg .number {
             fill: var(--text-color);
             font-size: 16px;
         }
@@ -101,6 +105,8 @@
         .controls {
             display: flex;
             gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
             margin-top: 20px;
         }
 
@@ -154,7 +160,7 @@
             font-size: 1em;
             border-radius: 8px;
             border: 2px solid var(--primary-color);
-            background-color: var(--dark-bg);
+            background-color: var(--main-bg);
             color: var(--text-color);
             appearance: none;
             cursor: pointer;
@@ -235,6 +241,9 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .controls button {
+                flex: 1 1 auto;
+            }
         }
     </style>
 </head>
@@ -243,12 +252,14 @@
         <img id="logo" src="GCLOGO.png" alt="Globoclock Logo" class="logo" />
 
         <div class="clock-display">
-            <div id="analog-clock" style="display: block;"></div>
+            <div id="analog-minimal-clock" class="analog-clock-svg active"></div>
+            <div id="analog-classic-clock" class="analog-clock-svg"></div>
             <div id="digital-clock" style="display: none;"></div>
         </div>
 
         <div class="controls">
-            <button id="showAnalogBtn" class="active">Analogico</button>
+            <button id="showAnalogMinimalBtn" class="active">Analogico Minimal</button>
+            <button id="showAnalogClassicBtn">Analogico Classico</button>
             <button id="showDigitalBtn">Digitale</button>
         </div>
 
@@ -267,26 +278,45 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script>
         // --- LOGICA OROLOGIO LOCALE ANALOGICO E DIGITALE ---
-
         const width = 300;
         const height = 300;
         const radius = Math.min(width, height) / 2;
 
-        const svg = d3.select("#analog-clock")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append("g")
-            .attr("transform", `translate(${width / 2},${height / 2})`);
+        function createAnalogClock(selector, withNumbers = false) {
+            const svg = d3.select(selector)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", `translate(${width / 2},${height / 2})`);
 
-        svg.append("circle").attr("r", radius).attr("class", "dial");
-        
-        const hourHand = svg.append("line").attr("class", "hour").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.5).attr("stroke-width", 6);
-        const minuteHand = svg.append("line").attr("class", "minute").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.75).attr("stroke-width", 4);
-        const secondHand = svg.append("line").attr("class", "second").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.9).attr("stroke-width", 2);
-        svg.append("circle").attr("r", 5).attr("class", "center");
+            svg.append("circle").attr("r", radius).attr("class", "dial");
+            
+            if (withNumbers) {
+                const numbers = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+                svg.selectAll(".number")
+                    .data(numbers)
+                    .enter()
+                    .append("text")
+                    .attr("class", "number")
+                    .attr("x", d => (radius - 25) * Math.cos((d * 30 - 90) * Math.PI / 180))
+                    .attr("y", d => (radius - 25) * Math.sin((d * 30 - 90) * Math.PI / 180) + 5)
+                    .attr("text-anchor", "middle")
+                    .text(d => d);
+            }
 
-        function updateAnalogClock() {
+            const hourHand = svg.append("line").attr("class", "hour").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.5).attr("stroke-width", 6);
+            const minuteHand = svg.append("line").attr("class", "minute").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.75).attr("stroke-width", 4);
+            const secondHand = svg.append("line").attr("class", "second").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", -radius * 0.9).attr("stroke-width", 2);
+            svg.append("circle").attr("r", 5).attr("class", "center");
+
+            return { hourHand, minuteHand, secondHand };
+        }
+
+        const minimalClockHands = createAnalogClock("#analog-minimal-clock");
+        const classicClockHands = createAnalogClock("#analog-classic-clock", true);
+
+        function updateAnalogClocks() {
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
@@ -296,9 +326,11 @@
             const minuteAngle = minutes * 6 + seconds * 0.1;
             const secondAngle = seconds * 6;
 
-            hourHand.attr("transform", `rotate(${hourAngle})`);
-            minuteHand.attr("transform", `rotate(${minuteAngle})`);
-            secondHand.attr("transform", `rotate(${secondAngle})`);
+            [minimalClockHands, classicClockHands].forEach(hands => {
+                hands.hourHand.attr("transform", `rotate(${hourAngle})`);
+                hands.minuteHand.attr("transform", `rotate(${minuteAngle})`);
+                hands.secondHand.attr("transform", `rotate(${secondAngle})`);
+            });
         }
 
         function updateDigitalClock() {
@@ -306,30 +338,40 @@
             document.getElementById('digital-clock').textContent = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
-        setInterval(updateAnalogClock, 1000);
+        setInterval(updateAnalogClocks, 1000);
         setInterval(updateDigitalClock, 1000);
-        updateAnalogClock();
+        updateAnalogClocks();
         updateDigitalClock();
 
-        const showAnalogBtn = document.getElementById('showAnalogBtn');
+        const showAnalogMinimalBtn = document.getElementById('showAnalogMinimalBtn');
+        const showAnalogClassicBtn = document.getElementById('showAnalogClassicBtn');
         const showDigitalBtn = document.getElementById('showDigitalBtn');
-        const analogClockDiv = document.getElementById('analog-clock');
+        const analogMinimalDiv = document.getElementById('analog-minimal-clock');
+        const analogClassicDiv = document.getElementById('analog-classic-clock');
         const digitalClockDiv = document.getElementById('digital-clock');
 
-        showAnalogBtn.addEventListener('click', () => {
-            analogClockDiv.style.display = 'block';
-            digitalClockDiv.style.display = 'none';
-            showAnalogBtn.classList.add('active');
-            showDigitalBtn.classList.remove('active');
+        function switchClock(activeDiv) {
+            [analogMinimalDiv, analogClassicDiv, digitalClockDiv].forEach(div => div.style.display = 'none');
+            activeDiv.style.display = 'block';
+
+            [showAnalogMinimalBtn, showAnalogClassicBtn, showDigitalBtn].forEach(btn => btn.classList.remove('active'));
+        }
+
+        showAnalogMinimalBtn.addEventListener('click', () => {
+            switchClock(analogMinimalDiv);
+            showAnalogMinimalBtn.classList.add('active');
+        });
+
+        showAnalogClassicBtn.addEventListener('click', () => {
+            switchClock(analogClassicDiv);
+            showAnalogClassicBtn.classList.add('active');
         });
 
         showDigitalBtn.addEventListener('click', () => {
-            analogClockDiv.style.display = 'none';
-            digitalClockDiv.style.display = 'block';
+            switchClock(digitalClockDiv);
             showDigitalBtn.classList.add('active');
-            showAnalogBtn.classList.remove('active');
         });
-
+        
         // --- LOGICA OROLOGI DEI FUSI ORARI ---
 
         const timezoneSelect = document.getElementById('timezone-select');
@@ -338,6 +380,7 @@
         
         const timezones = {
             'UTC': 'UTC',
+            'Europe/Rome': 'Roma',
             'America/New_York': 'New York',
             'Europe/London': 'Londra',
             'Europe/Paris': 'Parigi',
@@ -351,12 +394,10 @@
             'America/Sao_Paulo': 'San Paolo',
             'Africa/Cairo': 'Il Cairo',
             'Asia/Kolkata': 'Nuova Delhi',
-            'Europe/Rome': 'Roma',
             'Africa/Johannesburg': 'Johannesburg',
             'America/Mexico_City': 'Città del Messico'
         };
 
-        // Popola il selettore dei fusi orari
         function populateTimezoneSelect() {
             for (const key in timezones) {
                 const option = document.createElement('option');
@@ -412,7 +453,6 @@
             const selectedTimezone = timezoneSelect.value;
             const selectedTimezoneName = timezones[selectedTimezone];
             
-            // Evita di aggiungere lo stesso fuso orario più volte
             const existingCards = document.querySelectorAll(`[data-timezone="${selectedTimezone}"]`);
             if (existingCards.length > 0) {
                 alert(`Il fuso orario di ${selectedTimezoneName} è già stato aggiunto.`);

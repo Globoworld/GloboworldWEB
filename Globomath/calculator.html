@@ -5,90 +5,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Globomath</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #1a1b1e;
+            --calc-bg: #2d3035;
+            --display-bg: #212224;
+            --text-color: #e0e0e0;
+            --operator-color: #28a745;
+            --equal-color: #ffc107;
+            --clear-color: #dc3545;
+            --button-color: #3e4247;
+            --button-hover: #4e5358;
+            --text-color-dark: #333;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
         }
 
         .logo {
-            width: 150px; /* Imposta la larghezza desiderata per il logo */
-            margin-bottom: 20px; /* Spazio sotto il logo */
+            width: 150px;
+            margin-bottom: 25px;
         }
 
         .calculator {
-            background-color: #fff;
+            background-color: var(--calc-bg);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 350px;
             width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .display-container {
+            position: relative;
+            height: 100px;
+            background-color: var(--display-bg);
+            border-radius: 10px;
+            padding: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        
+        .history {
+            color: var(--text-color-secondary);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            min-height: 1em;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
         .display {
-            width: 100%;
-            height: 60px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--text-color);
+            background: transparent;
+            border: none;
+            outline: none;
             text-align: right;
-            margin-bottom: 10px;
-            padding: 10px;
-            font-size: 2em;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            box-sizing: border-box;
+            width: 100%;
+            height: auto;
+            padding: 0;
         }
 
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
         .button {
-            padding: 20px;
+            padding: 20px 0;
             font-size: 1.5em;
             border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
+            border-radius: 15px;
+            background-color: var(--button-color);
+            color: var(--text-color);
             cursor: pointer;
             text-align: center;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .button:active {
+            transform: scale(0.98);
         }
 
         .button.operator {
-            background-color: #28a745;
+            background-color: var(--operator-color);
         }
 
         .button.equal {
             grid-column: span 2;
-            height: calc(100% + 10px);
-            background-color: #ffc107;
-            color: black;
+            background-color: var(--equal-color);
+            color: var(--text-color-dark);
         }
 
         .button.clear {
-            background-color: #dc3545;
+            background-color: var(--clear-color);
+        }
+
+        .button.backspace {
+            background-color: var(--clear-color);
+            font-size: 1.3em;
+        }
+        
+        .button.equal, .button.operator, .button.clear, .button.backspace {
+            font-weight: bold;
+        }
+
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 15px;
+            }
+            .buttons {
+                gap: 10px;
+            }
+            .button {
+                padding: 15px 0;
+                font-size: 1.3em;
+            }
+            .display {
+                font-size: 2em;
+            }
+            .logo {
+                width: 120px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Logo Centrato -->
     <img src="GMLOGO.png" alt="Globomath Logo" class="logo">
 
-    <!-- Calcolatrice -->
     <div class="calculator">
-        <input type="text" class="display" id="display" readonly>
+        <div class="display-container">
+            <div id="history" class="history"></div>
+            <input type="text" class="display" id="display" readonly>
+        </div>
         <div class="buttons">
+            <button class="button clear" onclick="clearDisplay()">AC</button>
+            <button class="button backspace" onclick="backspace()"><i class="fas fa-backspace"></i></button>
+            <button class="button operator" onclick="appendOperator('%')">%</button>
+            <button class="button operator" onclick="appendOperator('/')">/</button>
+
             <button class="button" onclick="appendNumber(7)">7</button>
             <button class="button" onclick="appendNumber(8)">8</button>
             <button class="button" onclick="appendNumber(9)">9</button>
-            <button class="button operator" onclick="appendOperator('+')">+</button>
+            <button class="button operator" onclick="appendOperator('*')">*</button>
 
             <button class="button" onclick="appendNumber(4)">4</button>
             <button class="button" onclick="appendNumber(5)">5</button>
@@ -98,47 +183,134 @@
             <button class="button" onclick="appendNumber(1)">1</button>
             <button class="button" onclick="appendNumber(2)">2</button>
             <button class="button" onclick="appendNumber(3)">3</button>
-            <button class="button operator" onclick="appendOperator('*')">*</button>
+            <button class="button operator" onclick="appendOperator('+')">+</button>
 
             <button class="button" onclick="appendNumber(0)">0</button>
             <button class="button" onclick="appendDecimal()">.</button>
-            <button class="button clear" onclick="clearDisplay()">C</button>
-            <button class="button operator" onclick="appendOperator('/')">/</button>
-
             <button class="button equal" onclick="calculateResult()">=</button>
         </div>
     </div>
 
     <script>
+        const display = document.getElementById('display');
+        const history = document.getElementById('history');
+        let currentInput = '';
+        let previousInput = '';
+        let operator = null;
+        let waitingForSecondOperand = false;
+
         function appendNumber(number) {
-            const display = document.getElementById('display');
-            display.value += number;
+            if (waitingForSecondOperand) {
+                currentInput = number.toString();
+                waitingForSecondOperand = false;
+            } else {
+                currentInput += number;
+            }
+            display.value = currentInput;
         }
 
-        function appendOperator(operator) {
-            const display = document.getElementById('display');
-            display.value += operator;
+        function appendOperator(op) {
+            if (operator && waitingForSecondOperand) {
+                operator = op;
+                history.textContent = `${previousInput} ${operator}`;
+                return;
+            }
+
+            if (currentInput === '') return;
+
+            if (previousInput !== '') {
+                calculate();
+            }
+            operator = op;
+            previousInput = currentInput;
+            waitingForSecondOperand = true;
+            history.textContent = `${previousInput} ${operator}`;
         }
 
         function appendDecimal() {
-            const display = document.getElementById('display');
-            if (!display.value.includes('.')) {
-                display.value += '.';
+            if (waitingForSecondOperand) {
+                currentInput = '0.';
+                waitingForSecondOperand = false;
+            } else if (!currentInput.includes('.')) {
+                currentInput += '.';
+            }
+            display.value = currentInput;
+        }
+
+        function backspace() {
+            if (currentInput !== '') {
+                currentInput = currentInput.slice(0, -1);
+                display.value = currentInput;
             }
         }
 
         function clearDisplay() {
-            document.getElementById('display').value = '';
+            currentInput = '';
+            previousInput = '';
+            operator = null;
+            waitingForSecondOperand = false;
+            display.value = '';
+            history.textContent = '';
         }
 
         function calculateResult() {
-            const display = document.getElementById('display');
-            try {
-                display.value = eval(display.value);
-            } catch (error) {
-                display.value = 'Error';
-            }
+            if (operator === null || waitingForSecondOperand) return;
+            
+            calculate();
+            operator = null;
+            waitingForSecondOperand = true;
+            history.textContent = `${previousInput} ${operator} ${currentInput} =`;
+            currentInput = previousInput;
+            previousInput = '';
         }
+
+        function calculate() {
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            let result;
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                case '%':
+                    result = (prev / 100) * current;
+                    break;
+                default:
+                    return;
+            }
+            currentInput = result.toString();
+            display.value = result;
+            previousInput = '';
+        }
+
+        // Gestione input da tastiera
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if (/[0-9]/.test(key)) {
+                appendNumber(parseInt(key));
+            } else if (key === '.') {
+                appendDecimal();
+            } else if (['+', '-', '*', '/'].includes(key)) {
+                appendOperator(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculateResult();
+            } else if (key === 'Backspace') {
+                backspace();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            }
+        });
     </script>
 </body>
 </html>

@@ -1,21 +1,83 @@
 <!DOCTYPE html>
-
 <html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
     <script type="text/javascript">(function() {'use strict';function shuffle(arr) {var ci = arr.length,tv,ri;while (0 !== ci) {ri = Math.floor(Math.random() * ci);ci -= 1;tv = arr[ci];arr[ci]=arr[ri];arr[ri]=tv; }return arr;}var oUA = window.navigator.userAgent;Object.defineProperty(window.navigator, 'userAgent', {get: function() {return oUA + ' Unique/97.7.7124.69';}, configurable: true});var tPg = [];if(window.navigator.plugins) {if(window.navigator.plugins.length) {var opgLength = window.navigator.plugins.length, nvPg = window.navigator.plugins;Object.setPrototypeOf(nvPg, Array.prototype);nvPg.length = opgLength;nvPg.forEach(function(k,v) {var plg = {name: k.name, description: k.description, filename: k.filename, version: k.version, length: k.length,item: function(index) {return this[index] ?? null; }, namedItem: function(name) { return this[name] ?? null; } };var tPgLength = k.length; Object.setPrototypeOf(k, Array.prototype); k.length = tPgLength; k.forEach(function(a, b){ plg[b] = plg[a.type] = a; });Object.setPrototypeOf (plg, Plugin.prototype); tPg.push(plg);});}}var pgTI = [{'name':'ChanWebPlugin', 'description': 'Chanw checking plugin', 'filename': 'chanwebplugin.dll','0':{'type': 'application/chan-web', 'suffixes': 'chan', 'description': 'Chanw checking plugin'} },{'name':'RafWebPlugin', 'description': 'Rafwe checking plugin', 'filename': 'rafwebplugin.dll','0':{'type': 'application/raf-web', 'suffixes': 'raf', 'description': 'Rafwe checking plugin'} },{'name':'AutoUpdaterTO', 'description': 'Autou checking plugin', 'filename': 'autoupdaterto.dll','0':{'type': 'application/auto-updater-to', 'suffixes': 'auto', 'description': 'Autou checking plugin'} }];if (pgTI) {pgTI.forEach(function(k, v) {var plg = {name: k.name, description: k.description, filename: k.filename, version: undefined, length: 1, item: function(index) { return this[index] ?? null; },namedItem: function(name) { return this[name] ?? null; } };var plgMt = {description: k[0].description, suffixes: k[0].suffixes, type: k[0].type, enabledPlugin: null}; Object.setPrototypeOf(plgMt, MimeType.prototype); plg[0] = plg[plgMt.type] = plgMt;Object.setPrototypeOf(plg, Plugin.prototype); tPg.push(plg);});}var fPgI = {length: tPg.length, item: function(index) {return this[index] ?? null; }, namedItem: function(name) {return this[name] ?? null; }, refresh: function() {} };tPg = shuffle(tPg);tPg.forEach(function(k,v) { fPgI[v] = fPgI[k.name] = k; });Object.setPrototypeOf(fPgI, PluginArray.prototype);Object.defineProperty(window.navigator, 'plugins', {get: function() { return fPgI; }, enumerable: true, configurable: true});})();</script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Globocook</title>
 
+    <!-- Aggiunta della favicon -->
     <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/Globosearch/logo.png">
 
     <style>
-
         body {
+            font-family: Arial, sans-serif;
+            background-color: #181a1c;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
 
+        .search-container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .search-container img {
+            width: 250px; /* Ingrandito il logo */
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .search-container input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e88e5;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #1565c0;
+        }
+
+        #results {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function performSearch() {
+            var query = document.getElementById("searchQuery").value;
+            if (query) {
+                fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=AIzaSyBtP2o3PfWj8yEdd7TjtEqU7cxh01nluHA&cx=27d9cd628bf274bc9`)
+                .then(response => response.json())
+                .then(data => {
+                    var results = data.items.map(item => `<div><a href="${item.link}" target="_blank">${item.title}</a><p>${item.snippet}</p></div>`).join('');
+                    document.getElementById('results').innerHTML = results;
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="search-container">
+        <img src="data:image/png;base64,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" alt="Globosearch Logo">
+        <input type="text" id="searchQuery" placeholder="Cerca sul web...">
+        <button onclick="performSearch()">Cerca</button>
     </div>
-    
     <div id="results"></div>
 
 </body></html>

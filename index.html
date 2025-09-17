@@ -65,17 +65,13 @@
             padding: 20px; /* Spaziatura interna */
             text-align: center; /* Allineamento del testo */
         }
-
         .footer-links a {
             color: #646465; /* Colore del testo */
             text-decoration: none; /* Rimuove la sottolineatura */
             margin: 0 15px; /* Margine tra i link */
         }
-
         .footer-links a:hover {
             text-decoration: underline; /* Sottolinea il link al passaggio del mouse */
-        }
-
         }
         .container {
             max-width: 800px; /* Larghezza massima del contenitore */
@@ -85,12 +81,36 @@
             border-radius: 8px; /* Angoli arrotondati */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
         }
-        /* New style for the banner */
+        /* Stile per il banner pubblicitario */
+        .banner-container {
+            position: relative;
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 50%;
+        }
         .banner {
             display: block;
-            margin: 0 auto 20px; /* Centers the banner and adds space below it */
-            max-width: 50%; /* Ensures it's responsive */
+            width: 100%;
             height: auto;
+            border-radius: 6px;
+        }
+        /* Stile per la X di chiusura */
+        .close-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            padding: 4px 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: background 0.3s;
+        }
+        .close-btn:hover {
+            background: #ddd;
         }
     </style>
 </head>
@@ -100,9 +120,13 @@
     <div class="container">
         <img src="GW.png" alt="Globoworld Logo" class="logo">
         
-        <a href="https://globoworld.mysellauth.com/product/grow-your-business">
-            <img src="3D2C6CF8-7F78-4177-96B3-BF522F0DA2D1.jpeg" alt="Adv" class="banner">
-        </a>
+        <!-- Banner con pulsante di chiusura -->
+        <div class="banner-container" id="ad-banner">
+            <span class="close-btn" onclick="document.getElementById('ad-banner').style.display='none'">&times;</span>
+            <a href="https://globoworld.mysellauth.com/product/grow-your-business">
+                <img src="3D2C6CF8-7F78-4177-96B3-BF522F0DA2D1.jpeg" alt="Adv" class="banner">
+            </a>
+        </div>
 
         <h2>Our Tools:</h2>
         <p><a href="https://globoworld.github.io/GloboworldWEB/Globosearch/search.html" class="button">Visit Globosearch: A good alternative to Google</a></p>
@@ -114,7 +138,7 @@
         <p><a href="https://globoworld.github.io/GloboworldWEB/Browser/index.html" class="button">Check more about your browser: BETA: CAN HAVE BUGS</a></p>
         <p><a href="https://globoworld.github.io/GloboworldWEB/Globonote/note.html" class="button">Visit Globotext: An online block notes</a></p>
         <p><a href="https://globoworld.github.io/GloboworldWEB/GW/index.html" class="button">Visit Globoweather: Real-Time Simple Weather APP</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Game/index2.html" class="button">Visit Globoconvert: An online universal converter</a></p></a></p>
+        <p><a href="https://globoworld.github.io/GloboworldWEB/Game/index2.html" class="button">Visit Globoconvert: An online universal converter</a></p>
         <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/index.html" class="button">Visit Globopicker: Our advanced color picker</a></p>
         <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/oldsystem.html" class="button">Visit GloboAI: Our New AI Assistant</a></p>
     </div>

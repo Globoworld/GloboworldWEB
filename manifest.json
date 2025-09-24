@@ -1,8 +1,8 @@
 {
   "name": "Globoworld",
   "short_name": "Globoworld",
-  "start_url": "https://globoworld.github.io/GloboworldWEB/",
-  "scope": "https://globoworld.github.io/GloboworldWEB/",
+  "start_url": "/GloboworldWEB/",
+  "scope": "/GloboworldWEB/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0078d7",

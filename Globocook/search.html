@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globosearch</title>
+    
+    <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/Globosearch/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #1a1b1e;
+            --surface-color: #2c2f33;
+            --text-color-primary: #e0e0e0;
+            --text-color-secondary: #a0a0a0;
+            --link-color: #4da6ff;
+            --link-color-hover: #007bff;
+            --button-color: #4da6ff;
+            --button-color-hover: #007bff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color-primary);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container {
+            margin: 100px auto 20px;
+            max-width: 700px;
+        }
+
+        .search-container img {
+            width: 280px;
+            height: auto;
+            margin-bottom: 25px;
+        }
+
+        .search-input-group {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-color: var(--surface-color);
+            border-radius: 30px;
+            border: 1px solid #444;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-input-group:focus-within {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border-color: var(--link-color);
+        }
+
+        #searchQuery {
+            flex-grow: 1;
+            padding: 15px 25px;
+            font-size: 1.1em;
+            border: none;
+            background: transparent;
+            color: var(--text-color-primary);
+            outline: none;
+            border-radius: 30px 0 0 30px;
+        }
+
+        #searchQuery::placeholder {
+            color: var(--text-color-secondary);
+        }
+
+        .search-button {
+            background-color: var(--button-color);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 0 30px 30px 0;
+            cursor: pointer;
+            color: white;
+            font-size: 1.1em;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .search-button:hover {
+            background-color: var(--button-color-hover);
+            transform: scale(1.05);
+        }
+
+        .search-button i {
+            margin-right: 5px;
+        }
+
+        #results {
+            margin-top: 40px;
+            text-align: left;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .result-item {
+            background-color: var(--surface-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #3d4045;
+            transition: all 0.3s ease;
+        }
+        
+        .result-item:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            border-color: var(--link-color);
+        }
+
+        .result-item a {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--link-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .result-item a:hover {
+            color: var(--link-color-hover);
+            text-decoration: underline;
+        }
+
+        .result-item p {
+            margin: 10px 0 0;
+            color: var(--text-color-primary);
+            line-height: 1.6;
+        }
+
+        .result-item small {
+            color: var(--text-color-secondary);
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* --- Media Query per Dispositivi Mobili --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .search-container {
+                margin: 50px auto 20px;
+            }
+
+            .search-container img {
+                width: 200px; /* Logo più piccolo su schermi ridotti */
+            }
+
+            .search-input-group {
+                flex-direction: column;
+                border-radius: 15px;
+            }
+
+            #searchQuery {
+                width: calc(100% - 30px);
+                border-radius: 15px;
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+
+            .search-button {
+                width: 100%;
+                margin-top: 10px;
+                border-radius: 15px;
+                padding: 12px;
+                font-size: 1em;
+            }
+            
+            #results {
+                margin-top: 20px;
+                padding: 0 10px;
+            }
+            
+            .result-item {
+                padding: 15px;
+            }
+
+            .result-item a {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <img src="Globosearch.png" alt="Globosearch Logo">
+        <div class="search-input-group">
+            <input type="text" id="searchQuery" placeholder="Search on the web...">
+            <button class="search-button" onclick="performSearch()">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        function performSearch() {
+            var query = document.getElementById("searchQuery").value;
+            if (query) {
+                // Aggiungi un messaggio di caricamento
+                document.getElementById('results').innerHTML = '<p style="text-align:center;">Fetching...</p>';
+                
+                fetch(`https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=AIzaSyCQidRcAS6YvQwMYb2Ij0ZkuM_pQGA_Lo8&cx=8111c49bdb1334c70`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore di rete o API. Controlla la chiave API e la configurazione.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var resultsContainer = document.getElementById('results');
+                    resultsContainer.innerHTML = ''; // Pulisci i risultati precedenti
+                    
+                    if (data.items && data.items.length > 0) {
+                        data.items.forEach(item => {
+                            var resultDiv = document.createElement('div');
+                            resultDiv.className = 'result-item';
+                            
+                            var titleLink = document.createElement('a');
+                            titleLink.href = item.link;
+                            titleLink.target = '_blank';
+                            titleLink.textContent = item.title;
+                            
+                            var snippetP = document.createElement('p');
+                            snippetP.textContent = item.snippet;
+
+                            var linkSmall = document.createElement('small');
+                            linkSmall.textContent = item.link;
+                            
+                            resultDiv.appendChild(titleLink);
+                            resultDiv.appendChild(snippetP);
+                            resultDiv.appendChild(linkSmall);
+                            resultsContainer.appendChild(resultDiv);
+                        });
+                    } else {
+                        resultsContainer.innerHTML = '<p style="text-align:center;">Nessun risultato trovato per la ricerca.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    document.getElementById('results').innerHTML = `<p style="text-align:center; color: #d9534f;">Si è verificato un errore durante la ricerca: ${error.message}</p>`;
+                });
+            }
+        }
+
+        // Funzionalità per la ricerca con il tasto Invio
+        document.getElementById("searchQuery").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>

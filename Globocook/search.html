@@ -206,7 +206,7 @@
                 // Aggiungi un messaggio di caricamento
                 document.getElementById('results').innerHTML = '<p style="text-align:center;">Fetching...</p>';
                 
-                fetch("https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=AIzaSyBtP2o3PfWj8yEdd7TjtEqU7cxh01nluHA&cx=27d9cd628bf274bc9")
+                fetch('https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=AIzaSyBtP2o3PfWj8yEdd7TjtEqU7cxh01nluHA&cx=27d9cd628bf274bc9')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Errore di rete o API. Controlla la chiave API e la configurazione.');

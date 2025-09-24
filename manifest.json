@@ -1,12 +1,21 @@
-"icons": [
-  {
-    "src": "https://globoworld.github.io/GloboworldWEB/icon-192.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  },
-  {
-    "src": "https://globoworld.github.io/GloboworldWEB/icon-512.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+{
+  "name": "Globoworld",
+  "short_name": "Globoworld",
+  "start_url": "https://globoworld.github.io/GloboworldWEB/",
+  "scope": "https://globoworld.github.io/GloboworldWEB/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0078d7",
+  "icons": [
+    {
+      "src": "https://globoworld.github.io/GloboworldWEB/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://globoworld.github.io/GloboworldWEB/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

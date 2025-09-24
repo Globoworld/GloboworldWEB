@@ -4,6 +4,9 @@
     <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/logosus.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="/GloboworldWEB/manifest.json">
+    <meta name="theme-color" content="#0078d7">
+    
     <title>Globoworld - Our Services</title>
     <style>
         body {
@@ -114,6 +117,16 @@
         }
     </style>
 </head>
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/GloboworldWEB/sw.js")
+        .then(reg => console.log("✅ Service Worker registrato:", reg.scope))
+        .catch(err => console.error("❌ SW registration failed:", err));
+    });
+  }
+</script>
 <script src="https://static.elfsight.com/platform/platform.js" async></script>
 <div class="elfsight-app-af0229a8-22fe-429e-8e41-48d1655af9d8" data-elfsight-app-lazy></div>
 <body>

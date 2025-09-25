@@ -254,52 +254,37 @@
     </div>
   </div>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const textarea = document.querySelector(".chat__textarea");
-  const chatBox = document.getElementById("chat-box");
-  const submitBtn = document.querySelector(".chat-submit");
-  const menu = document.getElementById("menu");
-  const toggle = document.querySelector(".menu-toggle");
+const API_URL = 'https://free.v36.cm/v1/chat/completions';
+const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
 
-  // Aggiungi messaggi solo se non esiste già una funzione addMessage
-  if (typeof window.addMessage !== "function") {
-    window.addMessage = function (content, sender = "user") {
-      if (!chatBox) return;
-      const msg = document.createElement("div");
-      msg.className = "message " + sender;
-      msg.innerText = content;
-      chatBox.appendChild(msg);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    };
+document.addEventListener('DOMContentLoaded', () => {
+  const chatBox = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const newChatBtn = document.getElementById('new-chat-btn');
+  const deleteChatBtn = document.getElementById('delete-chat-btn');
+  const chatList = document.getElementById('chat-list');
+  const menu = document.getElementById('menu');
+  const menuToggle = document.getElementById('menu-toggle');
+  const themeToggle = document.getElementById('theme-toggle');
+
+  // 🔹 Scroll sempre in fondo
+  function scrollToBottom() {
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  // Invio messaggio con Enter (non interferisce con il click esistente)
-  if (textarea && submitBtn) {
-    textarea.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        submitBtn.click();
-      }
-    });
+  // 🔹 Mostra messaggio
+  function appendMessage(text, who) {
+    const div = document.createElement('div');
+    div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
+    div.textContent = text;
+    chatBox.appendChild(div);
+    scrollToBottom();
+    return div;
   }
 
-  // Toggle sidebar su mobile (solo se hai il bottone .menu-toggle)
-  if (toggle && menu) {
-    toggle.addEventListener("click", () => {
-      menu.classList.toggle("open");
-    });
-  }
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const chatBox = document.getElementById("chat-box");
-
-  // Mostra errore con pulsante debug
-  window.showApiError = function (errorResponse) {
-    if (!chatBox) return;
-
-    // Contenitore messaggio errore
+  // 🔹 Gestione errori con debug
+  function showApiError(errorResponse) {
     const errorMsg = document.createElement("div");
     errorMsg.className = "message bot error";
     errorMsg.innerHTML = `
@@ -309,14 +294,12 @@ document.addEventListener("DOMContentLoaded", () => {
       <pre class="debug-output" style="display:none; max-height:200px; overflow:auto; background:#111; color:#0fa; padding:5px; border-radius:5px; margin-top:5px;"></pre>
     `;
     chatBox.appendChild(errorMsg);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    scrollToBottom();
 
-    // Ricarica pagina
     errorMsg.querySelector(".reload-btn").addEventListener("click", () => {
       location.reload();
     });
 
-    // Mostra/Nascondi dettagli
     const debugBtn = errorMsg.querySelector(".debug-btn");
     const debugOutput = errorMsg.querySelector(".debug-output");
 
@@ -337,204 +320,194 @@ document.addEventListener("DOMContentLoaded", () => {
         debugBtn.textContent = "Più dettagli";
       }
     });
-  };
-});
+  }
 
-</script>
-  <script>
-    const API_URL = 'https://free.v36.cm/v1/chat/completions';
-    const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
+  // 🔹 Carica lista chat
+  function loadChats() {
+    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+    chatList.innerHTML = '<option value="">Seleziona una chat</option>';
+    chats.forEach(chat => {
+      const opt = document.createElement('option');
+      opt.value = chat.id;
+      opt.textContent = chat.title || "Nuova chat";
+      chatList.appendChild(opt);
+    });
+    const cur = localStorage.getItem('currentChatId') || '';
+    if (cur) chatList.value = cur;
+  }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const chatBox = document.getElementById('chat-box');
-      const userInput = document.getElementById('user-input');
-      const sendBtn = document.getElementById('send-btn');
-      const newChatBtn = document.getElementById('new-chat-btn');
-      const deleteChatBtn = document.getElementById('delete-chat-btn');
-      const chatList = document.getElementById('chat-list');
-      const menu = document.getElementById('menu');
-      const menuToggle = document.getElementById('menu-toggle');
+  function createNewChat() {
+    const systemMessage = {
+      role: "system",
+      content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
+    };
+    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+    const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
+    chats.unshift(newChat);
+    localStorage.setItem('chats', JSON.stringify(chats));
+    localStorage.setItem('currentChatId', newChat.id);
+    return newChat.id;
+  }
 
-      // Toggle menu mobile
-      menuToggle.addEventListener('click', () => {
-        menu.classList.toggle('open');
-      });
-
+  function updateChatTitle(chatId, newTitle) {
+    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+    const chat = chats.find(c => c.id === chatId);
+    if (chat) {
+      chat.title = newTitle;
+      localStorage.setItem('chats', JSON.stringify(chats));
       loadChats();
-      let currentChatId = localStorage.getItem('currentChatId');
-      if (!currentChatId) currentChatId = createNewChat();
-      displayChat(currentChatId);
+    }
+  }
 
-      sendBtn.addEventListener('click', sendMessage);
-      userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
+  function deleteChat(chatId) {
+    let chats = JSON.parse(localStorage.getItem('chats')) || [];
+    chats = chats.filter(c => c.id !== chatId);
+    localStorage.setItem('chats', JSON.stringify(chats));
+    if (chats.length) localStorage.setItem('currentChatId', chats[0].id);
+    else localStorage.removeItem('currentChatId');
+  }
+
+  function loadChatMessages(chatId) {
+    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+    const chat = chats.find(c => c.id === chatId);
+    return chat ? chat.messages : [];
+  }
+
+  function saveMessage(chatId, message) {
+    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+    const chat = chats.find(c => c.id === chatId);
+    if (chat) {
+      chat.messages.push(message);
+      localStorage.setItem('chats', JSON.stringify(chats));
+    }
+  }
+
+  function displayChat(chatId) {
+    chatBox.innerHTML = '';
+    const msgs = loadChatMessages(chatId);
+    msgs.forEach(m => {
+      if (m.role !== 'system') {
+        appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
+      }
+    });
+  }
+
+  // 🔹 Invio messaggi all'API
+  async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    appendMessage(text, 'user');
+    saveMessage(currentChatId, { role: 'user', content: text });
+    userInput.value = '';
+
+    const typingNode = appendMessage('Sto pensando...', 'bot');
+
+    const requestBody = {
+      model: 'gpt-5',
+      messages: loadChatMessages(currentChatId)
+    };
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify(requestBody)
       });
+      const data = await res.json();
 
-      newChatBtn.addEventListener('click', () => {
-        currentChatId = createNewChat();
-        location.reload(); // 🔄 ricarica dopo creazione
-      });
+      let botText = data.choices?.[0]?.message?.content ||
+        "Ricarica la pagina e riprova.";
+      if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+      appendMessage(botText, 'bot');
+      saveMessage(currentChatId, { role: 'assistant', content: botText });
 
-      deleteChatBtn.addEventListener('click', () => {
-        deleteChat(currentChatId);
-        location.reload(); // 🔄 ricarica dopo eliminazione
-      });
-
-      chatList.addEventListener('change', (e) => {
-        const id = e.target.value;
-        if (id) {
-          currentChatId = id;
-          localStorage.setItem('currentChatId', id);
-          displayChat(id);
-        }
-      });
-
-      function loadChats() {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        chatList.innerHTML = '<option value="">Seleziona una chat</option>';
-        chats.forEach(chat => {
-          const opt = document.createElement('option');
-          opt.value = chat.id;
-          opt.textContent = chat.title || "Nuova chat";
-          chatList.appendChild(opt);
-        });
-        const cur = localStorage.getItem('currentChatId') || '';
-        if (cur) chatList.value = cur;
-      }
-
-      function createNewChat() {
-        const systemMessage = {
-          role: "system",
-          content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
-        };
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
-        chats.unshift(newChat);
-        localStorage.setItem('chats', JSON.stringify(chats));
-        localStorage.setItem('currentChatId', newChat.id);
-        return newChat.id;
-      }
-
-      function updateChatTitle(chatId, newTitle) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        if (chat) {
-          chat.title = newTitle;
-          localStorage.setItem('chats', JSON.stringify(chats));
-          loadChats();
-        }
-      }
-
-      function deleteChat(chatId) {
-        let chats = JSON.parse(localStorage.getItem('chats')) || [];
-        chats = chats.filter(c => c.id !== chatId);
-        localStorage.setItem('chats', JSON.stringify(chats));
-        if (chats.length) localStorage.setItem('currentChatId', chats[0].id);
-        else localStorage.removeItem('currentChatId');
-      }
-
-      function loadChatMessages(chatId) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        return chat ? chat.messages : [];
-      }
-
-      function saveMessage(chatId, message) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        if (chat) {
-          chat.messages.push(message);
-          localStorage.setItem('chats', JSON.stringify(chats));
-        }
-      }
-
-      function appendMessage(text, who) {
-        const div = document.createElement('div');
-        div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
-        div.textContent = text;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        return div;
-      }
-
-      function displayChat(chatId) {
-        chatBox.innerHTML = '';
-        const msgs = loadChatMessages(chatId);
-        msgs.forEach(m => {
-          if (m.role !== 'system') { // non mostrare messaggio system
-            appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
-          }
-        });
-      }
-
-      async function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        appendMessage(text, 'user');
-        saveMessage(currentChatId, { role: 'user', content: text });
-        userInput.value = '';
-
-        const typingNode = appendMessage('Sto pensando...', 'bot');
-
-        const requestBody = {
-          model: 'gpt-5',
-          messages: loadChatMessages(currentChatId)
-        };
-
+      // 🔹 Genera titolo automatico
+      const chats = JSON.parse(localStorage.getItem('chats')) || [];
+      const chat = chats.find(c => c.id === currentChatId);
+      if (chat && chat.title === "Nuova chat") {
         try {
-          const res = await fetch(API_URL, {
+          const titleReq = {
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat." },
+              ...chat.messages.filter(m => m.role !== 'system')
+            ]
+          };
+          const titleRes = await fetch(API_URL, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${API_KEY}`
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(titleReq)
           });
-          const data = await res.json();
-
-          let botText = data.choices?.[0]?.message?.content || "Ricarica la pagina e riprova. Se il problema persiste contatta l'amministratore del sito.";
-          if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
-          appendMessage(botText, 'bot');
-          saveMessage(currentChatId, { role: 'assistant', content: botText });
-
-          // Genera titolo automatico
-          const chats = JSON.parse(localStorage.getItem('chats')) || [];
-          const chat = chats.find(c => c.id === currentChatId);
-          if (chat && chat.title === "Nuova chat") {
-            try {
-              const titleReq = {
-                model: 'gpt-4o-mini',
-                messages: [
-                  { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat." },
-                  ...chat.messages.filter(m => m.role !== 'system')
-                ]
-              };
-              const titleRes = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${API_KEY}`
-                },
-                body: JSON.stringify(titleReq)
-              });
-              const titleData = await titleRes.json();
-              const newTitle = titleData.choices?.[0]?.message?.content?.trim() || "Nuova chat";
-              updateChatTitle(currentChatId, newTitle);
-            } catch (titleErr) {
-              console.error("Errore generazione titolo:", titleErr);
-            }
-          }
-        } catch (err) {
-          console.error(err);
-          if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
-          appendMessage('Errore: impossibile contattare il server.', 'bot');
+          const titleData = await titleRes.json();
+          const newTitle = titleData.choices?.[0]?.message?.content?.trim() || "Nuova chat";
+          updateChatTitle(currentChatId, newTitle);
+        } catch (titleErr) {
+          console.error("Errore generazione titolo:", titleErr);
         }
       }
+    } catch (err) {
+      console.error(err);
+      if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+      showApiError(err);
+    }
+  }
+
+  // 🔹 Eventi UI
+  menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('open');
+  });
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      themeToggle.innerHTML = document.body.classList.contains("light")
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
     });
-  </script>
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  newChatBtn.addEventListener('click', () => {
+    currentChatId = createNewChat();
+    location.reload();
+  });
+
+  deleteChatBtn.addEventListener('click', () => {
+    deleteChat(currentChatId);
+    location.reload();
+  });
+
+  chatList.addEventListener('change', (e) => {
+    const id = e.target.value;
+    if (id) {
+      currentChatId = id;
+      localStorage.setItem('currentChatId', id);
+      displayChat(id);
+    }
+  });
+
+  // 🔹 Avvio
+  loadChats();
+  let currentChatId = localStorage.getItem('currentChatId');
+  if (!currentChatId) currentChatId = createNewChat();
+  displayChat(currentChatId);
+});
+</script>
+
+
 </body>
 </html>

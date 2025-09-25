@@ -395,7 +395,7 @@
           if (chat && chat.title === "Nuova chat") {
             try {
               const titleReq = {
-                model: 'gpt-4o',
+                model: 'gpt-4',
                 messages: [
                   { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat." },
                   ...chat.messages.filter(m => m.role !== 'system')

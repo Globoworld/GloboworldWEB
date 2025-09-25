@@ -1,35 +1,307 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="data:image/png;base64,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" alt="logo" width="60%" height="60%" />
-      </div>
-      <button id="new-chat-btn">➕ Nuova chat</button>
-      <button id="delete-chat-btn">🗑️ Elimina chat</button>
-      <select id="chat-list">
-        <option value="">Seleziona una chat</option>
-      </select>
-    </aside>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GloboAI Chat</title>
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --bg-light: #252526;
+            --sidebar-bg: #2d2d30;
+            --text-color: #d4d4d4;
+            --accent-color: #007acc;
+            --user-bubble: #007acc;
+            --bot-bubble: #3c3c3c;
+            --border-color: #3f3f46;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        <div class="chat__body">
-      <header class="chat__header">
-        <div>
-          <h1>GloboAI</h1>
-          <p>Assistente AI di Globoworld: Adatto anche per lo studio!</p>
-        </div>
-        <button class="menu-toggle" id="menu-toggle">☰</button>
-      </header>
+        /* Stile generale e reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-      <main class="chat__main">
-        <div id="chat-box"></div>
-        <div class="chat__footer">
-          <textarea id="user-input" class="chat__textarea" placeholder="Scrivi un messaggio..."></textarea>
-          <button id="send-btn" class="chat-submit">Invia</button>
-        </div>
-      </main>
-    </div>
-  </div>
+        html, body, .container {
+            height: 100%;
+            overflow: hidden; /* Previene lo scroll della pagina intera */
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+        }
+
+        /* -----------------------
+           ASIDE (Sidebar)
+        ----------------------- */
+        .chat__menu {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px; /* Aggiunto per uniformità */
+        }
+
+        #new-chat-btn, #delete-chat-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        #new-chat-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        #new-chat-btn:hover {
+            background-color: #005f99;
+        }
+
+        #delete-chat-btn {
+            background-color: #cc4444;
+            color: white;
+        }
+
+        #delete-chat-btn:hover {
+            background-color: #a33232;
+        }
+
+        #chat-list {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+            color: var(--text-color);
+            margin-top: 10px;
+            cursor: pointer;
+            flex-grow: 0; /* Non occupa spazio in eccesso */
+        }
+
+        /* Stile mobile: la sidebar è nascosta di default */
+        @media (max-width: 768px) {
+            .chat__menu {
+                position: absolute;
+                height: 100%;
+                left: 0;
+                top: 0;
+                transform: translateX(-100%);
+            }
+            .chat__menu.open {
+                transform: translateX(0);
+            }
+        }
+
+
+        /* -----------------------
+           BODY (Chat principale)
+        ----------------------- */
+        .chat__body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-light);
+            overflow: hidden; /* Gestito dallo scrollbar di chat-box */
+        }
+
+        /* HEADER */
+        .chat__header {
+            padding: 15px 20px;
+            background-color: var(--sidebar-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat__header h1 {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2px;
+        }
+
+        .chat__header p {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .menu-toggle {
+            display: none; /* Nascosto su desktop */
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block; /* Visibile su mobile */
+            }
+        }
+
+        /* MAIN (Area Messaggi) */
+        .chat__main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px; /* Spazio per lo scrollbar */
+            margin-bottom: 15px;
+        }
+
+        /* Stile delle bolle di messaggio */
+        .message {
+            max-width: 75%;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .user {
+            background-color: var(--user-bubble);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot {
+            background-color: var(--bot-bubble);
+            color: var(--text-color);
+            align-self: flex-start;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .bot.error {
+            background-color: #ff5555;
+            color: white;
+        }
+
+        /* FOOTER (Area Input) */
+        .chat__footer {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .chat__textarea {
+            flex-grow: 1;
+            height: 50px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            margin-right: 10px;
+            resize: none;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            font-size: 1rem;
+            line-height: 1.2;
+            overflow-y: auto; /* Permette lo scroll quando il testo aumenta */
+            transition: height 0.2s;
+        }
+
+        .chat__textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .chat-submit {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .chat-submit:hover {
+            background-color: #005f99;
+        }
+        
+        /* Stili aggiuntivi per la nuova logica (errori) */
+        .debug-btn, .reload-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 5px 10px;
+            margin-right: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+    </style>
+    </head>
+<body>
+
+    <div class="container">
+        <aside class="chat__menu" id="menu">
+            <div class="logo">
+                <img src="data:image/png;base64,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" alt="logo" width="60%" height="60%" />
+            </div>
+            <button id="new-chat-btn">➕ Nuova chat</button>
+            <button id="delete-chat-btn">🗑️ Elimina chat</button>
+            <select id="chat-list">
+                <option value="">Seleziona una chat</option>
+            </select>
+        </aside>
+
+        <div class="chat__body">
+            <header class="chat__header">
+                <div>
+                    <h1>GloboAI</h1>
+                    <p>Assistente AI di Globoworld: Adatto anche per lo studio!</p>
+                </div>
+                <button class="menu-toggle" id="menu-toggle">☰</button>
+            </header>
+
+            <main class="chat__main">
+                <div id="chat-box"></div>
+                <div class="chat__footer">
+                    <textarea id="user-input" class="chat__textarea" placeholder="Scrivi un messaggio..."></textarea>
+                    <button id="send-btn" class="chat-submit">Invia</button>
+                </div>
+            </main>
+        </div>
+    </div>
 <script>
 const API_URL = 'https://free.v36.cm/v1/chat/completions';
 const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
@@ -279,9 +551,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   deleteChatBtn.addEventListener('click', () => {
-    deleteChat(currentChatId);
-    // Uso il reload per semplicità nel cambio completo di contesto
-    location.reload();
+    const confirmDelete = window.confirm("Sei sicuro di voler eliminare questa chat?");
+    if (confirmDelete) {
+      deleteChat(currentChatId);
+      // Uso il reload per semplicità nel cambio completo di contesto
+      location.reload();
+    }
   });
 
   chatList.addEventListener('change', (e) => {
@@ -296,11 +571,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 🔹 Avvio
   loadChats();
   let currentChatId = localStorage.getItem('currentChatId');
-  if (!currentChatId) currentChatId = createNewChat();
+  if (!currentChatId || !loadChatMessages(currentChatId).length) {
+    // Se non c'è nessuna chat o la chat corrente non ha messaggi (non è stata inizializzata bene), crea una nuova.
+    currentChatId = createNewChat();
+  }
   displayChat(currentChatId);
 });
 </script>
-
 
 </body>
 </html>

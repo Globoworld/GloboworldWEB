@@ -497,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (chat && chat.title === "Nuova chat") {
         try {
           const titleReq = {
-            model: 'gpt-4o-mini',
+            model: 'gpt-4o',
             messages: [
               { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
               ...chat.messages.filter(m => m.role !== 'system').slice(-1)

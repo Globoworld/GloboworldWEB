@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <link rel="icon" type="image/png" href="https://globoworld.github.io/GloboworldWEB/logosus.png">
     <meta charset="UTF-8">
@@ -8,83 +8,198 @@
     <meta name="theme-color" content="#0078d7">
     
     <title>Globoworld - Our Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            /* Tema Chiaro */
+            --bg-color: #eef2f3;
+            --container-bg: white;
+            --text-color: #333;
+            --header-bg: #007bff;
+            --title-color: #0056b3;
+            --button-bg: #0155db;
+            --button-hover-bg: #00008B;
+            --footer-bg: #f8f9fa;
+            --footer-border: #ccc;
+            --footer-link-color: #646465;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            --close-btn-bg: rgba(255, 255, 255, 0.9);
+            --close-btn-hover-bg: #ddd;
+        }
+
+        [data-theme="dark"] {
+            /* Tema Scuro */
+            --bg-color: #2c3e50; /* Blu scuro/petrolio */
+            --container-bg: #34495e; /* Grigio-blu scuro */
+            --text-color: #ecf0f1; /* Bianco sporco */
+            --header-bg: #3498db; /* Blu acceso per l'intestazione */
+            --title-color: #ecf0f1;
+            --button-bg: #2980b9; /* Blu per i bottoni */
+            --button-hover-bg: #3498db;
+            --footer-bg: #2c3e50;
+            --footer-border: #555;
+            --footer-link-color: #bdc3c7;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            --close-btn-bg: rgba(44, 62, 80, 0.9);
+            --close-btn-hover-bg: #4a627a;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #eef2f3; /* Sfondo grigio chiaro */
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
         }
         header {
-            background-color: #007bff; /* Colore di sfondo dell'intestazione */
+            background-color: var(--header-bg);
             padding: 10px 20px;
-            text-align: right; /* Allinea il contenuto a destra */
-            color: white; /* Colore del testo */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombra per profondità */
+            text-align: right;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         img.logo {
-            max-width: 300px; /* Dimensione logo responsiva */
-            height: auto; /* Mantiene l'aspetto originale */
+            max-width: 300px;
+            height: auto;
             display: block;
-            margin: 20px auto; /* Centra il logo */
+            margin: 20px auto;
         }
         h2 {
             text-align: center;
-            color: #0056b3; /* Colore del titolo */
+            color: var(--title-color);
             margin: 20px 0;
-            font-size: 2em; /* Dimensione del font */
+            font-size: 2em;
+            transition: color 0.3s;
         }
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px 5px;
-            font-size: 16px;
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        /* Stili per la griglia di servizi */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 3-4 colonne su desktop, si adatta su mobile */
+            gap: 20px;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .service-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background-color: var(--button-bg);
+            border-radius: 12px;
             color: white;
-            background-color: #0155db; /* Colore blu */
-            border: none;
-            border-radius: 50px; /* Bordo arrotondato */
-            transition: background-color 0.3s, transform 0.3s; /* Transizione */
-            font-weight: bold; /* Testo in grassetto */
-            text-decoration: none; /* Rimuove il sottolineato */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            aspect-ratio: 1 / 1; /* Rende il bottone quadrato */
         }
-        .button:hover {
-            background-color: #00008B; /* Colore scuro al passaggio del mouse */
-            transform: translateY(-2px); /* Effetto sollevato */
+        .service-button:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        /* Footer come richiesto */
         footer {
             margin-top: 40px;
             padding: 15px 0;
             text-align: center;
-            background-color: #f8f9fa; /* Grigio molto chiaro */
-            border-top: 1px solid #ccc; /* Bordo superiore */
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
             font-size: 14px;
-            color: #555;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Ombra per profondità */
+            color: var(--text-color);
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, color 0.3s;
         }
         .footer-links {
-            background-color: #f8f9fa; /* Colore di sfondo */
-            padding: 20px; /* Spaziatura interna */
-            text-align: center; /* Allineamento del testo */
+            background-color: var(--footer-bg);
+            padding: 20px;
+            text-align: center;
+            transition: background-color 0.3s;
         }
         .footer-links a {
-            color: #646465; /* Colore del testo */
-            text-decoration: none; /* Rimuove la sottolineatura */
-            margin: 0 15px; /* Margine tra i link */
+            color: var(--footer-link-color);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s;
         }
         .footer-links a:hover {
-            text-decoration: underline; /* Sottolinea il link al passaggio del mouse */
+            text-decoration: underline;
         }
-        .container {
-            max-width: 800px; /* Larghezza massima del contenitore */
-            margin: 20px auto; /* Centra il contenitore */
-            padding: 20px;
-            background-color: white; /* Sfondo bianco per il contenitore */
-            border-radius: 8px; /* Angoli arrotondati */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
+        /* Toggler Tema */
+        .theme-toggler {
+            text-align: center;
+            margin-bottom: 20px;
         }
-        /* Stile per il banner pubblicitario */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            /* Icone all'interno dello switch */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #007bff;
+            content: "\f185"; /* Icona Sole (Light Mode) */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+            background-color: #fdd835; /* Giallo per la luna */
+            content: "\f186"; /* Icona Luna (Dark Mode) */
+            color: #2c3e50;
+        }
+
+        /* Stile banner (mantenuto) */
         .banner-container {
             position: relative;
             display: block;
@@ -97,35 +212,66 @@
             height: auto;
             border-radius: 6px;
         }
-        /* Stile per la X di chiusura */
         .close-btn {
             position: absolute;
             top: -10px;
             right: -10px;
             font-size: 22px;
             font-weight: bold;
-            color: #333;
-            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-color);
+            background: var(--close-btn-bg);
             border-radius: 50%;
             padding: 4px 10px;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: background 0.3s;
+            transition: background 0.3s, color 0.3s;
         }
         .close-btn:hover {
-            background: #ddd;
+            background: var(--close-btn-hover-bg);
+        }
+        /* Media Query per layout responsivo */
+        @media (max-width: 600px) {
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 2 colonne su mobile */
+                gap: 15px;
+            }
+            .service-icon {
+                font-size: 2.5em;
+            }
+            .service-button {
+                font-size: 12px;
+                padding: 10px;
+            }
+            .banner-container {
+                max-width: 80%;
+            }
         }
     </style>
 </head>
 <script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("https://globoworld.github.io/GloboworldWEB/sw.js")
-        .then(reg => console.log("✅ Service Worker registrato:", reg.scope))
-        .catch(err => console.error("❌ SW registration failed:", err));
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker
+                .register("https://globoworld.github.io/GloboworldWEB/sw.js")
+                .then(reg => console.log("✅ Service Worker registrato:", reg.scope))
+                .catch(err => console.error("❌ SW registration failed:", err));
+        });
+    }
+
+    // Funzione per gestire il Dark/Light Mode
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+
+    // Applica il tema al caricamento della pagina
+    document.addEventListener('DOMContentLoaded', () => {
+        const storedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', storedTheme);
+        document.getElementById('theme-checkbox').checked = storedTheme === 'dark';
     });
-  }
 </script>
 <script src="https://static.elfsight.com/platform/platform.js" async></script>
 <div class="elfsight-app-af0229a8-22fe-429e-8e41-48d1655af9d8" data-elfsight-app-lazy></div>
@@ -133,7 +279,14 @@
     <div class="container">
         <img src="GW.png" alt="Globoworld Logo" class="logo">
         
-        <!-- Banner con pulsante di chiusura -->
+        <div class="theme-toggler">
+            <label class="toggle-switch">
+                <input type="checkbox" id="theme-checkbox" onclick="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+            <p style="margin-top: 10px; font-size: 0.9em; color: var(--text-color);">Tema Chiaro/Scuro</p>
+        </div>
+        
         <div class="banner-container" id="ad-banner">
             <span class="close-btn" onclick="document.getElementById('ad-banner').style.display='none'">&times;</span>
             <a href="https://globoworld.mysellauth.com/product/grow-your-business">
@@ -142,19 +295,71 @@
         </div>
 
         <h2>Our Tools:</h2>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globosearch/search.html" class="button">Visit Globosearch: A good alternative to Google</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globomath/calculator.html" class="button">Visit Globomath: Can help you to calculate</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globoclock/clock.html" class="button">Visit Globoclock: Analog and Digital Clock</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globotranslate/translate.html" class="button">Visit Globotranslate: A Good translator to speak over the world</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Dino/index.html" class="button">Visit Chrome Dino: Chrome Offline Game</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globocook/search.html" class="button">Visit Globocook: to search your favorite food</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Browser/index.html" class="button">Check more about your browser</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Globonote/note.html" class="button">Visit Globotext: An online block notes</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/GW/index.html" class="button">Visit Globoweather: Real-Time Simple Weather APP</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/Game/index2.html" class="button">Visit Globoconvert: An online universal converter</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/index.html" class="button">Visit Globopicker: Our advanced color picker</a></p>
-        <p><a href="https://globoworld.github.io/GloboworldWEB/GloboAI/oldsystem.html" class="button">Visit GloboAI: Our New AI Assistant</a></p>
+        
+        <div class="services-grid">
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globosearch/search.html" class="service-button" title="Globosearch">
+                <i class="fas fa-search service-icon"></i>
+                <span>Globosearch</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globomath/calculator.html" class="service-button" title="Globomath">
+                <i class="fas fa-calculator service-icon"></i>
+                <span>Globomath</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globoclock/clock.html" class="service-button" title="Globoclock">
+                <i class="fas fa-clock service-icon"></i>
+                <span>Globoclock</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globotranslate/translate.html" class="service-button" title="Globotranslate">
+                <i class="fas fa-language service-icon"></i>
+                <span>Globotranslate</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Dino/index.html" class="service-button" title="Chrome Dino">
+                <i class="fas fa-gamepad service-icon"></i>
+                <span>Chrome Dino</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globocook/search.html" class="service-button" title="Globocook">
+                <i class="fas fa-utensils service-icon"></i>
+                <span>Globocook</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Browser/index.html" class="service-button" title="Check Browser">
+                <i class="fas fa-desktop service-icon"></i>
+                <span>Browser Info</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/Globonote/note.html" class="service-button" title="Globotext">
+                <i class="fas fa-sticky-note service-icon"></i>
+                <span>Globotext</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/GW/index.html" class="service-button" title="Globoweather">
+                <i class="fas fa-cloud-sun service-icon"></i>
+                <span>Globoweather</span>
+            </a>
+
+            <a href="https://globoworld.github.io/GloboworldWEB/Game/index2.html" class="service-button" title="Globoconvert">
+                <i class="fas fa-exchange-alt service-icon"></i>
+                <span>Globoconvert</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/GloboAI/index.html" class="service-button" title="Globopicker">
+                <i class="fas fa-eye-dropper service-icon"></i>
+                <span>Globopicker</span>
+            </a>
+            
+            <a href="https://globoworld.github.io/GloboworldWEB/GloboAI/oldsystem.html" class="service-button" title="GloboAI">
+                <i class="fas fa-robot service-icon"></i>
+                <span>GloboAI</span>
+            </a>
+        </div>
     </div>
+    
     <footer>
         &copy; 2024 - 2025 Globoworld (formerly Globotools). All rights reserved.
         <div class="footer-links">

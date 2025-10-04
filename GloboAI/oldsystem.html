@@ -422,14 +422,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.id = 'file-input';
-    fileInput.style.display = 'none'; // Nascondi input file
+    fileInput.style.display = 'none'; // Nascondi l'input file
 
     // Crea un pulsante per il caricamento file
     const sendFileBtn = document.createElement('button');
     sendFileBtn.className = 'send-file';
-    sendFileBtn.innerHTML = '<i class="fas fa-paperclip"></i>'; // Icona a graffetta
+    sendFileBtn.innerHTML = '<i class="fas fa-paperclip"></i>'; // Icona della graffetta
     sendFileBtn.addEventListener('click', () => {
-        fileInput.click(); // Clicca sul file input
+        fileInput.click(); // Clicca sull'input file
     });
 
     // Aggiungi evento per gestire il caricamento del file
@@ -734,6 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayChat(currentChatId);
 });
 </script>
+
 
 
 </body>

@@ -9,11 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <link rel="icon" href="data:image/png;base64,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" alt="GloboAI Logo">
-    
-    <style>
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAQAElEQVR4AexdCXcUx7W+GoF2CaF9AyEJJIFkYxMbE4wJz8F2Er8k57133j97/+Kdk5OcxHGckBhjB+OVmB0kCwRCSEhCCO3bkL6DR56uru6uXqanevrjUJquW7du3fpufTPV3dXVqf/78MlzJGCQ1DGQIvwDAglGAARIcPDRdSIQAKMg0QiAAIkOPzqfYAIg+EAAUyCMgYQjgF+AhA+ApHcfBEj6CEh4/0GAhA+ApHcfBEjiCECfdxAAAXagwEESEQABkhh19HkHARBgBwocJBEBECCJUUefdxAAAXagwEESEBD7CAKIiCCfKARAgESFG50VEQABRESQTxQCIECiwo3OigiAACIiyCcKgQQRIFFxRWcVEQABFIGCWnEiAAIUZ1zRK0UEQABFoKBWnAiAAMUZV/RKEQEQQBGoWKvBeVsEQABbaFCQBARAgCREGX20RQAEsIUGBUlAAARIQpTRR1sEQABbaFBQDAi49QEEcEMI5UWNAAhQ1OFF59wQAAHcEEJ5USMAAhR1eNE5NwRAADeEUF7UCBQxAYo6buhcSAiAACEBCTPxRAAEiGfc4HVICIAAIQEJM/FEAASIZ9zgdUgIgAAhAamVGTijjAAIoAwVFIsRARAgpKhubGzT0uI6zc8u09MnK7S8tEGbm9uBrKefU8bW3OMlmptZpsWFNVpf3aTnXBDIMipnEQABskh4/NzeTtPUwwW6/MV9+uj3V+lvf7hGn/zlFl38eJT++fcROv/hTfrr76/RuT/eoKvfTtCsMYhVBu6zp2t047tJ+vLTsYxNtnXpk+/p0vlRuvDX23TuTzfoz7+7Qpc+GaN7o7O0vrbl0XOo5yIAAuSioXC8vf2cxu7M0N+NgfjNxXs0eX+etjbTtjXX1zbp/vdz9IUxiM8bBJm8/5SeG9/ssgoryxsGee7QXcP+zNSiYdfmF8SoP/d4ka5ffmgQ4jpd/WaC1ox2ZDYhc0YABHDGx1Q6Pfks881+0/iG3jSmPKZChQwP8MtfjNOn527TwtNVS42q6jI6duKARe4oMMhwf2yOPv7gFo3cmLYll6ONIir02hUQQBGxkZvT9PU/79KaMQdXrGKrtmhMcy7+YyQzhRKVWjvraPDlDlHsmk+n03Tn+hR99dmY/S+Hq5XkKYAACjG/fGmc7lybUtBUV0kbUymeQt0dmbFU6htoppb2OotcRcBTJz4P4ZNyFf2k64AALiOAB/7kg6cuWv6Lb/xrkh4/emYxMHysi1KpEotcRcBXi765eJdUTrpV7BWzDgjgEF0emDz1cVAJpejbz8eNy6brJluVVbupu6/JJPOSeWJcNr1xZdJLlUTqggA2Yedr+HyJ06Y4VPG2cUn1uy8fWGz29BsE8PcjkLF1b2SWnhj3JTIZ/JEiUEQEkPbPt3DUOOndCngjy0vj83PLNDW5YKpSWVVGre17TDKvGZ5iea2TJH0QQBLt1ZUNGrttPTmVqIYqun3VeqK9v7chUBsL8yvSq02BjBZRZRBAEsyHxs0qiTjvoqVnazQ/t2Jqp6G5hkp8ngxnDT249yR7iE8BARBAAISzUxPmqQjLokqPJsxXnHbtSlFdfWWg5mf5rvKW/d3qQMZjXhkEEALI0x+eNgjiyLLTxt1msbE9e4MRIJ1+TjNT1kutYjtJzIMAQtR5FacgijS7srROPGBzG62pKc/NWo8VJEvPzJdZFaokQgUEEMK8uV741ZVrq2YfKqvLBC+9Z3kZtfdaxV8DBBBivO5jkZtgInCWV5DmGikr35Wb9XW8itWiUtxAAAGW58ZNKUGklOUT1camaspNNXUVSnVFJXGlaalxIizqeM1vbz33WiUR+qlE9NJDJ/mqi4o6D/ie/mZ6/VQPvfvbYXrrnX468R8HTeln7w3Q2V8P0bGfdlN3byPx8gYV27t2l5rUnJ43MCk6ZMorzDYdVBNVlEpUbxU6W15pP99OlaboQF+TMdgHjNRPR452ZFZt7i6zH1zlFbuovauehn/SRW+/f4SOv9VL7fvqHT0RibK5YT4ncKxsU1hRudumJN7ioN6DAAKCtXsqBMmL7MHDrfTub4Zo6Fgn1dXLdV5oOv9tbqulYye66ex/HqHWzj0WZf72FwkQxpWpqurgV5IszhaBAAQQgsiDL/fbstz45vzpmYM0MNxGYczFs82x3ddOHjAI1ZUVZT4bmqszn7l/FhesT4/llqscM/FU9JKmAwJIIt7S8eJhlMbmGjr97gDJBmW2Gn8787qha5cfEj/u+MWFMbr08Sjxg+w3rz7KPAzv9BTZgb5GOnW2n3jhG9tslSx+mzHu5HKZ31RjnIxXhXAp1W/7OtcDASTR4Xl+Z/deeuN0L5VJ5vdbW+nMYjnepYF3f7h5ZZLGR2eJH3ifnV6kudll4q1Mxm49zjwMzw/Qf/LRbdu7sXyn99TZQ9TUWkud+83nB4vP1mgj4L2JLKEJ/ywIgAAWSIj4POCV4/sti9D4Du346Byd//Mt4kHPT15JqktFPIirauzPHfhaPxNOnGYxqaQGFYWlxol776FmRe3kqcWYANEGi/ff+dyY2ly7PEHr65ueGk+lUpmrP9U1ZZ7q8SONE+PBVnL2DjYTX4ny1HCClEEAhWAvzK/Sp+fuZHZpU1C3qBw9vo94mmMpcBE8MAb/2oo3suWa5Hl/X39LrgjHAgIggACImF1aXKPPz3+f2ZJQLFPJt3XtoQ6X6/4yO3yeMXJ9WlakJNtlnLscP91H4pRKqXKClFIJ6qvnrvIjkV99do+2t2x2aHOxyA+yHHml00VLXjxybcr3HkR8N/uEMfi9TrnknhS3FARwiO+/vnxAvDzZQcWxqMu4klRp3EdwVJIU8vPBY6P+Hsnky6knf37I15RL4krRi0AAmxDzZrbTwkPqNqq24t4B7/PvzY1t437CfSKntWs2LfLNrlPv9FOtcd3fRgViAQEQQAAkm73+7UT20NdnY0st1dSalx9suUylNozr/XylaXV5w1ObtfUV9Pqp3syVJvl9C39TOE9OxFQZBJAEbvrhs8xe/5IiZVFXt/mGFlfkLQv5RhkfyxIvtttn3Bne01BFpaXOoeE1Q3xy/drJHnrr7AC1tNfKTNKocTPu5pVH0jIIiZxRTihCjx6aH0z3A8Pe5hpTNb6Uuvh0jfikmrc/NxX+kOGT156DTXTKmMP/4r9fyiyR4I1yDx1po0NDbTT0aie9+kY3nThzkN75zRC9eqKbWjvrqKTkBwM5HzyVuvL1A7p99RFNjs/nlOAwFwEQIBcN45hvPgWd+5eV76JqYe3NzA8PpafT6cwLMD47N0LLi87P6fK9g76BZuofaqX+I610wCBHx/56amyuppTDVimPHy3S+Y9u0YO7L26ibW2libdKNLqH/wICIIAAyMLTVQr6AEpdfaVglSz7/SzMr9CFv93JvGyDv60tFXwIVo2bZte+mTB+ZcZoQ3hzzFOjPR8mtasStkMggIAoL3kQRJ6z1bXlljpLz9YssvR2mvhlG/wape++ekD8fjGLkoKA9xLiVaj/+OAGjY/NSWvI2pcqJkwIAggB3wjh4XHZ3Ve+wiM0tZPladHEvSeZ94vxO8D4fQTj388RrwTdUco54Bfm8cntlxfG6MPfXSXeXdrp5Jqrrgm/CCxDIpwEi4Ng05gvizKv+dLSEksVnodbhBIBb1/C7yO4ZlyGvfDRbfrg/7+zpEvnRzMntzPTi8S/IhIzFtG2yyVYS4WECPALIAS63DiBFUSes9sSEuU+ZebZYAgVysvwTLAMRhBAQCWMgboteWtkuY8lEYJrgbLlVSCADMAYEUDmfviyihAGysqK9U5uZVVZ+M56sMjPOntQT4wqCCCEurqmnMrLg31bLkn24WxorBJaijbb0FQdbYMxaQ0EkASqxWZZgURVKlo1fgH4ZDa3sNnnWx9zbfg95n2L6hsKS0C/vue7HgggQTiMh8hnppdMlnlhHD+hZRJGlGnrsO4/FFHT2jcDAkhC1GJ8Wwc9GZatJ+o+2CRpLf+ingE8FG+HMgggQYbX2fAiNEmRsmhmapE2183LkHktj6+TYeVWrYod+/fi+QArLDsSEGAHCvMB78+zZ6//eTMvqhOf6mJiHT7abm4ojzleUj34UlseW4i/aRDAIYY/OXmAeGWng4pjEe8Yty4sQeCNcnsjmpIcO9lNUf/iOAKiYSEI4BAUvnb+xuk+4nX6Dmq2RbxM4eaVSUv54Evt1N6V3xNT3tirpa3O0jYEZgRAADMellxdfQXxvv9+T4ofjs+TuFCtpKQk82BLPk6KeZrFu0/z1o6WzkBgQQAEsEBiFeypryR+AYbfcwLeXUJc81+SKqHhVzvp5df2WRv0KeEd4E6+fYjc3j/g03xBquW7URBAEWE+Fzj59kEaPtbl+U7x+tomfX3xHm1vpy2t7etpoNPvDVBLh//pSqo0RXxe8bP3BrEdigVhZwEI4IyPqZSnF919jXTmV4M0ONzu6fLik9llejSxYLKXzfA2Jq+/2UP8HoL2znrXB+Kz9cordlNPfxOd+eUgHX65g/iOb7YMn2oIgABqOJm0+KS473BL5pv7zC8GacA4qe00rrfzcoPSXaU7uvWNVXTocGvm4fWfv3+Yurr37pTJDhqaq4mv3Lzz2yHi94odONREza21xK9JTaVSVFNXnvml4Ifk+dfo7K+P0JGjneRn8y1Z+0mUgQABo86PPx4cbKFX3thPb/JuDv81TO//79FMetOYj/cPt2X2BvVyEs3X7/ly6dArnXT8dC+9/avD9Mv/eYl4isO/FPyQ/N7GasK/4AiAAMExhIUYI6AxAWKMKlyPDQIgQGxCBUfzgQAIkA9UYTM2CIAAsQkVHM0HAiBAPlCFzdggAALoGCr4FBkCIEBkUKMhHREAAXSMCnyKDAEQIDKo0ZCOCIAAOkYFPkWGAAgQGdRoSAWBqHUSQwDZLsssixpwtKcXAokhQKFgZ5LJUqH8QbtmBGJBANkAypWZu4RcWAjkYiw7VmlHVo9lKnWj0NGaAAwUJzcgWIeTmx7K1RFICp5aEoDB56Qerheafuq8qIm/fhAoBrw1IsCLEAQFNWj9F17gb1IQ0IoAGLx6DDtZHPgxTz28C9cLrQjg1DUOgJjs9GUBtNOFPNkIaEMAp0HLA18WJju5TDeIjH2TpSA2s3XDsiuzw7JsO2F8yvAOu40w/PRiQxsC2DktAz1X1608V9frMQeXk109LuNkV+4mt6vLck5u9bmc9TjxsSxxGSdZmUzmRVdWP24y7QmgAiiTQEwq9Zx0vAwE1uXkZE8sM+mLhYp5LzZYl5OiaZMaY2sSFFFGawIUCni/AyXsceHkh1NZ2H642dPJFzdfxXItCKATgE6+MCE5iSBm8051szrip5M91pXZlMlYlxPb48THsuRUV6Yvypxsi7pxyGtBgDgAlRt4PuYUxG+uz4lt8CcnPg6Scm3wMScv9oKSw0tbuujGkgAcqadbogAAA6tJREFUKJUUFsheBhL75bddL+2IbXip68VHVbtebIq+FzIfSwLkCzCvQVQdHGH6GwcfvfS30LoggEsECjHIXVyyFIfhoxdihdGepRMFEmhBgGICtEBxzFuzTAxZyluDERvWggBe+8yEEZNXG9APHwEmSvhW82tRawLoAKgOPrgNgaA+Bq3v5p/O5VoTgIHTOTg6+8bYcYqDj+xnoVIBCWDuMk9pzJIfc25BdCv/0ZLzkZMPzjV/LA1iQ6UfQexnvVSxwTpuKWsv91OlD7n6hT7WhgBuQDCwdsmtbtDybLu5dliWm/d6LNYX837siTbEvFebSdDXigD8jVNo0J184AGVTTI/nerK9LO2+FNWzjKZTZmMdTmxrWzivJjEuqwr6qjmRVuq9XTS04oADExYoIZlh30KO+nsWxh9DUKqMNr3YkM7ArDzQQYI1+XEdvwmP/X91HHzz8mmU5mdXdU6qnp27cRJriUBGEAOAic+Vkmsy0lFV0WHbXFy02UdTm56pnIj41SHyzgZao7/WYeTo5JRyDqcjEPT/zh9U5scDzGjLQGyfeTAqaSsvt2nnQ07/azcrl5WntWz+8zq5X5mdXNlucfZctXP3LqyYzs7Ml2W2enL5KwvS1ldWRnLsuWF/tSeAIUGCO0XNwIgQHHHF71zQQAEcAEIxcWNAAhQ3PHVrne6OQQC6BYR+BMpAiBApHCjMd0QAAF0iwj8iRQBECBSuNGYbgiAALpFBP5EikCEBIi0X2gMCCghAAIowQSlYkUABCjWyKJfSgiAAEowQalYEQABijWy6JcSAiCAEkwBlVBdWwRAAG1DA8eiQAAEiAJltKEtAiCAtqGBY1EgAAJEgTLa0BYBEEDb0BSHY7r3AgTQPULwL68IgAB5hRfGdUcABNA9QvAvrwiAAHmFF8Z1RwAE0D1C8C+vCOSRAHn1G8aBQCgIgAChwAgjcUUABIhr5OB3KAiAAKHACCNxRQAEiGvk4HcoCIAAocAoGEE2NgiAALEJFRzNBwIgQD5Qhc3YIAACxCZUcDQfCIAA+UAVNmODAAgQm1DFw9G4eQkCxC1i8DdUBECAUOGEsbghAALELWLwN1QEQIBQ4YSxuCEAAsQtYvA3VARCJECofsEYEIgEARAgEpjRiK4IgAC6RgZ+RYIACBAJzGhEVwRAAF0jA78iQQAECANm2IgtAiBAbEMHx8NAAAQIA0XYiC0CIEBsQwfHw0AABAgDRdiILQIgQGxDp4fjcffi3wAAAP//+wIb9gAAAAZJREFUAwDIQCD5JOROXQAAAABJRU5ErkJggg=="> <style>
         :root {
             --bg-dark: #1e1e1e;
             --bg-light: #252526;
@@ -35,7 +32,7 @@
 
         html, body, .container {
             height: 100%;
-            overflow: hidden; 
+            overflow: hidden; /* Previene lo scroll della pagina intera */
             font-family: var(--font-family);
             background-color: var(--bg-dark);
             color: var(--text-color);
@@ -68,7 +65,7 @@
         .logo img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px; 
+            border-radius: 8px; /* Aggiunto per uniformità */
         }
 
         #new-chat-btn, #delete-chat-btn {
@@ -109,28 +106,7 @@
             color: var(--text-color);
             margin-top: 10px;
             cursor: pointer;
-            flex-grow: 1; 
-            overflow-y: auto; 
-            min-height: 50px; 
-        }
-        
-        .chat-item {
-            padding: 8px;
-            margin-bottom: 5px;
-            border-radius: 4px;
-            cursor: pointer;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            transition: background-color 0.2s;
-        }
-        
-        .chat-item.active {
-            background-color: #005f99;
-        }
-        
-        .chat-item:not(.active):hover {
-            background-color: #3c3c3c;
+            flex-grow: 0; /* Non occupa spazio in eccesso */
         }
 
         /* Stile mobile: la sidebar è nascosta di default */
@@ -155,7 +131,7 @@
             display: flex;
             flex-direction: column;
             background-color: var(--bg-light);
-            overflow: hidden;
+            overflow: hidden; /* Gestito dallo scrollbar di chat-box */
         }
 
         /* HEADER */
@@ -206,20 +182,8 @@
         #chat-box {
             flex-grow: 1;
             overflow-y: auto;
-            padding-right: 10px; 
+            padding-right: 10px; /* Spazio per lo scrollbar */
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column; 
-        }
-        
-        /* Stile scrollbar su chat-box (Webkit) */
-        #chat-box::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #chat-box::-webkit-scrollbar-thumb {
-            background-color: var(--border-color);
-            border-radius: 4px;
         }
 
         /* Stile delle bolle di messaggio */
@@ -230,18 +194,6 @@
             border-radius: 20px;
             line-height: 1.5;
             word-wrap: break-word;
-            position: relative; 
-        }
-        
-        .typing-indicator {
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 20px;
-            background-color: var(--bot-bubble);
-            color: var(--text-color);
-            align-self: flex-start;
-            margin-right: auto;
-            border-bottom-left-radius: 5px;
         }
 
         .user {
@@ -260,7 +212,7 @@
             border-bottom-left-radius: 5px;
         }
         
-        /* Stili aggiuntivi per i messaggi del bot */
+        /* 💡 Stili per link e tabelle dentro i messaggi */
         .message a {
             color: #55b4ff;
             text-decoration: underline;
@@ -288,7 +240,7 @@
             color: white;
         }
         
-        /* Stili per i blocchi di codice */
+        /* 💡 Stili per i blocchi di codice */
         .code-block-wrapper {
             position: relative;
             margin: 10px 0;
@@ -318,13 +270,9 @@
         .copy-code-btn:hover {
             background: #5a5a5a;
         }
-        
-        .copy-code-btn:active {
-            background: #007acc;
-        }
 
-        .code-block-wrapper pre {
-            margin: 0 !important; 
+        .message pre {
+            margin: 0 !important; /* Resetta il margine per allinearsi con l'header */
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
@@ -332,15 +280,14 @@
         /* FOOTER (Area Input) */
         .chat__footer {
             display: flex;
-            align-items: flex-end; 
+            align-items: center;
             border-top: 1px solid var(--border-color);
-            padding: 15px 20px 15px 20px; 
+            padding-top: 15px;
         }
 
         .chat__textarea {
             flex-grow: 1;
-            max-height: 200px;
-            min-height: 50px;
+            height: 50px;
             padding: 15px;
             border: 1px solid var(--border-color);
             border-radius: 25px;
@@ -350,510 +297,433 @@
             color: var(--text-color);
             font-size: 1rem;
             line-height: 1.2;
-            overflow-y: auto; 
+            overflow-y: auto; /* Permette lo scroll quando il testo aumenta */
             transition: height 0.2s;
-        }
-        
-        /* Nasconde la scrollbar della textarea (estetica) */
-        .chat__textarea::-webkit-scrollbar {
-            display: none;
-        }
-        .chat__textarea {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
         }
 
         .chat__textarea:focus {
             outline: none;
             border-color: var(--accent-color);
         }
-        
-        /* Pulsante Invia */
+
         .chat-submit {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
             background-color: var(--accent-color);
             color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-        }
-        
-        .chat-submit:disabled {
-            background-color: #3f3f46;
-            color: #888;
-            cursor: not-allowed;
         }
 
-        .chat-submit:hover:not(:disabled) {
+        .chat-submit:hover {
             background-color: #005f99;
         }
         
-        /* Pulsante per il file (Clip) */
-        #file-input {
-            display: none;
-        }
-        
-        .send-file {
-            background: transparent;
-            border: none;
+        /* Stili aggiuntivi per la nuova logica (errori) */
+        .debug-btn, .reload-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 5px 10px;
+            margin-right: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
             cursor: pointer;
-            color: var(--accent-color);
-            font-size: 1.5rem; 
-            padding: 5px;
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
-            height: 50px; 
         }
+            .chat__footer {
+        display: flex;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 15px;
+    }
 
-        .send-file:hover {
-            color: #005f99;
-        }
-        
+    .chat-submit {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s; /* Aggiungi transizione */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chat-submit:hover {
+        background-color: #005f99;
+    }
+
+    /* Pulsante per il file */
+    #file-input {
+        display: none; /* Nascondi l'input field */
+    }
+    /* Aggiunto al tuo CSS esistente */
+.send-file {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--accent-color);
+    font-size: 20px; /* Dimensione dell'icona */
+}
+
+.send-file:hover {
+    color: #005f99;
+}
     </style>
-    </head>
+</head>
 <body>
+
     <div class="container">
         <aside class="chat__menu" id="menu">
-            
             <div class="logo">
-                <img src="data:image/png;base64,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" alt="GloboAI Logo">
-            </div>
-
-            <button id="new-chat-btn">Nuova Chat</button>
-            <button id="delete-chat-btn">Elimina Chat Corrente</button>
-            
-            <div id="chat-list">
-                </div>
-            
+                <img src="data:image/png;base64,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" alt="logo" width="60%" height="60%" /> </div>
+            <button id="new-chat-btn">✚Nuova chat</button>
+            <button id="delete-chat-btn">␡Elimina chat</button>
+            <select id="chat-list">
+                <option value="">Seleziona una chat</option>
+            </select>
         </aside>
 
         <div class="chat__body">
-            
             <header class="chat__header">
                 <div>
                     <h1>GloboAI</h1>
-                    <p>Il tuo assistente personale per la programmazione e altro.</p>
+                    <p>Assistente AI di Globoworld: Adatto anche per lo studio!</p>
                 </div>
-                <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+                <div style="display: flex; align-items: center;">
+        <a href="https://paypal.me/PayPalOfficialBot" target="_blank" style="margin-right: 10px;">
+            <i class="fas fa-heart" style="color: var(--accent-color); font-size: 1rem;"></i>
+        </a></div>
+                <button class="menu-toggle" id="menu-toggle">☰</button>
             </header>
 
             <main class="chat__main">
-                <div id="chat-box">
-                    <div class="bot message">
-                        Ciao! Sono GloboAI. Inizia la conversazione scrivendo un messaggio qui sotto.
-                    </div>
+                <div id="chat-box"></div>
+                <div class="chat__footer">
+                    <textarea id="user-input" class="chat__textarea" placeholder="Scrivi un messaggio..."></textarea>
+                    <button id="send-btn" class="chat-submit">Invia</button>
                 </div>
-                
-                <footer class="chat__footer">
-                    <label for="file-input" class="send-file">
-                        <i class="fas fa-paperclip"></i>
-                    </label>
-                    <input type="file" id="file-input" accept=".txt,.pdf,.jpg,.png" />
-
-                    <textarea id="user-input" class="chat__textarea" placeholder="Scrivi il tuo messaggio..."></textarea>
-                    
-                    <button id="send-btn" class="chat-submit" disabled>
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </footer>
             </main>
         </div>
     </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script>
+const API_URL = 'https://free.v36.cm/v1/chat/completions';
+const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userInput = document.getElementById('user-input');
-            const sendBtn = document.getElementById('send-btn');
-            const chatBox = document.getElementById('chat-box');
-            const menuToggle = document.getElementById('menu-toggle');
-            const menu = document.getElementById('menu');
-            const newChatBtn = document.getElementById('new-chat-btn');
-            const deleteChatBtn = document.getElementById('delete-chat-btn');
-            const chatListContainer = document.getElementById('chat-list');
-            const fileInput = document.getElementById('file-input');
-            
-            let currentChatId = null;
-            let chats = {};
+document.addEventListener('DOMContentLoaded', () => {
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const newChatBtn = document.getElementById('new-chat-btn');
+    const deleteChatBtn = document.getElementById('delete-chat-btn');
+    const chatList = document.getElementById('chat-list');
+    const menu = document.getElementById('menu');
+    const menuToggle = document.getElementById('menu-toggle');
 
-            // 💡 Funzioni per gestione UI Input
-            function adjustTextareaHeight() {
-                userInput.style.height = 'auto';
-                userInput.style.height = userInput.scrollHeight + 'px';
-            }
+    // Crea un pulsante per il caricamento file
+    const sendFileBtn = document.createElement('button');
+    sendFileBtn.innerHTML = '<i class="fas fa-paperclip"></i>'; // Icona della graffetta
+    sendFileBtn.addEventListener('click', () => {
+        fileInput.click(); // Clicca sull'input file
+    });
 
-            function toggleSendButton() {
-                const isInputEmpty = userInput.value.trim() === '';
-                const hasFile = fileInput.files.length > 0;
-                // Abilita solo se c'è testo O un file
-                sendBtn.disabled = !(!isInputEmpty || hasFile);
-            }
-            
-            userInput.addEventListener('input', () => {
-                adjustTextareaHeight();
-                toggleSendButton();
-            });
-            
-            fileInput.addEventListener('change', () => {
-                toggleSendButton();
-                // Mostra un feedback visivo se un file è stato selezionato
-                const icon = document.querySelector('.send-file i');
-                if (fileInput.files.length > 0) {
-                    icon.style.color = 'green';
-                } else {
-                    icon.style.color = 'var(--accent-color)';
-                }
-            });
+    // Aggiungi evento per gestire il caricamento del file
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            appendMessage(`Questa funzione è attualmente in fase di sviluppo, considera di fare una donazione per aiutarci a svilupparla: <a href="https://paypal.me/PayPalOfficialBot" class="google-link" target="_blank">Dona Ora! Qualsiasi centesimo conta</a>`, 'user');
+            saveMessage(currentChatId, { role: 'bot', content: `File: ${file.name}` });
+            fileInput.value = ''; // Resetta l'input file
+        }
+    });
 
-            // 🔹 Funzioni di supporto per la Chat State
-            function generateUniqueId() {
-                return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-            }
+    // Modifica il pulsante di invio
+    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; // Icona dell'aeroplano di carta
+    sendBtn.className = 'chat-submit'; // Assicurati che abbia la classe corretta
 
-            function loadChats() {
-                const storedChats = localStorage.getItem('globoAI_chats');
-                if (storedChats) {
-                    chats = JSON.parse(storedChats);
-                } else {
-                    chats = {};
-                }
-                renderChatList();
-            }
+    // 🔹 Scroll sempre in fondo
+    function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-            function saveChats() {
-                localStorage.setItem('globoAI_chats', JSON.stringify(chats));
-            }
+    // 💡 Mostra messaggio con supporto Markdown/HTML
+    function appendMessage(text, who) {
+        const div = document.createElement('div');
+        div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
 
-            function loadChatMessages(id) {
-                return chats[id] ? chats[id].messages : [];
-            }
-            
-            // Funzione per gestire la copia del codice
-            function copyCode(button) {
-                // Trova il blocco di codice PRE che è il fratello precedente del wrapper PRE
-                const pre = button.closest('.code-block-wrapper').querySelector('pre code');
-                const code = pre.textContent;
-                navigator.clipboard.writeText(code).then(() => {
-                    const originalText = button.textContent;
-                    button.textContent = 'Copiato!';
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                    }, 2000);
-                }).catch(err => {
-                    console.error('Errore nella copia:', err);
-                });
-            }
+        if (who === 'bot') {
+            const sanitizedText = text.replace(/‘’’’\s*(\w+)?\n([\s\S]+?)\n‘’’’/g, '```$1\n$2\n```');
+            const rawHtml = marked.parse(sanitizedText);
+            div.innerHTML = DOMPurify.sanitize(rawHtml);
 
-            function createMessageNode(content, type, isError = false) {
-                const messageNode = document.createElement('div');
-                messageNode.classList.add('message', type);
-                if (isError) {
-                    messageNode.classList.add('error');
-                }
-
-                if (type === 'bot') {
-                    // Converti Markdown in HTML
-                    marked.setOptions({ breaks: true });
-                    const rawHtml = marked.parse(content);
-                    
-                    // Sanitizza l'HTML
-                    const safeHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
-                    messageNode.innerHTML = safeHtml;
-
-                    // Gestione di Highlighting e pulsante di copia
-                    messageNode.querySelectorAll('pre code').forEach((block) => {
-                        // Applicare l'highlighting
-                        hljs.highlightElement(block);
-                        
-                        // Creare il wrapper per il blocco di codice
-                        const wrapper = document.createElement('div');
-                        wrapper.classList.add('code-block-wrapper');
-
-                        // Creare l'header con il pulsante copia
-                        const header = document.createElement('div');
-                        header.classList.add('code-block-header');
-                        
-                        // Determina la lingua
-                        const language = block.className.match(/language-(\w+)/)?.[1] || 'plaintext';
-                        
-                        const langSpan = document.createElement('span');
-                        langSpan.textContent = language.toUpperCase();
-                        
-                        const copyBtn = document.createElement('button');
-                        copyBtn.classList.add('copy-code-btn');
-                        copyBtn.textContent = 'Copia Codice';
-                        
-                        // Aggiunto l'event listener al pulsante di copia
-                        // Importante: l'event listener deve essere aggiunto qui
-                        copyBtn.addEventListener('click', () => copyCode(copyBtn));
-                        
-                        header.appendChild(langSpan);
-                        header.appendChild(copyBtn);
-
-                        // Riassemblare l'elemento
-                        const preElement = block.parentNode; // Questo è l'elemento <pre>
-                        preElement.parentNode.replaceChild(wrapper, preElement);
-                        wrapper.appendChild(header);
-                        wrapper.appendChild(preElement);
+            div.querySelectorAll('pre > code').forEach(codeElement => {
+                const preElement = codeElement.parentElement;
+                const language = (codeElement.className.match(/language-(\w+)/) || [, ''])[1];
+                const header = document.createElement('div');
+                header.className = 'code-block-header';
+                const langSpan = document.createElement('span');
+                langSpan.textContent = language;
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-code-btn';
+                copyBtn.textContent = 'Copia';
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(codeElement.textContent).then(() => {
+                        copyBtn.textContent = 'Copiato!';
+                        setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
                     });
-
-                } else {
-                    // Messaggi utente: solo testo semplice
-                    messageNode.textContent = content;
-                }
-
-                return messageNode;
-            }
-
-            function addTypingIndicator() {
-                const indicator = document.createElement('div');
-                indicator.classList.add('typing-indicator');
-                indicator.id = 'typing-indicator';
-                indicator.textContent = 'GloboAI sta scrivendo...';
-                chatBox.appendChild(indicator);
-                chatBox.scrollTop = chatBox.scrollHeight;
-                return indicator;
-            }
-
-            function removeTypingIndicator(indicator) {
-                if (indicator && indicator.parentNode) {
-                    indicator.parentNode.removeChild(indicator);
-                }
-            }
-            
-            function showApiError(error) {
-                const errorMessage = `**Errore di connessione o API:** ${error.message || "Qualcosa è andato storto."}\n\nRiprova o inizia una nuova chat.`;
-                const errorNode = createMessageNode(errorMessage, 'bot', true);
-                chatBox.appendChild(errorNode);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-
-            function createNewChat() {
-                const id = generateUniqueId();
-                const now = new Date();
-                chats[id] = {
-                    title: `Nuova Chat ${Object.keys(chats).length + 1}`,
-                    messages: [],
-                    timestamp: now.toISOString()
-                };
-                saveChats();
-                currentChatId = id; // Imposta la nuova chat come corrente
-                renderChatList();
-                displayChat(id);
-                localStorage.setItem('currentChatId', id);
-                return id;
-            }
-
-            function deleteChat(id) {
-                if (chats[id]) {
-                    delete chats[id];
-                    saveChats();
-                    
-                    // Gestione della selezione della nuova chat corrente
-                    const chatIds = Object.keys(chats).sort((a, b) => new Date(chats[b].timestamp) - new Date(chats[a].timestamp));
-                    if (chatIds.length > 0) {
-                        currentChatId = chatIds[0];
-                    } else {
-                        // Se non ci sono più chat, ne crea una nuova
-                        currentChatId = createNewChat();
-                    }
-                    localStorage.setItem('currentChatId', currentChatId);
-                    renderChatList();
-                    displayChat(currentChatId);
-                }
-            }
-
-            // Corretta la logica per renderizzare gli elementi DIV della chat list
-            function renderChatList() {
-                chatListContainer.innerHTML = '';
-                // Ordina per timestamp più recente
-                const chatIds = Object.keys(chats).sort((a, b) => new Date(chats[b].timestamp) - new Date(chats[a].timestamp));
-                
-                chatIds.forEach(id => {
-                    const chat = chats[id];
-                    const chatItem = document.createElement('div');
-                    chatItem.classList.add('chat-item');
-                    chatItem.dataset.chatId = id;
-                    chatItem.textContent = chat.title;
-                    
-                    if (id === currentChatId) {
-                        chatItem.classList.add('active');
-                    }
-                    
-                    // Event listener corretto sulla lista
-                    chatItem.addEventListener('click', () => {
-                        if (currentChatId !== id) {
-                            currentChatId = id;
-                            localStorage.setItem('currentChatId', id);
-                            displayChat(id);
-                            // Chiude la sidebar su mobile dopo la selezione
-                            if (window.innerWidth <= 768) {
-                                menu.classList.remove('open');
-                            }
-                        }
-                    });
-                    chatListContainer.appendChild(chatItem);
                 });
-            }
-
-            function displayChat(id) {
-                chatBox.innerHTML = '';
-                const messages = loadChatMessages(id);
                 
-                // Se la chat è vuota, aggiungi il messaggio di benvenuto iniziale
-                if (messages.length === 0) {
-                    chatBox.appendChild(createMessageNode("Ciao! Sono GloboAI. Inizia la conversazione scrivendo un messaggio qui sotto.", 'bot'));
-                } else {
-                    messages.forEach(msg => {
-                        chatBox.appendChild(createMessageNode(msg.content, msg.type));
-                    });
-                }
-                
-                chatBox.scrollTop = chatBox.scrollHeight;
-                
-                // Aggiorna l'highlight nella sidebar
-                document.querySelectorAll('.chat-item').forEach(item => {
-                    item.classList.remove('active');
-                    if (item.dataset.chatId === id) {
-                        item.classList.add('active');
-                    }
-                });
-            }
-
-            async function sendMessage() {
-                const userText = userInput.value.trim();
-                const file = fileInput.files[0];
-
-                if (!userText && !file) {
-                    return;
-                }
-
-                // 1. Aggiungi il messaggio utente alla chat
-                let messageContent = userText;
-                if (file) {
-                     messageContent = `${userText}\n\n[File: ${file.name} - ${Math.round(file.size / 1024)}KB]`;
-                }
-
-                const userMessageNode = createMessageNode(messageContent, 'user');
-                chatBox.appendChild(userMessageNode);
-                
-                // Aggiorna la chat in memoria e il titolo
-                if (chats[currentChatId].messages.length === 0 && userText) {
-                    chats[currentChatId].title = userText.substring(0, 30) + (userText.length > 30 ? '...' : '');
-                    renderChatList(); // Ricarica la lista per aggiornare il titolo
-                }
-                chats[currentChatId].messages.push({ type: 'user', content: messageContent });
-                chats[currentChatId].timestamp = new Date().toISOString(); // Aggiorna il timestamp
-                saveChats();
-
-                // 2. Resetta l'input
-                userInput.value = '';
-                fileInput.value = ''; // Resetta il campo file
-                document.querySelector('.send-file i').style.color = 'var(--accent-color)'; // Resetta l'icona
-                adjustTextareaHeight();
-                toggleSendButton(); 
-
-                // 3. Mostra l'indicatore di scrittura
-                const typingNode = addTypingIndicator();
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                try {
-                    // Logica di Mock API
-                    const isCodeQuestion = userText.toLowerCase().includes('codice') || userText.toLowerCase().includes('html') || userText.toLowerCase().includes('script');
-                    
-                    let botContent;
-                    if (isCodeQuestion) {
-                        botContent = `Certo, ecco un esempio di **codice** corretto, come richiesto:\n\n\`\`\`javascript\nfunction calculateArea(radius) {\n  // Formula per l'area di un cerchio\n  if (radius <= 0) {\n    return "Errore: il raggio deve essere positivo.";\n  }\n  return Math.PI * radius * radius;\n}\n\nconsole.log(calculateArea(5));\n\`\`\`\n\nFammi sapere se hai bisogno di altre correzioni o chiarimenti!`;
-                    } else if (file) {
-                        botContent = `Ho ricevuto il tuo messaggio e il file **${file.name}**. In un'applicazione reale, lo analizzerei. Al momento, la mia risposta mock è: Analisi del file completata con successo!`;
-                    } else {
-                        botContent = `Ho ricevuto il tuo messaggio: **${userText}**. Questa è una risposta di prova per dimostrare che lo script funziona correttamente. Se hai bisogno di aiuto, usa il Markdown o prova a chiedere un esempio di codice!`;
-                    }
-
-
-                    // Simula un ritardo di rete
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-
-                    
-                    // 4. Rimuovi l'indicatore di scrittura
-                    removeTypingIndicator(typingNode);
-                    
-                    // 5. Aggiungi la risposta del bot
-                    const botMessageNode = createMessageNode(botContent, 'bot');
-                    chatBox.appendChild(botMessageNode);
-
-                    // 6. Aggiorna la chat in memoria
-                    chats[currentChatId].messages.push({ type: 'bot', content: botContent });
-                    saveChats();
-
-                } catch (err) {
-                    console.error("Errore fatale API/Network:", err);
-                    removeTypingIndicator(typingNode);
-                    showApiError(err);
-                }
-                
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-
-            // 🔹 Eventi UI (FIXED)
-            menuToggle.addEventListener('click', () => {
-                menu.classList.toggle('open');
-            });
-
-            sendBtn.addEventListener('click', sendMessage);
-            
-            userInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    if (!sendBtn.disabled) { 
-                        sendMessage();
-                    }
-                }
-            });
-
-            // FIX: Ora creano la chat e la caricano senza ricaricare la pagina
-            newChatBtn.addEventListener('click', () => {
-                createNewChat();
-                if (window.innerWidth <= 768) {
-                    menu.classList.remove('open');
-                }
+                header.appendChild(langSpan);
+                header.appendChild(copyBtn);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                preElement.parentNode.insertBefore(wrapper, preElement);
+                wrapper.appendChild(header);
+                wrapper.appendChild(preElement);
             });
             
-            deleteChatBtn.addEventListener('click', () => {
-                if (Object.keys(chats).length > 0 && window.confirm("Sei sicuro di voler eliminare questa chat?")) {
-                    deleteChat(currentChatId);
-                } else if (Object.keys(chats).length === 0) {
-                    alert("Non ci sono chat da eliminare!");
-                }
+            div.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
             });
+            
+        } else {
+            div.textContent = text;
+        }
 
-            // 🔹 Avvio
-            loadChats();
-            const storedChatId = localStorage.getItem('currentChatId');
-            
-            if (storedChatId && chats[storedChatId]) {
-                currentChatId = storedChatId;
-            } else {
-                 // Trova l'ultima chat o creane una nuova
-                const chatIds = Object.keys(chats).sort((a, b) => new Date(chats[b].timestamp) - new Date(chats[a].timestamp));
-                if (chatIds.length > 0) {
-                    currentChatId = chatIds[0];
-                } else {
-                    currentChatId = createNewChat();
-                }
-                localStorage.setItem('currentChatId', currentChatId);
-            }
-            
-            displayChat(currentChatId);
-            toggleSendButton(); // Inizializza lo stato del pulsante
-            userInput.focus();
+        chatBox.appendChild(div);
+        scrollToBottom();
+        return div;
+    }
+
+    function showApiError(errorResponse) {
+        const errorMsg = document.createElement("div");
+        errorMsg.className = "message bot error";
+        errorMsg.innerHTML = `
+        ⚠️ Si è verificato un errore durante la chiamata API.<br>
+        <button class="reload-btn">Ricarica la pagina</button>
+        <button class="debug-btn">Più dettagli</button>
+        <pre class="debug-output" style="display:none; max-height:200px; overflow:auto; background:#111; color:#0fa; padding:5px; border-radius:5px; margin-top:5px;"></pre>
+        `;
+        chatBox.appendChild(errorMsg);
+        scrollToBottom();
+
+        errorMsg.querySelector(".reload-btn").addEventListener("click", () => {
+            location.reload();
         });
-    </script>
+
+        const debugBtn = errorMsg.querySelector(".debug-btn");
+        const debugOutput = errorMsg.querySelector(".debug-output");
+        debugBtn.addEventListener("click", () => {
+            if (debugOutput.style.display === "none") {
+                debugOutput.style.display = "block";
+                try {
+                    debugOutput.textContent =
+                        typeof errorResponse === "object" && errorResponse !== null
+                            ? JSON.stringify(errorResponse, null, 2)
+                            : String(errorResponse);
+                } catch (e) {
+                    debugOutput.textContent = String(errorResponse);
+                }
+                debugBtn.textContent = "Nascondi dettagli";
+            } else {
+                debugOutput.style.display = "none";
+                debugBtn.textContent = "Più dettagli";
+            }
+        });
+    }
+
+    function loadChats() {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        chatList.innerHTML = '<option value="">Seleziona una chat</option>';
+        chats.forEach(chat => {
+            const opt = document.createElement('option');
+            opt.value = chat.id;
+            opt.textContent = chat.title || "Nuova chat";
+            chatList.appendChild(opt);
+        });
+        const cur = localStorage.getItem('currentChatId') || '';
+        if (cur) chatList.value = cur;
+    }
+
+    function createNewChat() {
+        const systemMessage = {
+            role: "system",
+            content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
+        };
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
+        chats.unshift(newChat);
+        localStorage.setItem('chats', JSON.stringify(chats));
+        localStorage.setItem('currentChatId', newChat.id);
+        return newChat.id;
+    }
+
+    function updateChatTitle(chatId, newTitle) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.title = newTitle;
+            localStorage.setItem('chats', JSON.stringify(chats));
+            loadChats();
+        }
+    }
+
+    function deleteChat(chatId) {
+        let chats = JSON.parse(localStorage.getItem('chats')) || [];
+        chats = chats.filter(c => c.id !== chatId);
+        localStorage.setItem('chats', JSON.stringify(chats));
+        if (chats.length) localStorage.setItem('currentChatId', chats[0].id);
+        else localStorage.removeItem('currentChatId');
+    }
+
+    function loadChatMessages(chatId) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        return chat ? chat.messages : [];
+    }
+
+    function saveMessage(chatId, message) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.messages.push(message);
+            localStorage.setItem('chats', JSON.stringify(chats));
+        }
+    }
+
+    function displayChat(chatId) {
+        chatBox.innerHTML = '';
+        const msgs = loadChatMessages(chatId);
+        msgs.forEach(m => {
+            if (m.role !== 'system') {
+                appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
+            }
+        });
+    }
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text && !fileInput.files.length) return;
+
+        // Gestisci il messaggio dell'utente
+        if (text) {
+            appendMessage(text, 'user');
+            saveMessage(currentChatId, { role: 'user', content: text });
+            userInput.value = '';
+        }
+
+        const typingNode = appendMessage('Sto scrivendo...', 'bot');
+
+        const requestBody = {
+            model: 'gpt-4o-mini',
+            messages: loadChatMessages(currentChatId)
+        };
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+            if (!res.ok) {
+                let errorDetails = { status: res.status, statusText: res.statusText };
+                try {
+                    const errorJson = await res.json();
+                    errorDetails = { ...errorDetails, ...errorJson };
+                } catch (e) { /* Ignora */ }
+                throw errorDetails;
+            }
+
+            const data = await res.json();
+            let botText = data.choices?.[0]?.message?.content || "Ricarica la pagina e riprova.";
+            appendMessage(botText, 'bot');
+            saveMessage(currentChatId, { role: 'assistant', content: botText });
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const chat = chats.find(c => c.id === currentChatId);
+            if (chat && chat.title === "Nuova chat") {
+                try {
+                    const titleReq = {
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
+                            ...chat.messages.filter(m => m.role !== 'system').slice(-1)
+                        ]
+                    };
+                    const titleRes = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${API_KEY}`
+                        },
+                        body: JSON.stringify(titleReq)
+                    });
+                    if (titleRes.ok) {
+                        const titleData = await titleRes.json();
+                        const newTitle = titleData.choices?.[0]?.message?.content?.trim() || "Nuova chat";
+                        updateChatTitle(currentChatId, newTitle);
+                    } else {
+                        console.warn("Fallita la generazione del titolo (status:", titleRes.status, ")");
+                    }
+                } catch (titleErr) {
+                    console.error("Errore generazione titolo:", titleErr);
+                }
+            }
+        } catch (err) {
+            console.error("Errore fatale API/Network:", err);
+            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+            showApiError(err);
+        }
+    }
+
+    // 🔹 Eventi UI (Invariati)
+    menuToggle.addEventListener('click', () => {
+        menu.classList.toggle('open');
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    newChatBtn.addEventListener('click', () => {
+        currentChatId = createNewChat();
+        location.reload();
+    });
+    deleteChatBtn.addEventListener('click', () => {
+        if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
+            deleteChat(currentChatId);
+            location.reload();
+        }
+    });
+    chatList.addEventListener('change', (e) => {
+        const id = e.target.value;
+        if (id) {
+            currentChatId = id;
+            localStorage.setItem('currentChatId', id);
+            displayChat(id);
+        }
+    });
+    // 🔹 Avvio (Invariato)
+    loadChats();
+    let currentChatId = localStorage.getItem('currentChatId');
+    if (!currentChatId || !loadChatMessages(currentChatId).length) {
+        currentChatId = createNewChat();
+    }
+    displayChat(currentChatId);
+});
+</script>
+
 </body>
 </html>
+Correggi errori di questo codice nello stile o nelle scritture

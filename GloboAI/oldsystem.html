@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             appendMessage(`Questa funzione è attualmente in fase di sviluppo, considera di fare una donazione per aiutarci a svilupparla: <a href="https://paypal.me/PayPalOfficialBot" class="google-link" target="_blank">Dona Ora! Qualsiasi centesimo conta</a>`, 'user');
-            saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
+            saveMessage(currentChatId, { role: 'bot', content: `File: ${file.name}` });
             fileInput.value = ''; // Resetta l'input file
         }
     });
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fileInput.value = ''; // Resetta l'input del file
         }
 
-        const typingNode = appendMessage('Sto pensando...', 'bot');
+        const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
         const requestBody = {
             model: 'gpt-4o-mini',

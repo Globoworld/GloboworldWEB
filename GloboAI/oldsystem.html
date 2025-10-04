@@ -32,6 +32,7 @@
     /* ************************************** */
     html {
         font-size: 62.5%; /* 10px / 16px = 0.625 */
+        height: 100%; /* ASSICURA CHE L'ELEMENTO RADICE OCCUPI TUTTO LO SCHERMO */
     }
 
     /* Stile generale e reset */
@@ -41,18 +42,24 @@
         padding: 0;
     }
 
-    body, .container {
-        height: 100%;
+    /* ************************************** */
+    /* CORREZIONE 3: RIMUOVE SPAZIO SOTTO LA CHAT */
+    /* Garantisce che body e container siano alti al 100% */
+    /* ************************************** */
+    body {
+        height: 100%; 
         overflow: hidden;
         font-family: var(--font-family);
         background-color: var(--bg-dark);
         color: var(--text-color);
         font-size: 1.6rem; /* Il font base è ora 16px */
     }
-
+    
     .container {
+        height: 100%;
         display: flex;
         flex-wrap: nowrap;
+        overflow: hidden; /* Garantisce che il layout non strabordi */
     }
 
     /* ASIDE (Sidebar) */
@@ -66,6 +73,7 @@
         border-right: 0.1rem solid var(--border-color);
         transition: transform 0.3s ease-in-out;
         z-index: 10;
+        flex-shrink: 0; /* Impedisce alla sidebar di ridursi */
     }
 
     .logo {
@@ -152,6 +160,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-shrink: 0; /* Impedisce all'header di ridursi */
     }
 
     .chat__header h1 {
@@ -180,21 +189,20 @@
         }
     }
 
-    /* MAIN (Area Messaggi) */
+    /* MAIN (Area Messaggi e Footer) */
     .chat__main {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        padding: 1.5rem;
+        padding: 0; /* Rimuoviamo il padding generale per una gestione più precisa */
         overflow: hidden;
-        height: 100%;
     }
 
     #chat-box {
-        flex-grow: 1;
+        flex-grow: 1; /* Permette al box di occupare tutto lo spazio verticale */
         overflow-y: auto;
-        padding-right: 1.5rem;
-        margin-bottom: 1.5rem;
+        padding: 1.5rem 1.5rem 0 1.5rem; /* Padding a sinistra, destra e sopra; 0 sotto per non interferire con il footer */
+        margin-bottom: 0; /* Rimuoviamo il margin-bottom */
     }
 
     /* Stile delle bolle di messaggio */
@@ -291,30 +299,27 @@
         border-top-right-radius: 0;
     }
 
-    /* ************************************** */
-    /* CORREZIONE 2: ALLINEAMENTO FOOTER */
-    /* Standardizza le dimensioni per l'allineamento */
-    /* ************************************** */
-    .chat__foter {
+    /* FOOTER */
+    .chat__footer {
         display: flex;
-        align-items: flex-end; /* Allinea gli elementi in basso (textarea può crescere) */
+        align-items: flex-end; 
         border-top: 0.1rem solid var(--border-color);
         padding: 1.5rem;
+        flex-shrink: 0; /* Impedisce al footer di ridursi */
     }
 
     .chat__textarea {
         flex-grow: 1;
-        /* Rimuoviamo height: 3rem per lasciare che padding e resize gestiscano l'altezza */
-        min-height: 4.8rem; /* Altezza minima (circa 2 linee di testo) */
-        max-height: 15rem; /* Altezza massima per evitare che prenda tutto lo schermo */
+        min-height: 4.8rem; 
+        max-height: 15rem; 
         padding: 1.1rem 1.6rem; 
         border: 0.1rem solid var(--border-color);
-        border-radius: 2.5rem; /* 25px */
+        border-radius: 2.5rem; 
         margin-right: 1rem;
-        resize: vertical; /* Permetti solo il resize verticale */
+        resize: vertical; 
         background-color: var(--bg-dark);
         color: var(--text-color);
-        font-size: 1.6rem; /* 16px */
+        font-size: 1.6rem; 
         line-height: 1.3;
         overflow-y: auto;
         transition: border-color 0.2s;
@@ -326,9 +331,9 @@
     }
 
     .chat-submit {
-        height: 4.8rem; /* Altezza fissa per un cerchio perfetto allineato al textarea */
-        width: 4.8rem; /* Larghezza fissa */
-        padding: 0; /* Il padding viene gestito dall'altezza/larghezza fissa */
+        height: 4.8rem; 
+        width: 4.8rem; 
+        padding: 0; 
         border: none;
         border-radius: 50%;
         background-color: var(--accent-color);
@@ -338,8 +343,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-shrink: 0; /* Impedisce che si rimpicciolisca */
-        font-size: 2rem; /* Dimensione icona */
+        flex-shrink: 0; 
+        font-size: 2rem; 
     }
 
     .chat-submit:hover {
@@ -352,14 +357,13 @@
     }
     
     .send-file {
-        /* Dimensioni del pulsante per il file per allinearsi al submit */
         height: 4.8rem; 
         width: 4.8rem;
         background: transparent;
         border: none;
         cursor: pointer;
         color: var(--accent-color);
-        font-size: 2.4rem; /* Dimensione icona più grande */
+        font-size: 2.4rem; 
         display: flex;
         justify-content: center;
         align-items: center;
@@ -499,7 +503,7 @@
                         navigator.clipboard.writeText(code).then(() => {
                             header.querySelector('.copy-code-btn').innerText = 'Copiato!';
                             setTimeout(() => {
-                                header.querySelector('.copy-code-btn').innerText = 'Copia Codice';
+                                header.querySelector('.copy-code-btn').innerText = 'Copìa Codice';
                             }, 2000);
                         });
                     });
@@ -587,9 +591,9 @@
                 const fileName = fileInput.files[0].name;
                 botText = `Ho ricevuto il file **\`${fileName}\`**. La funzione di analisi avanzata dei file è in fase di sviluppo, ma puoi incollare il codice direttamente nella casella di testo per una risposta immediata!`;
             } else if (userMessage.length > 50) {
-                 botText = "Grazie per il codice! Ho notato che l'uso di **`rem`** senza un **`font-size`** di base nell'HTML può causare problemi di ridimensionamento. Ti suggerisco di aggiungere: \n\n\`\`\`css\nhtml {\n  font-size: 62.5%; /* 1rem = 10px */\n}\n\`\`\`\n\nInoltre, ho corretto l'allineamento dei pulsanti nel footer per garantire coerenza con il campo di testo. Fammi sapere se desideri ulteriori analisi!";
+                 botText = "Grazie per il codice! Ho notato che l'uso di **\`rem\`** senza un **\`font-size\`** di base nell'HTML può causare problemi di ridimensionamento. Ti suggerisco di aggiungere: \n\n\`\`\`css\nhtml {\n  font-size: 62.5%; /* 1rem = 10px */\n}\n\`\`\`\n\nInoltre, ho corretto l'allineamento dei pulsanti nel footer per garantire coerenza con il campo di testo. Fammi sapere se desideri ulteriori analisi!";
             } else if (userMessage.includes('dimensione') || userMessage.includes('strane')) {
-                botText = "Capisco che le dimensioni appaiano 'strane'. Ho corretto il problema nel CSS: la chiave era impostare **`html { font-size: 62.5%; }`** per stabilizzare le unità **`rem`** e allineare meglio il pulsante di invio nel `footer`. Prova il codice corretto che ti ho fornito!";
+                botText = "Capisco che le dimensioni appaiano 'strane'. Ho corretto il problema nel CSS: la chiave era impostare **\`html { font-size: 62.5%; } \`** per stabilizzare le unità **\`rem\`** e allineare meglio il pulsante di invio nel `footer`. Prova il codice corretto che ti ho fornito!";
             }
             
             appendMessage(botText, 'bot');
@@ -602,7 +606,7 @@
             if (!message && !hasFile) return;
 
             // Se è la prima domanda della chat, crea un titolo
-            if (chats[currentChatId].messages.length === 0) {
+            if (chats[currentChatId] && chats[currentChatId].messages.length === 0) {
                 chats[currentChatId].title = getChatTitle(message || "File caricato");
             }
             

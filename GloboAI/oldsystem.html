@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <style>
+<style>
     :root {
         --bg-dark: #1e1e1e;
         --bg-light: #252526;
@@ -65,7 +65,7 @@
     .logo img {
         max-width: 100%;
         height: auto;
-        border-radius: 8px; /* Aggiunto per uniformità */
+        border-radius: 8px; /* Uniformità */
     }
 
     #new-chat-btn, #delete-chat-btn {
@@ -106,12 +106,11 @@
         color: var(--text-color);
         margin-top: 10px;
         cursor: pointer;
-        flex-grow: 1; /* Permette alla lista di occupare spazio */
-        overflow-y: auto; /* Aggiunto scroll per la lista chat */
-        min-height: 50px; /* Altezza minima */
+        flex-grow: 1; /* Permette alla lista di occupare lo spazio disponibile */
+        overflow-y: auto; 
+        min-height: 50px; 
     }
     
-    /* Stile chat-item */
     .chat-item {
         padding: 8px;
         margin-bottom: 5px;
@@ -209,6 +208,16 @@
         display: flex;
         flex-direction: column; 
     }
+    
+    /* FIX/MIGLIORAMENTO: Stile scrollbar su chat-box (Webkit) */
+    #chat-box::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #chat-box::-webkit-scrollbar-thumb {
+        background-color: var(--border-color);
+        border-radius: 4px;
+    }
 
     /* Stile delle bolle di messaggio */
     .message {
@@ -248,7 +257,7 @@
         border-bottom-left-radius: 5px;
     }
     
-    /* Stili per link e tabelle dentro i messaggi */
+    /* Stili aggiuntivi per i messaggi del bot */
     .message a {
         color: #55b4ff;
         text-decoration: underline;
@@ -311,7 +320,6 @@
         background: #007acc;
     }
 
-    /* Corregge l'aspetto del blocco `pre` dopo l'header */
     .code-block-wrapper pre {
         margin: 0 !important; 
         border-top-left-radius: 0;
@@ -321,17 +329,14 @@
     /* FOOTER (Area Input) */
     .chat__footer {
         display: flex;
-        align-items: flex-end; /* Allinea gli elementi in basso */
+        align-items: flex-end; 
         border-top: 1px solid var(--border-color);
-        padding: 15px 0 0 0;
-        /* Aggiungo padding laterale per un aspetto migliore */
-        padding-left: 20px;
-        padding-right: 20px;
+        padding: 15px 20px 15px 20px; /* Aggiunto padding inferiore */
     }
 
     .chat__textarea {
         flex-grow: 1;
-        max-height: 200px; /* Limite massimo per l'espansione */
+        max-height: 200px;
         min-height: 50px;
         padding: 15px;
         border: 1px solid var(--border-color);
@@ -342,18 +347,17 @@
         color: var(--text-color);
         font-size: 1rem;
         line-height: 1.2;
-        overflow-y: auto; /* Permette lo scroll quando il testo aumenta */
+        overflow-y: auto; 
         transition: height 0.2s;
     }
     
-    /* Nasconde la scrollbar su Chrome/Safari/Opera */
+    /* FIX: Nasconde la scrollbar della textarea (estetica) */
     .chat__textarea::-webkit-scrollbar {
         display: none;
     }
-    /* Nasconde la scrollbar su IE e Edge */
     .chat__textarea {
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  /* Nasconde la scrollbar su Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
     }
 
     .chat__textarea:focus {
@@ -361,7 +365,7 @@
         border-color: var(--accent-color);
     }
     
-    /* Stile circolare per il pulsante Invia */
+    /* Pulsante Invia */
     .chat-submit {
         background-color: var(--accent-color);
         color: white;
@@ -375,11 +379,8 @@
         justify-content: center;
         align-items: center;
         font-size: 1.2rem;
-        /* Rimuovi il margine a destra che c'era nella versione precedente */
-        margin-right: 0; 
     }
     
-    /* Stile per pulsante disabilitato */
     .chat-submit:disabled {
         background-color: #3f3f46;
         color: #888;
@@ -392,7 +393,7 @@
     
     /* Pulsante per il file (Clip) */
     #file-input {
-        display: none; /* Nascondi l'input field */
+        display: none;
     }
     
     .send-file {
@@ -405,7 +406,7 @@
         margin-right: 10px;
         display: flex;
         align-items: center;
-        height: 50px; /* Allineato con la textarea */
+        height: 50px; 
     }
 
     .send-file:hover {

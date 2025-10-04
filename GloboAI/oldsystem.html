@@ -362,14 +362,18 @@
     #file-input {
         display: none; /* Nascondi l'input field */
     }
+    /* Aggiunto al tuo CSS esistente */
+.send-file {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--accent-color);
+    font-size: 20px; /* Dimensione dell'icona */
+}
 
-    .send-file {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        color: var(--accent-color);
-        font-size: 20px; /* Dimensione dell'icona */
-    }
+.send-file:hover {
+    color: #005f99;
+}
     </style>
 </head>
 <body>
@@ -734,8 +738,6 @@ document.addEventListener('DOMContentLoaded', () => {
     displayChat(currentChatId);
 });
 </script>
-
-
 
 </body>
 </html>

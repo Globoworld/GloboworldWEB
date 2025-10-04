@@ -406,260 +406,325 @@
         </main>
     </div>
 
-    <script>
-        // ... (Script JavaScript omesso per brevità, è rimasto invariato e corretto)
-        
-        // Inizializzazione di Highlight.js
-        hljs.highlightAll();
+ <script>
+const API_URL = 'https://free.v36.cm/v1/chat/completions';
+const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
 
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const newChatBtn = document.getElementById('new-chat-btn');
-        const deleteChatBtn = document.getElementById('delete-chat-btn');
-        const chatList = document.getElementById('chat-list');
-        const menuToggle = document.getElementById('menu-toggle');
-        const menu = document.getElementById('menu');
-        const fileInput = document.getElementById('file-input');
-        
-        // Struttura fittizia per le chat salvate nel localStorage
-        let chats = JSON.parse(localStorage.getItem('chats')) || {};
-        let currentChatId = localStorage.getItem('currentChatId') || 'default';
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Definizione corretta delle variabili
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const newChatBtn = document.getElementById('new-chat-btn');
+    const deleteChatBtn = document.getElementById('delete-chat-btn');
+    const chatList = document.getElementById('chat-list');
+    const menu = document.getElementById('menu');
+    const menuToggle = document.getElementById('menu-toggle');
+    const fileInput = document.getElementById('file-input'); // 💡 Variabile fileInput definita qui
 
-        // Funzioni di utilità
+    let currentChatId;
 
-        function sanitizeAndMarkdown(text) {
-            const html = marked.parse(text);
-            return DOMPurify.sanitize(html);
-        }
+    // 🔹 Scroll sempre in fondo
+    function scrollToBottom() {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-        function createMessageElement(text, sender) {
-            const messageWrapper = document.createElement('div');
-            messageWrapper.classList.add('message-wrapper');
-            
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender);
-            
-            const sanitizedHtml = sanitizeAndMarkdown(text);
-            
-            const wrapCodeBlocks = (html) => {
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
+    // 💡 Mostra messaggio con supporto Markdown/HTML
+    function appendMessage(text, who) {
+        const div = document.createElement('div');
+        div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
 
-                tempDiv.querySelectorAll('pre code').forEach(codeBlock => {
-                    const pre = codeBlock.parentNode;
-                    
-                    if (pre.parentNode.classList.contains('code-block-wrapper')) {
-                        return;
-                    }
-                    
-                    const languageClass = Array.from(codeBlock.classList).find(cls => cls.startsWith('language-'));
-                    const language = languageClass ? languageClass.replace('language-', '') : 'plaintext';
+        if (who === 'bot') {
+            const sanitizedText = text.replace(/‘’’’\s*(\w+)?\n([\s\S]+?)\n‘’’’/g, '```$1\n$2\n```');
+            const rawHtml = marked.parse(sanitizedText);
+            div.innerHTML = DOMPurify.sanitize(rawHtml);
 
-                    const header = document.createElement('div');
-                    header.classList.add('code-block-header');
-                    header.innerHTML = `<span>${language.toUpperCase()}</span><button class="copy-code-btn">Copia Codice</button>`;
-                    
-                    const wrapper = document.createElement('div');
-                    wrapper.classList.add('code-block-wrapper');
-                    
-                    pre.parentNode.insertBefore(wrapper, pre);
-                    wrapper.appendChild(header);
-                    wrapper.appendChild(pre);
+            div.querySelectorAll('pre > code').forEach(codeElement => {
+                const preElement = codeElement.parentElement;
+                const language = (codeElement.className.match(/language-(\w+)/) || [, ''])[1];
+                const header = document.createElement('div');
+                header.className = 'code-block-header';
+                const langSpan = document.createElement('span');
+                langSpan.textContent = language;
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-code-btn';
+                copyBtn.textContent = 'Copia';
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(codeElement.textContent).then(() => {
+                        copyBtn.textContent = 'Copiato!';
+                        setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
+                    })
+                });
+                
+                header.appendChild(langSpan);
+                header.appendChild(copyBtn);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-block-wrapper';
+                preElement.parentNode.insertBefore(wrapper, preElement);
+                wrapper.appendChild(header);
+                wrapper.appendChild(preElement);
+            });
+            
+            div.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+            
+        } else {
+            div.textContent = text;
+        }
 
-                    header.querySelector('.copy-code-btn').addEventListener('click', () => {
-                        const code = codeBlock.innerText;
-                        navigator.clipboard.writeText(code).then(() => {
-                            header.querySelector('.copy-code-btn').innerText = 'Copiato!';
-                            setTimeout(() => {
-                                header.querySelector('.copy-code-btn').innerText = 'Copia Codice';
-                            }, 2000);
-                        });
-                    });
-                });
-                return tempDiv.innerHTML;
-            };
+        chatBox.appendChild(div);
+        scrollToBottom();
+        return div;
+    }
 
-            messageElement.innerHTML = wrapCodeBlocks(sanitizedHtml);
-            
-            messageElement.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
+    function showApiError(errorResponse) {
+        const errorMsg = document.createElement("div");
+        errorMsg.className = "message bot error";
+        errorMsg.innerHTML = `
+        ⚠️ Si è verificato un errore durante la chiamata API.<br>
+        <button class="reload-btn">Ricarica la pagina</button>
+        <button class="debug-btn">Più dettagli</button>
+        <pre class="debug-output" style="display:none; max-height:200px; overflow:auto; background:#111; color:#0fa; padding:5px; border-radius:5px; margin-top:5px;"></pre>
+        `;
+        chatBox.appendChild(errorMsg);
+        scrollToBottom();
 
-            messageWrapper.appendChild(messageElement);
-            return messageWrapper;
-        }
+        errorMsg.querySelector(".reload-btn").addEventListener("click", () => {
+            location.reload();
+        });
 
-        function appendMessage(text, sender) {
-            const messageElement = createMessageElement(text, sender);
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            
-            if (chats[currentChatId]) {
-                chats[currentChatId].messages.push({ text, sender });
-                saveChats();
-            }
-        }
-        
-        function getChatTitle(firstMessage) {
-            return firstMessage.split(/\s+/).slice(0, 5).join(' ') + '...';
-        }
+        const debugBtn = errorMsg.querySelector(".debug-btn");
+        const debugOutput = errorMsg.querySelector(".debug-output");
+        debugBtn.addEventListener("click", () => {
+            if (debugOutput.style.display === "none") {
+                debugOutput.style.display = "block";
+                try {
+                    debugOutput.textContent =
+                        typeof errorResponse === "object" && errorResponse !== null
+                            ? JSON.stringify(errorResponse, null, 2)
+                            : String(errorResponse);
+                } catch (e) {
+                    debugOutput.textContent = String(errorResponse);
+                }
+                debugBtn.textContent = "Nascondi dettagli";
+            } else {
+                debugOutput.style.display = "none";
+                debugBtn.textContent = "Più dettagli";
+            }
+        });
+    }
 
-        function saveChats() {
-            localStorage.setItem('chats', JSON.stringify(chats));
-            populateChatList();
-        }
+    function loadChats() {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        chatList.innerHTML = '<option value="">Seleziona una chat</option>';
+        chats.forEach(chat => {
+            const opt = document.createElement('option');
+            opt.value = chat.id;
+            opt.textContent = chat.title || "Nuova chat";
+            chatList.appendChild(opt);
+        });
+        const cur = localStorage.getItem('currentChatId') || '';
+        if (cur) chatList.value = cur;
+    }
 
-        function createNewChat() {
-            const newId = Date.now().toString();
-            chats[newId] = {
-                id: newId,
-                title: 'Nuova Chat',
-                messages: []
-            };
-            localStorage.setItem('currentChatId', newId);
-            return newId;
-        }
+    function createNewChat() {
+        const systemMessage = {
+            role: "system",
+            content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
+        };
+        let chats = JSON.parse(localStorage.getItem('chats')) || []; // Usa let per poter riassegnare
+        const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
+        chats.unshift(newChat);
+        localStorage.setItem('chats', JSON.stringify(chats));
+        localStorage.setItem('currentChatId', newChat.id);
+        return newChat.id;
+    }
 
-        function loadChat(chatId) {
-            const chat = chats[chatId];
-            if (chat) {
-                chatBox.innerHTML = '';
-                chat.messages.forEach(msg => {
-                    appendMessage(msg.text, msg.sender);
-                });
-                populateChatList(chatId);
-            }
-        }
+    function updateChatTitle(chatId, newTitle) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.title = newTitle;
+            localStorage.setItem('chats', JSON.stringify(chats));
+            loadChats();
+        }
+    }
 
-        function populateChatList(selectedId = currentChatId) {
-            chatList.innerHTML = '<option value="default">Chat precedenti...</option>';
-            
-            const sortedChats = Object.values(chats).sort((a, b) => b.id - a.id);
+    function deleteChat(chatId) {
+        let chats = JSON.parse(localStorage.getItem('chats')) || [];
+        chats = chats.filter(c => c.id !== chatId);
+        localStorage.setItem('chats', JSON.stringify(chats));
+        if (chats.length) localStorage.setItem('currentChatId', chats[0].id);
+        else localStorage.removeItem('currentChatId');
+    }
 
-            sortedChats.forEach(chat => {
-                const option = document.createElement('option');
-                option.value = chat.id;
-                option.textContent = chat.title;
-                if (chat.id === selectedId) {
-                    option.selected = true;
-                }
-                chatList.appendChild(option);
-            });
-        }
-        
-        function simulateBotResponse(userMessage, isFile) {
-            let botText = "Ciao! Sono GloboAI. Incolla qui il tuo codice o scrivi la tua domanda. Analizzo il codice e suggerisco miglioramenti per lo stile, le performance e la pulizia.";
-            
-            if (isFile) {
-                const fileName = fileInput.files[0].name;
-                botText = `Ho ricevuto il file **\`${fileName}\`**. La funzione di analisi avanzata dei file è in fase di sviluppo, ma puoi incollare il codice direttamente nella casella di testo per una risposta immediata!`;
-            } else if (userMessage.length > 50) {
-                 botText = "Grazie per il codice! Ho notato che l'uso di **\`rem\`** senza un **\`font-size\`** di base nell'HTML può causare problemi di ridimensionamento. Ti suggerisco di aggiungere: \n\n\`\`\`css\nhtml {\n  font-size: 62.5%; /* 1rem = 10px */\n}\n\`\`\`\n\nInoltre, ho corretto l'allineamento dei pulsanti nel footer per garantire coerenza con il campo di testo. Fammi sapere se desideri ulteriori analisi!";
-            } else if (userMessage.includes('dimensione') || userMessage.includes('strane')) {
-                botText = "Capisco che le dimensioni appaiano 'strane'. Ho corretto il problema nel CSS: la chiave era impostare **\`html { font-size: 62.5%; } \`** per stabilizzare le unità **\`rem\`** e allineare meglio il pulsante di invio nel `footer`. Prova il codice corretto che ti ho fornito!";
-            }
-            
-            appendMessage(botText, 'bot');
-        }
+    function loadChatMessages(chatId) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        return chat ? chat.messages : [];
+    }
 
-        function sendMessage() {
-            let message = userInput.value.trim();
-            const hasFile = fileInput.files.length > 0;
-            
-            if (!message && !hasFile) return;
+    function saveMessage(chatId, message) {
+        const chats = JSON.parse(localStorage.getItem('chats')) || [];
+        const chat = chats.find(c => c.id === chatId);
+        if (chat) {
+            chat.messages.push(message);
+            localStorage.setItem('chats', JSON.stringify(chats));
+        }
+    }
 
-            if (chats[currentChatId] && chats[currentChatId].messages.length === 0) {
-                chats[currentChatId].title = getChatTitle(message || "File caricato");
-            }
-            
-            if (hasFile) {
-                const fileName = fileInput.files[0].name;
-                message = `[File Caricato: ${fileName}] ${message}`;
-                appendMessage(message, 'user');
-                simulateBotResponse(message, true);
-                
-                fileInput.value = ''; 
+    function displayChat(chatId) {
+        chatBox.innerHTML = '';
+        const msgs = loadChatMessages(chatId);
+        msgs.forEach(m => {
+            if (m.role !== 'system') {
+                appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
+            }
+        });
+    }
 
-            } else {
-                appendMessage(message, 'user');
-                simulateBotResponse(message, false);
-            }
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        if (!text && !fileInput.files.length) return;
 
-            userInput.value = '';
-            userInput.style.height = userInput.style.minHeight; 
-            
-            saveChats();
-        }
+        // Gestisci il messaggio dell'utente
+        if (text) {
+            appendMessage(text, 'user');
+            saveMessage(currentChatId, { role: 'user', content: text });
+            userInput.value = '';
+        }
 
-        // Event Listeners
-        
-        userInput.addEventListener('input', () => {
-            userInput.style.height = 'auto'; 
-            userInput.style.height = userInput.scrollHeight + 'px'; 
-        });
+        // 💡 Gestione file (anche se disattivata)
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            appendMessage(`Funzione di caricamento file (**${file.name}**) attualmente in fase di sviluppo, considera una donazione: <a href="https://paypal.me/PayPalOfficialBot" target="_blank">Dona Ora</a>`, 'user');
+            saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
+            fileInput.value = ''; // Resetta l'input file
+            return; // Non inviare nulla all'API se è solo un file (secondo la tua logica originale)
+        }
+        
+        // Se invii solo testo, prosegui con l'API
+        const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
-        chatList.addEventListener('change', (e) => {
-            const newChatId = e.target.value;
-            if (newChatId !== 'default' && newChatId !== currentChatId) {
-                currentChatId = newChatId;
-                localStorage.setItem('currentChatId', currentChatId);
-                loadChat(currentChatId);
-            }
-        });
+        const requestBody = {
+            model: 'gpt-4o-mini',
+            messages: loadChatMessages(currentChatId)
+        };
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify(requestBody)
+            });
+            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+            if (!res.ok) {
+                let errorDetails = { status: res.status, statusText: res.statusText };
+                try {
+                    const errorJson = await res.json();
+                    errorDetails = { ...errorDetails, ...errorJson };
+                } catch (e) { /* Ignora */ }
+                throw errorDetails;
+            }
 
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                sendMessage();
-            }
-        });
+            const data = await res.json();
+            let botText = data.choices?.[0]?.message?.content || "Ricarica la pagina e riprova.";
+            appendMessage(botText, 'bot');
+            saveMessage(currentChatId, { role: 'assistant', content: botText });
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const chat = chats.find(c => c.id === currentChatId);
+            if (chat && chat.title === "Nuova chat") {
+                try {
+                    const titleReq = {
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
+                            ...chat.messages.filter(m => m.role !== 'system').slice(-1)
+                        ]
+                    };
+                    const titleRes = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${API_KEY}`
+                        },
+                        body: JSON.stringify(titleReq)
+                    });
+                    if (titleRes.ok) {
+                        const titleData = await titleRes.json();
+                        const newTitle = titleData.choices?.[0]?.message?.content?.trim() || "Nuova chat";
+                        updateChatTitle(currentChatId, newTitle);
+                    } else {
+                        console.warn("Fallita la generazione del titolo (status:", titleRes.status, ")");
+                    }
+                } catch (titleErr) {
+                    console.error("Errore generazione titolo:", titleErr);
+                }
+            }
+        } catch (err) {
+            console.error("Errore fatale API/Network:", err);
+            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+            showApiError(err);
+        }
+    }
+
+    // ----------------------------------------------------
+    // 2. Riorganizzazione e attivazione corretta degli Eventi UI
+    // ----------------------------------------------------
+
+    // Gestione file: usa la label per aprire l'input
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            // Triggera l'invio che gestirà la logica del file (il messaggio "in fase di sviluppo")
+            sendMessage();
+        }
+    });
 
 
-        menuToggle.addEventListener('click', () => {
-            menu.classList.toggle('open');
-        });
+    menuToggle.addEventListener('click', () => {
+        menu.classList.toggle('open');
+    });
 
-        sendBtn.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
 
-        newChatBtn.addEventListener('click', () => {
-            currentChatId = createNewChat();
-            loadChat(currentChatId);
-        });
+    newChatBtn.addEventListener('click', () => {
+        currentChatId = createNewChat();
+        location.reload();
+    });
 
-        deleteChatBtn.addEventListener('click', () => {
-            if (currentChatId && currentChatId !== 'default' && chats[currentChatId]) {
-                const title = chats[currentChatId].title;
-                if (confirm(`Sei sicuro di voler eliminare la chat "${title}"?`)) {
-                    delete chats[currentChatId];
-                    const chatKeys = Object.keys(chats);
-                    
-                    if (chatKeys.length > 0) {
-                        const latestChatId = chatKeys.sort((a, b) => b - a)[0];
-                        currentChatId = latestChatId;
-                        localStorage.setItem('currentChatId', currentChatId);
-                        loadChat(currentChatId);
-                    } else {
-                        currentChatId = createNewChat();
-                        loadChat(currentChatId);
-                    }
-                    saveChats();
-                }
-            } else {
-                alert('Non c\'è nessuna chat da eliminare.');
-            }
-        });
+    deleteChatBtn.addEventListener('click', () => {
+        if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
+            deleteChat(currentChatId);
+            location.reload();
+        }
+    });
 
-        // Caricamento iniziale
-        if (!chats[currentChatId]) {
-            currentChatId = createNewChat();
-        }
-        loadChat(currentChatId);
-    </script>
+    chatList.addEventListener('change', (e) => {
+        const id = e.target.value;
+        if (id) {
+            currentChatId = id;
+            localStorage.setItem('currentChatId', id);
+            displayChat(id);
+        }
+    });
+
+    // 🔹 Avvio
+    loadChats();
+    currentChatId = localStorage.getItem('currentChatId'); // Riassegna currentChatId
+    if (!currentChatId || !loadChatMessages(currentChatId).length) {
+        currentChatId = createNewChat();
+    }
+    displayChat(currentChatId);
+});
+</script>
 </body>
 </html>

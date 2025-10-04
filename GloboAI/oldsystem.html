@@ -403,6 +403,7 @@
             </main>
         </div>
     </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script>
 const API_URL = 'https://free.v36.cm/v1/chat/completions';
 const API_KEY = 'sk-uw0qBhVuhLAUFDbQBb955989A13c463cA765A26aE1035e41';
@@ -417,38 +418,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('menu');
     const menuToggle = document.getElementById('menu-toggle');
 
+    // Aggiungi un campo di input per i file
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'file-input';
+    fileInput.style.display = 'none'; // Nascondi input file
+
+    // Crea un pulsante per il caricamento file
+    const sendFileBtn = document.createElement('button');
+    sendFileBtn.className = 'send-file';
+    sendFileBtn.innerHTML = '<i class="fas fa-paperclip"></i>'; // Icona a graffetta
+    sendFileBtn.addEventListener('click', () => {
+        fileInput.click(); // Clicca sul file input
+    });
+
+    // Aggiungi evento per gestire il caricamento del file
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            appendMessage(`File inviato: ${file.name}`, 'user');
+            saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
+            fileInput.value = ''; // Resetta l'input file
+        }
+    });
+
+    // Modifica il pulsante di invio
+    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>'; // Icona dell'aeroplano di carta
+    sendBtn.className = 'chat-submit'; // Assicurati che abbia la classe corretta
+
+    // Aggiungi input file e pulsanti alla chat__footer
+    document.querySelector('.chat__footer').insertBefore(fileInput, sendBtn);
+    document.querySelector('.chat__footer').appendChild(sendFileBtn);
+
     // 🔹 Scroll sempre in fondo
     function scrollToBottom() {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // 💡 MODIFICATA: Mostra messaggio con supporto Markdown/HTML
+    // 💡 Mostra messaggio con supporto Markdown/HTML
     function appendMessage(text, who) {
         const div = document.createElement('div');
         div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
 
         if (who === 'bot') {
-            // Sostituisce i delimitatori non standard con quelli standard di Markdown
             const sanitizedText = text.replace(/‘’’’\s*(\w+)?\n([\s\S]+?)\n‘’’’/g, '```$1\n$2\n```');
-            
-            // Converte Markdown in HTML, poi lo sanifica per sicurezza
             const rawHtml = marked.parse(sanitizedText);
             div.innerHTML = DOMPurify.sanitize(rawHtml);
-            
-            // Cerca tutti i blocchi di codice e aggiunge l'header con il bottone "Copia"
+
             div.querySelectorAll('pre > code').forEach(codeElement => {
                 const preElement = codeElement.parentElement;
-                
-                // Estrae il linguaggio, se presente (es. class="language-javascript")
                 const language = (codeElement.className.match(/language-(\w+)/) || [, ''])[1];
-                
-                // Crea l'header
                 const header = document.createElement('div');
                 header.className = 'code-block-header';
-                
                 const langSpan = document.createElement('span');
                 langSpan.textContent = language;
-                
                 const copyBtn = document.createElement('button');
                 copyBtn.className = 'copy-code-btn';
                 copyBtn.textContent = 'Copia';
@@ -461,8 +484,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 header.appendChild(langSpan);
                 header.appendChild(copyBtn);
-                
-                // Crea un wrapper per contenere header e blocco di codice
                 const wrapper = document.createElement('div');
                 wrapper.className = 'code-block-wrapper';
                 preElement.parentNode.insertBefore(wrapper, preElement);
@@ -470,13 +491,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.appendChild(preElement);
             });
             
-            // Applica syntax highlighting a tutti i blocchi di codice nel messaggio
             div.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
             });
             
         } else {
-            // Per i messaggi dell'utente, si limita a mostrare il testo semplice per sicurezza
             div.textContent = text;
         }
 
@@ -485,7 +504,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return div;
     }
 
-    // 🔹 Gestione errori con debug (Invariata)
     function showApiError(errorResponse) {
         const errorMsg = document.createElement("div");
         errorMsg.className = "message bot error";
@@ -523,8 +541,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Funzioni di gestione chat (loadChats, createNewChat, etc.) sono rimaste invariate...
-    // ... omesse per brevità, sono identiche all'originale.
     function loadChats() {
         const chats = JSON.parse(localStorage.getItem('chats')) || [];
         chatList.innerHTML = '<option value="">Seleziona una chat</option>';
@@ -596,11 +612,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function sendMessage() {
         const text = userInput.value.trim();
-        if (!text) return;
+        if (!text && !fileInput.files.length) return;
 
-        appendMessage(text, 'user');
-        saveMessage(currentChatId, { role: 'user', content: text });
-        userInput.value = '';
+        // Gestisci il messaggio dell'utente
+        if (text) {
+            appendMessage(text, 'user');
+            saveMessage(currentChatId, { role: 'user', content: text });
+            userInput.value = '';
+        }
+
+        // Gestisci il caricamento del file
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            appendMessage(`File inviato: ${file.name}`, 'user');
+            saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
+            fileInput.value = ''; // Resetta l'input del file
+        }
+
         const typingNode = appendMessage('Sto pensando...', 'bot');
 
         const requestBody = {
@@ -706,6 +734,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayChat(currentChatId);
 });
 </script>
+
 
 </body>
 </html>

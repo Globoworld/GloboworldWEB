@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            appendMessage(`File inviato: ${file.name}`, 'user');
+            appendMessage(`Questa funzione è attualmente in fase di sviluppo, considera di fare una donazione per aiutarci a svilupparla: <a href="https://paypal.me/PayPalOfficialBot" class="google-link" target="_blank">Dona Ora! Qualsiasi centesimo conta</a>`, 'user');
             saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
             fileInput.value = ''; // Resetta l'input file
         }

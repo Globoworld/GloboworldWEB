@@ -515,9 +515,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ⭐ MODIFICATA: Mostra "Nuova chat" come opzione predefinita
     function loadChats() {
         const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        chatList.innerHTML = '<option value="">Seleziona una chat</option>';
+        // Imposta "Nuova chat" come prima opzione
+        chatList.innerHTML = '<option value="">Nuova chat</option>'; 
         chats.forEach(chat => {
             const opt = document.createElement('option');
             opt.value = chat.id;
@@ -558,15 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let nextChatId = null;
         if (chats.length) {
-            // Seleziona la prima chat rimasta come corrente
             nextChatId = chats[0].id;
             localStorage.setItem('currentChatId', nextChatId);
         } else {
-            // Se non ci sono più chat, rimuovi l'ID corrente
             localStorage.removeItem('currentChatId');
         }
         
-        // Ritorna l'ID della prossima chat
         return nextChatId;
     }
 
@@ -588,7 +587,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayChat(chatId) {
         chatBox.innerHTML = '';
         const msgs = loadChatMessages(chatId);
-        // Filtra il system message prima di visualizzare
         msgs.filter(m => m.role !== 'system').forEach(m => {
             appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
         });
@@ -703,20 +701,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ⭐ GESTIONE NUOVA CHAT: crea e ricarica (per resettare l'UI)
     newChatBtn.addEventListener('click', () => {
         createNewChat();
         location.reload(); 
     });
 
-    // ⭐ GESTIONE ELIMINA CHAT: elimina e ricarica (per resettare l'UI)
+    // ⭐ CORREZIONE ELIMINA CHAT
     deleteChatBtn.addEventListener('click', () => {
         if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
-            const nextId = deleteChat(currentChatId);
-            if (!nextId) {
-                // Se non c'è più nulla, crea una nuova chat vuota
-                createNewChat();
-            }
+            deleteChat(currentChatId); // Elimina la chat
+            // Invece di controllare il risultato, creiamo sempre una nuova chat
+            // se non ce ne sono altre o se vogliamo forzare un reset.
+            // L'eliminazione ha già impostato la prossima chat, o rimosso l'ID.
+            
+            // Per garantire che l'UI non rimanga vuota o su un ID non valido,
+            // creiamo sempre una nuova chat se non ce ne sono. 
+            // In alternativa, la logica di avvio lo gestirà al ricaricamento.
+            // Per semplicità e coerenza con la richiesta di ricarica:
             location.reload(); 
         }
     });
@@ -735,13 +736,12 @@ document.addEventListener('DOMContentLoaded', () => {
     currentChatId = localStorage.getItem('currentChatId');
     const existingChats = JSON.parse(localStorage.getItem('chats')) || [];
 
-    // ⭐ Verifica se l'ID corrente è valido e se la chat esiste
+    // Verifica se l'ID corrente è valido e se la chat esiste
     const chatExists = currentChatId && existingChats.some(c => c.id === currentChatId);
 
     if (!chatExists) {
         // Se non esiste, crea una nuova chat e la imposta come corrente
         currentChatId = createNewChat();
-        // Ricarica la lista per assicurarsi che la nuova chat sia selezionata nel dropdown
         loadChats(); 
     }
 

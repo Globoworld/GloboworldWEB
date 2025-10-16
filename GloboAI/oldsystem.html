@@ -615,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
         const requestBody = {
-            model: 'gemma-3-4b-it',
+            model: 'google/gemma-3-4b-it',
             messages: loadChatMessages(currentChatId)
         };
         try {
@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (chat && chat.title === "Nuova chat") {
                 try {
                     const titleReq = {
-                        model: 'gemma-3-4b-it',
+                        model: 'google/gemma-3-4b-it',
                         messages: [
                             { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
                             ...chat.messages.filter(m => m.role !== 'system').slice(-1)

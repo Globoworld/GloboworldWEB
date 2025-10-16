@@ -410,7 +410,6 @@
 const API_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Definizione corretta delle variabili
     const chatBox = document.getElementById('chat-box');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
@@ -423,12 +422,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentChatId;
 
-    // 🔹 Scroll sempre in fondo
     function scrollToBottom() {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // 💡 Mostra messaggio con supporto Markdown/HTML
     function appendMessage(text, who) {
         const div = document.createElement('div');
         div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
@@ -452,9 +449,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     navigator.clipboard.writeText(codeElement.textContent).then(() => {
                         copyBtn.textContent = 'Copiato!';
                         setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
-                    })
+                    });
                 });
-                
+
                 header.appendChild(langSpan);
                 header.appendChild(copyBtn);
                 const wrapper = document.createElement('div');
@@ -463,11 +460,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 wrapper.appendChild(header);
                 wrapper.appendChild(preElement);
             });
-            
+
             div.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
             });
-            
+
         } else {
             div.textContent = text;
         }
@@ -514,10 +511,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ⭐ MODIFICATA: Mostra "Nuova chat" come opzione predefinita
     function loadChats() {
         const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        // Imposta "Nuova chat" come prima opzione
         chatList.innerHTML = '<option value="">Nuova chat</option>'; 
         chats.forEach(chat => {
             const opt = document.createElement('option');
@@ -595,52 +590,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = userInput.value.trim();
         if (!text && !fileInput.files.length) return;
 
-        // Gestisci il messaggio dell'utente
         if (text) {
             appendMessage(text, 'user');
             saveMessage(currentChatId, { role: 'user', content: text });
             userInput.value = '';
         }
 
-        // 💡 Gestione file (anche se disattivata)
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            appendMessage(`Funzione di caricamento file (**${file.name}**) attualmente in fase di sviluppo, considera una donazione: <a href="https://paypal.me/PayPalOfficialBot" target="_blank">Dona Ora</a>`, 'user');
+            appendMessage(`Funzione di caricamento file (**${file.name}**) attualmente in fase di sviluppo.`, 'user');
             saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
-            fileInput.value = ''; // Resetta l'input file
+            fileInput.value = '';
             return; 
         }
-        
-        // Se invii solo testo, prosegui con l'API
+
         const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
         const requestBody = {
             model: 'gemini-2.5-flash',
-            messages: loadChatMessages(currentChatId)
+            messages: loadChatMessages(currentChatId),
+            temperature: 0.7
         };
+
         try {
-            const res = await fetch(API_URL, {
+            const res = await fetch(`${API_URL}chat:generateMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer AIzaSyCyUuk5VaIgoBdiZEUofAae82VK4Mp-g1Y'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify({
+                    prompt: {
+                        model: requestBody.model,
+                        messages: requestBody.messages
+                    },
+                    temperature: requestBody.temperature
+                })
             });
+
             if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
-            if (!res.ok) {
-                let errorDetails = { status: res.status, statusText: res.statusText };
-                try {
-                    const errorJson = await res.json();
-                    errorDetails = { ...errorDetails, ...errorJson };
-                } catch (e) { /* Ignora */ }
-                throw errorDetails;
-            }
+            if (!res.ok) throw await res.json();
 
             const data = await res.json();
-            let botText = data.choices?.[0]?.message?.content || "Ricarica la pagina e riprova.";
+            let botText = data.candidates?.[0]?.content || "Ricarica la pagina e riprova.";
             appendMessage(botText, 'bot');
             saveMessage(currentChatId, { role: 'assistant', content: botText });
+
             const chats = JSON.parse(localStorage.getItem('chats')) || [];
             const chat = chats.find(c => c.id === currentChatId);
             if (chat && chat.title === "Nuova chat") {
@@ -652,20 +647,26 @@ document.addEventListener('DOMContentLoaded', () => {
                             ...chat.messages.filter(m => m.role !== 'system').slice(-1)
                         ]
                     };
-                    const titleRes = await fetch(API_URL, {
+
+                    const titleRes = await fetch(`${API_URL}chat:generateMessage`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer AIzaSyCyUuk5VaIgoBdiZEUofAae82VK4Mp-g1Y'
                         },
-                        body: JSON.stringify(titleReq)
+                        body: JSON.stringify({
+                            prompt: {
+                                model: titleReq.model,
+                                messages: titleReq.messages
+                            },
+                            temperature: 0.5
+                        })
                     });
+
                     if (titleRes.ok) {
                         const titleData = await titleRes.json();
-                        const newTitle = titleData.choices?.[0]?.message?.content?.trim() || "Nuova chat";
+                        const newTitle = titleData.candidates?.[0]?.content?.trim() || "Nuova chat";
                         updateChatTitle(currentChatId, newTitle);
-                    } else {
-                        console.warn("Fallita la generazione del titolo (status:", titleRes.status, ")");
                     }
                 } catch (titleErr) {
                     console.error("Errore generazione titolo:", titleErr);
@@ -677,10 +678,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showApiError(err);
         }
     }
-
-    // ----------------------------------------------------
-    // 2. Riorganizzazione e attivazione corretta degli Eventi UI
-    // ----------------------------------------------------
 
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
@@ -705,18 +702,9 @@ document.addEventListener('DOMContentLoaded', () => {
         location.reload(); 
     });
 
-    // ⭐ CORREZIONE ELIMINA CHAT
     deleteChatBtn.addEventListener('click', () => {
         if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
-            deleteChat(currentChatId); // Elimina la chat
-            // Invece di controllare il risultato, creiamo sempre una nuova chat
-            // se non ce ne sono altre o se vogliamo forzare un reset.
-            // L'eliminazione ha già impostato la prossima chat, o rimosso l'ID.
-            
-            // Per garantire che l'UI non rimanga vuota o su un ID non valido,
-            // creiamo sempre una nuova chat se non ce ne sono. 
-            // In alternativa, la logica di avvio lo gestirà al ricaricamento.
-            // Per semplicità e coerenza con la richiesta di ricarica:
+            deleteChat(currentChatId);
             location.reload(); 
         }
     });
@@ -730,24 +718,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🔹 Avvio (gestione della persistenza)
     loadChats();
     currentChatId = localStorage.getItem('currentChatId');
     const existingChats = JSON.parse(localStorage.getItem('chats')) || [];
-
-    // Verifica se l'ID corrente è valido e se la chat esiste
     const chatExists = currentChatId && existingChats.some(c => c.id === currentChatId);
 
     if (!chatExists) {
-        // Se non esiste, crea una nuova chat e la imposta come corrente
         currentChatId = createNewChat();
         loadChats(); 
     }
 
-    // Mostra la chat corrente (o quella appena creata)
     displayChat(currentChatId);
 });
 </script>
+
 
 </body>
 </html>

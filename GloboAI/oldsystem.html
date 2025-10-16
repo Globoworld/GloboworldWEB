@@ -407,7 +407,7 @@
     </div>
 
 <script>
-const API_URL = 'https://api.aimlapi.com/v1/chat/completions';
+const API_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/';
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Definizione corretta delle variabili
@@ -615,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
         const requestBody = {
-            model: 'google/gemma-3-4b-it',
+            model: 'gemini-2.5-flash',
             messages: loadChatMessages(currentChatId)
         };
         try {
@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ffd919f715894b37b3373a07ae246a73'
+                    'Authorization': 'Bearer AIzaSyCyUuk5VaIgoBdiZEUofAae82VK4Mp-g1Y'
                 },
                 body: JSON.stringify(requestBody)
             });
@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (chat && chat.title === "Nuova chat") {
                 try {
                     const titleReq = {
-                        model: 'google/gemma-3-4b-it',
+                        model: 'gemini-2.5-flash',
                         messages: [
                             { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
                             ...chat.messages.filter(m => m.role !== 'system').slice(-1)
@@ -656,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ffd919f715894b37b3373a07ae246a73'
+                            'Authorization': 'Bearer AIzaSyCyUuk5VaIgoBdiZEUofAae82VK4Mp-g1Y'
                         },
                         body: JSON.stringify(titleReq)
                     });

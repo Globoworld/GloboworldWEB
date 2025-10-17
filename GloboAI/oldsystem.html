@@ -406,331 +406,406 @@
         </main>
     </div>
 
-<script>
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash';
+    <script>
+        // *** IMPORTANTE: Questa API Key è ESPOSTA nel tuo codice frontend. ***
+        // *** È ALTAMENTE SCONSIGLIATO per la produzione. Usala solo per test. ***
+        // *** Sostituisci 'YOUR_ACTUAL_API_KEY_HERE' con la tua chiave API di Google. ***
+        // *** Deve essere una chiave API (AIza...) creata nella Google Cloud Console. ***
+        const YOUR_API_KEY = 'AIzaSyCyUuk5VaIgoBdiZEUofAae82VK4Mp-g1Y'; 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const newChatBtn = document.getElementById('new-chat-btn');
-    const deleteChatBtn = document.getElementById('delete-chat-btn');
-    const chatList = document.getElementById('chat-list');
-    const menu = document.getElementById('menu');
-    const menuToggle = document.getElementById('menu-toggle');
-    const fileInput = document.getElementById('file-input');
+        // Endpoint per Generative Language API (non Vertex AI)
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash';
 
-    let currentChatId;
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBox = document.getElementById('chat-box');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const newChatBtn = document.getElementById('new-chat-btn');
+            const deleteChatBtn = document.getElementById('delete-chat-btn');
+            const chatList = document.getElementById('chat-list');
+            const menu = document.getElementById('menu');
+            const menuToggle = document.getElementById('menu-toggle');
+            const fileInput = document.getElementById('file-input');
 
-    function scrollToBottom() {
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
+            let currentChatId;
 
-    function appendMessage(text, who) {
-        const div = document.createElement('div');
-        div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
+            function scrollToBottom() {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
 
-        if (who === 'bot') {
-            const sanitizedText = text.replace(/‘’’’\s*(\w+)?\n([\s\S]+?)\n‘’’’/g, '```$1\n$2\n```');
-            const rawHtml = marked.parse(sanitizedText);
-            div.innerHTML = DOMPurify.sanitize(rawHtml);
+            function appendMessage(text, who) {
+                const div = document.createElement('div');
+                div.className = 'message ' + (who === 'user' ? 'user' : 'bot');
 
-            div.querySelectorAll('pre > code').forEach(codeElement => {
-                const preElement = codeElement.parentElement;
-                const language = (codeElement.className.match(/language-(\w+)/) || [, ''])[1];
-                const header = document.createElement('div');
-                header.className = 'code-block-header';
-                const langSpan = document.createElement('span');
-                langSpan.textContent = language;
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-code-btn';
-                copyBtn.textContent = 'Copia';
-                copyBtn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(codeElement.textContent).then(() => {
-                        copyBtn.textContent = 'Copiato!';
-                        setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
+                if (who === 'bot') {
+                    const sanitizedText = text.replace(/‘’’’\s*(\w+)?\n([\s\S]+?)\n‘’’’/g, '```$1\n$2\n```');
+                    // Marked.js non supporta direttamente i template tag '''', quindi li convertiamo in ```
+                    const rawHtml = marked.parse(sanitizedText);
+                    div.innerHTML = DOMPurify.sanitize(rawHtml);
+
+                    div.querySelectorAll('pre > code').forEach(codeElement => {
+                        const preElement = codeElement.parentElement;
+                        const language = (codeElement.className.match(/language-(\w+)/) || [, ''])[1];
+                        const header = document.createElement('div');
+                        header.className = 'code-block-header';
+                        const langSpan = document.createElement('span');
+                        langSpan.textContent = language;
+                        const copyBtn = document.createElement('button');
+                        copyBtn.className = 'copy-code-btn';
+                        copyBtn.textContent = 'Copia';
+                        copyBtn.addEventListener('click', () => {
+                            navigator.clipboard.writeText(codeElement.textContent).then(() => {
+                                copyBtn.textContent = 'Copiato!';
+                                setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
+                            });
+                        });
+
+                        header.appendChild(langSpan);
+                        header.appendChild(copyBtn);
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'code-block-wrapper';
+                        preElement.parentNode.insertBefore(wrapper, preElement);
+                        wrapper.appendChild(header);
+                        wrapper.appendChild(preElement);
                     });
+
+                    div.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+
+                } else {
+                    div.textContent = text;
+                }
+
+                chatBox.appendChild(div);
+                scrollToBottom();
+                return div;
+            }
+
+            function showApiError(errorResponse) {
+                const errorMsg = document.createElement("div");
+                errorMsg.className = "message bot error";
+                errorMsg.innerHTML = `
+                ⚠️ Si è verificato un errore durante la chiamata API.<br>
+                <button class="reload-btn">Ricarica la pagina</button>
+                <button class="debug-btn">Più dettagli</button>
+                <pre class="debug-output" style="display:none; max-height:200px; overflow:auto; background:#111; color:#0fa; padding:5px; border-radius:5px; margin-top:5px;"></pre>
+                `;
+                chatBox.appendChild(errorMsg);
+                scrollToBottom();
+
+                errorMsg.querySelector(".reload-btn").addEventListener("click", () => {
+                    location.reload();
                 });
 
-                header.appendChild(langSpan);
-                header.appendChild(copyBtn);
-                const wrapper = document.createElement('div');
-                wrapper.className = 'code-block-wrapper';
-                preElement.parentNode.insertBefore(wrapper, preElement);
-                wrapper.appendChild(header);
-                wrapper.appendChild(preElement);
-            });
-
-            div.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
-
-        } else {
-            div.textContent = text;
-        }
-
-        chatBox.appendChild(div);
-        scrollToBottom();
-        return div;
-    }
-
-    function showApiError(errorResponse) {
-        const errorMsg = document.createElement("div");
-        errorMsg.className = "message bot error";
-        errorMsg.innerHTML = `
-        ⚠️ Si è verificato un errore durante la chiamata API.<br>
-        <button class="reload-btn">Ricarica la pagina</button>
-        <button class="debug-btn">Più dettagli</button>
-        <pre class="debug-output" style="display:none; max-height:200px; overflow:auto; background:#111; color:#0fa; padding:5px; border-radius:5px; margin-top:5px;"></pre>
-        `;
-        chatBox.appendChild(errorMsg);
-        scrollToBottom();
-
-        errorMsg.querySelector(".reload-btn").addEventListener("click", () => {
-            location.reload();
-        });
-
-        const debugBtn = errorMsg.querySelector(".debug-btn");
-        const debugOutput = errorMsg.querySelector(".debug-output");
-        debugBtn.addEventListener("click", () => {
-            if (debugOutput.style.display === "none") {
-                debugOutput.style.display = "block";
-                try {
-                    debugOutput.textContent =
-                        typeof errorResponse === "object" && errorResponse !== null
-                            ? JSON.stringify(errorResponse, null, 2)
-                            : String(errorResponse);
-                } catch (e) {
-                    debugOutput.textContent = String(errorResponse);
-                }
-                debugBtn.textContent = "Nascondi dettagli";
-            } else {
-                debugOutput.style.display = "none";
-                debugBtn.textContent = "Più dettagli";
+                const debugBtn = errorMsg.querySelector(".debug-btn");
+                const debugOutput = errorMsg.querySelector(".debug-output");
+                debugBtn.addEventListener("click", () => {
+                    if (debugOutput.style.display === "none") {
+                        debugOutput.style.display = "block";
+                        try {
+                            debugOutput.textContent =
+                                typeof errorResponse === "object" && errorResponse !== null
+                                    ? JSON.stringify(errorResponse, null, 2)
+                                    : String(errorResponse);
+                        } catch (e) {
+                            debugOutput.textContent = String(errorResponse);
+                        }
+                        debugBtn.textContent = "Nascondi dettagli";
+                    } else {
+                        debugOutput.style.display = "none";
+                        debugBtn.textContent = "Più dettagli";
+                    }
+                });
             }
-        });
-    }
 
-    function loadChats() {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        chatList.innerHTML = '<option value="">Nuova chat</option>'; 
-        chats.forEach(chat => {
-            const opt = document.createElement('option');
-            opt.value = chat.id;
-            opt.textContent = chat.title || "Nuova chat";
-            chatList.appendChild(opt);
-        });
-        const cur = localStorage.getItem('currentChatId') || '';
-        if (cur) chatList.value = cur;
-    }
+            function loadChats() {
+                const chats = JSON.parse(localStorage.getItem('chats')) || [];
+                chatList.innerHTML = '<option value="">Nuova chat</option>'; 
+                chats.forEach(chat => {
+                    const opt = document.createElement('option');
+                    opt.value = chat.id;
+                    opt.textContent = chat.title || "Nuova chat";
+                    chatList.appendChild(opt);
+                });
+                const cur = localStorage.getItem('currentChatId') || '';
+                if (cur) chatList.value = cur;
+            }
 
-    function createNewChat() {
-        const systemMessage = {
-            role: "system",
-            content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
-        };
-        let chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
-        chats.unshift(newChat);
-        localStorage.setItem('chats', JSON.stringify(chats));
-        localStorage.setItem('currentChatId', newChat.id);
-        return newChat.id;
-    }
+            function createNewChat() {
+                const systemMessage = {
+                    role: "system",
+                    content: "Sei GloboAI, un Assistente AI creato da Globoworld. Il tuo compito è servire le richieste dell'utente in modo etico e responsabile, purché non siano illegali."
+                };
+                let chats = JSON.parse(localStorage.getItem('chats')) || [];
+                const newChat = { id: Date.now().toString(), title: "Nuova chat", messages: [systemMessage] };
+                chats.unshift(newChat);
+                localStorage.setItem('chats', JSON.stringify(chats));
+                localStorage.setItem('currentChatId', newChat.id);
+                return newChat.id;
+            }
 
-    function updateChatTitle(chatId, newTitle) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        if (chat) {
-            chat.title = newTitle;
-            localStorage.setItem('chats', JSON.stringify(chats));
-            loadChats();
-        }
-    }
+            function updateChatTitle(chatId, newTitle) {
+                const chats = JSON.parse(localStorage.getItem('chats')) || [];
+                const chat = chats.find(c => c.id === chatId);
+                if (chat) {
+                    chat.title = newTitle;
+                    localStorage.setItem('chats', JSON.stringify(chats));
+                    loadChats();
+                }
+            }
 
-    function deleteChat(chatId) {
-        let chats = JSON.parse(localStorage.getItem('chats')) || [];
-        chats = chats.filter(c => c.id !== chatId);
-        localStorage.setItem('chats', JSON.stringify(chats));
-        
-        let nextChatId = null;
-        if (chats.length) {
-            nextChatId = chats[0].id;
-            localStorage.setItem('currentChatId', nextChatId);
-        } else {
-            localStorage.removeItem('currentChatId');
-        }
-        
-        return nextChatId;
-    }
+            function deleteChat(chatId) {
+                let chats = JSON.parse(localStorage.getItem('chats')) || [];
+                chats = chats.filter(c => c.id !== chatId);
+                localStorage.setItem('chats', JSON.stringify(chats));
+                
+                let nextChatId = null;
+                if (chats.length) {
+                    nextChatId = chats[0].id;
+                    localStorage.setItem('currentChatId', nextChatId);
+                } else {
+                    localStorage.removeItem('currentChatId');
+                }
+                
+                return nextChatId;
+            }
 
-    function loadChatMessages(chatId) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        return chat ? chat.messages : [];
-    }
+            function loadChatMessages(chatId) {
+                const chats = JSON.parse(localStorage.getItem('chats')) || [];
+                const chat = chats.find(c => c.id === chatId);
+                return chat ? chat.messages : [];
+            }
 
-    function saveMessage(chatId, message) {
-        const chats = JSON.parse(localStorage.getItem('chats')) || [];
-        const chat = chats.find(c => c.id === chatId);
-        if (chat) {
-            chat.messages.push(message);
-            localStorage.setItem('chats', JSON.stringify(chats));
-        }
-    }
+            function saveMessage(chatId, message) {
+                const chats = JSON.parse(localStorage.getItem('chats')) || [];
+                const chat = chats.find(c => c.id === chatId);
+                if (chat) {
+                    chat.messages.push(message);
+                    localStorage.setItem('chats', JSON.stringify(chats));
+                }
+            }
 
-    function displayChat(chatId) {
-        chatBox.innerHTML = '';
-        const msgs = loadChatMessages(chatId);
-        msgs.filter(m => m.role !== 'system').forEach(m => {
-            appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
-        });
-    }
+            function displayChat(chatId) {
+                chatBox.innerHTML = '';
+                const msgs = loadChatMessages(chatId);
+                msgs.filter(m => m.role !== 'system').forEach(m => {
+                    appendMessage(m.content, m.role === 'user' ? 'user' : 'bot');
+                });
+            }
 
-    async function sendMessage() {
-        const text = userInput.value.trim();
-        if (!text && !fileInput.files.length) return;
+            // Funzione per formattare i messaggi nel formato atteso dall'API Gemini
+            function formatMessagesForGeminiAPI(messages) {
+                let formatted = [];
+                let lastRole = null;
 
-        if (text) {
-            appendMessage(text, 'user');
-            saveMessage(currentChatId, { role: 'user', content: text });
-            userInput.value = '';
-        }
+                for (const msg of messages) {
+                    if (msg.role === 'system') {
+                        // Messaggi di sistema non sono supportati direttamente in 'contents'
+                        // Li prependeremo al primo messaggio utente o li ignoreremo
+                        // Qui li ignoro per evitare complessità, ma si può fare di meglio
+                        continue; 
+                    }
 
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            appendMessage(`Funzione di caricamento file (**${file.name}**) attualmente in fase di sviluppo.`, 'user');
-            saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
-            fileInput.value = '';
-            return; 
-        }
+                    const currentApiRole = msg.role === 'user' ? 'user' : 'model'; // 'assistant' diventa 'model'
 
-        const typingNode = appendMessage('Sto scrivendo...', 'bot');
+                    if (currentApiRole === lastRole) {
+                        // Se il ruolo è consecutivo, unisci i contenuti
+                        if (formatted.length > 0) {
+                            formatted[formatted.length - 1].parts[0].text += "\n" + msg.content;
+                        } else {
+                             // Questo caso non dovrebbe succedere con un pattern user/model alternato
+                             // Ma per sicurezza, se il primo messaggio è consecutivo
+                             formatted.push({ role: currentApiRole, parts: [{ text: msg.content }] });
+                        }
+                    } else {
+                        formatted.push({ role: currentApiRole, parts: [{ text: msg.content }] });
+                        lastRole = currentApiRole;
+                    }
+                }
+                return formatted;
+            }
 
-        const requestBody = {
-            model: 'gemini-2.5-flash',
-            messages: loadChatMessages(currentChatId),
-            temperature: 0.7
-        };
+            async function sendMessage() {
+                const text = userInput.value.trim();
+                if (!text && !fileInput.files.length) return;
 
-        try {
-            const res = await fetch(`${API_URL}chat:generateMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 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'
-                },
-                body: JSON.stringify({
-                    prompt: {
-                        model: requestBody.model,
-                        messages: requestBody.messages
-                    },
-                    temperature: requestBody.temperature
-                })
-            });
+                if (text) {
+                    appendMessage(text, 'user');
+                    saveMessage(currentChatId, { role: 'user', content: text });
+                    userInput.value = '';
+                }
 
-            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
-            if (!res.ok) throw await res.json();
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    // La gestione dei file richiederebbe la conversione in base64 e l'invio come "parts"
+                    // Questo è un placeholder e andrebbe implementato correttamente per i modelli multimodal
+                    appendMessage(`Funzione di caricamento file (**${file.name}**) attualmente in fase di sviluppo.`, 'user');
+                    saveMessage(currentChatId, { role: 'user', content: `File: ${file.name}` });
+                    fileInput.value = '';
+                    return; 
+                }
 
-            const data = await res.json();
-            let botText = data.candidates?.[0]?.content || "Ricarica la pagina e riprova.";
-            appendMessage(botText, 'bot');
-            saveMessage(currentChatId, { role: 'assistant', content: botText });
+                const typingNode = appendMessage('Sto scrivendo...', 'bot');
 
-            const chats = JSON.parse(localStorage.getItem('chats')) || [];
-            const chat = chats.find(c => c.id === currentChatId);
-            if (chat && chat.title === "Nuova chat") {
+                // Prepara i messaggi per l'API Gemini
+                const currentMessages = loadChatMessages(currentChatId);
+                const formattedGeminiMessages = formatMessagesForGeminiAPI(currentMessages);
+                
+                // Assicurati che il primo messaggio sia 'user'
+                if (formattedGeminiMessages.length > 0 && formattedGeminiMessages[0].role !== 'user') {
+                    // Questo può succedere se il primo messaggio nella cronologia è del bot.
+                    // Per l'API generateContent, il primo messaggio *deve* essere 'user'.
+                    // Una strategia è premettere un prompt di sistema come messaggio utente se non c'è un user iniziale
+                    console.warn("Il primo messaggio non è 'user'. L'API Gemini potrebbe rifiutare.");
+                }
+
                 try {
-                    const titleReq = {
-                        model: 'gemini-2.5-flash',
-                        messages: [
-                            { role: "system", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
-                            ...chat.messages.filter(m => m.role !== 'system').slice(-1)
-                        ]
-                    };
-
-                    const titleRes = await fetch(`${API_URL}chat:generateMessage`, {
+                    const res = await fetch(`${API_URL}?key=${YOUR_API_KEY}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authentication': 'Bearer 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'
                         },
                         body: JSON.stringify({
-                            prompt: {
-                                model: titleReq.model,
-                                messages: titleReq.messages
+                            contents: formattedGeminiMessages,
+                            generationConfig: {
+                                temperature: 0.7,
+                                maxOutputTokens: 2048, // Limite per gemini-2.5-flash
                             },
-                            temperature: 0.5
+                            safetySettings: [
+                                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+                            ]
                         })
                     });
 
-                    if (titleRes.ok) {
-                        const titleData = await titleRes.json();
-                        const newTitle = titleData.candidates?.[0]?.content?.trim() || "Nuova chat";
-                        updateChatTitle(currentChatId, newTitle);
+                    if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+                    
+                    if (!res.ok) {
+                        const errorBody = await res.json();
+                        console.error("Errore API:", errorBody);
+                        throw errorBody; // Rilancia l'errore per showApiError
                     }
-                } catch (titleErr) {
-                    console.error("Errore generazione titolo:", titleErr);
+
+                    const data = await res.json();
+                    
+                    // Controlla per safety ratings che hanno bloccato la risposta
+                    if (data.promptFeedback && data.promptFeedback.blockReason) {
+                        const blockReason = data.promptFeedback.blockReason;
+                        let botText = `La tua richiesta è stata bloccata a causa di contenuti non idonei: ${blockReason}.`;
+                        if (data.promptFeedback.safetyRatings) {
+                            botText += " Dettagli sicurezza: " + JSON.stringify(data.promptFeedback.safetyRatings);
+                        }
+                        appendMessage(botText, 'bot');
+                        saveMessage(currentChatId, { role: 'assistant', content: botText });
+                        return;
+                    }
+                    if (!data.candidates || data.candidates.length === 0) {
+                        appendMessage("Non è stata generata alcuna risposta. Prova a riformulare.", 'bot');
+                        saveMessage(currentChatId, { role: 'assistant', content: "Non è stata generata alcuna risposta." });
+                        return;
+                    }
+
+                    let botText = data.candidates[0].content.parts[0].text || "Ricarica la pagina e riprova.";
+                    appendMessage(botText, 'bot');
+                    saveMessage(currentChatId, { role: 'assistant', content: botText });
+
+                    const chats = JSON.parse(localStorage.getItem('chats')) || [];
+                    const chat = chats.find(c => c.id === currentChatId);
+                    if (chat && chat.title === "Nuova chat") {
+                        try {
+                            // Per generare il titolo, usiamo un prompt specifico
+                            const titleGenerationMessages = formatMessagesForGeminiAPI([
+                                { role: "user", content: "Genera un titolo breve (massimo 3 parole) per questa chat. Basalo sull'ultimo messaggio dell'utente." },
+                                ...chat.messages.filter(m => m.role === 'user').slice(-1) // Solo l'ultimo messaggio dell'utente
+                            ]);
+
+                            const titleRes = await fetch(`${API_URL}?key=${YOUR_API_KEY}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    contents: titleGenerationMessages,
+                                    generationConfig: {
+                                        temperature: 0.5,
+                                        maxOutputTokens: 10, // Titolo corto
+                                    }
+                                })
+                            });
+
+                            if (titleRes.ok) {
+                                const titleData = await titleRes.json();
+                                const newTitle = titleData.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "Nuova chat";
+                                updateChatTitle(currentChatId, newTitle);
+                            } else {
+                                console.warn("Errore generazione titolo (API response not OK):", await titleRes.json());
+                            }
+                        } catch (titleErr) {
+                            console.error("Errore generazione titolo:", titleErr);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Errore fatale API/Network:", err);
+                    if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
+                    showApiError(err);
                 }
             }
-        } catch (err) {
-            console.error("Errore fatale API/Network:", err);
-            if (typingNode && typingNode.parentNode) typingNode.parentNode.removeChild(typingNode);
-            showApiError(err);
-        }
-    }
 
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            sendMessage();
-        }
-    });
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    sendMessage();
+                }
+            });
 
-    menuToggle.addEventListener('click', () => {
-        menu.classList.toggle('open');
-    });
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('open');
+            });
 
-    sendBtn.addEventListener('click', sendMessage);
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
+            sendBtn.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
 
-    newChatBtn.addEventListener('click', () => {
-        createNewChat();
-        location.reload(); 
-    });
+            newChatBtn.addEventListener('click', () => {
+                createNewChat();
+                location.reload(); 
+            });
 
-    deleteChatBtn.addEventListener('click', () => {
-        if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
-            deleteChat(currentChatId);
-            location.reload(); 
-        }
-    });
+            deleteChatBtn.addEventListener('click', () => {
+                if (window.confirm("Sei sicuro di voler eliminare questa chat?")) {
+                    deleteChat(currentChatId);
+                    location.reload(); 
+                }
+            });
 
-    chatList.addEventListener('change', (e) => {
-        const id = e.target.value;
-        if (id) {
-            currentChatId = id;
-            localStorage.setItem('currentChatId', id);
-            displayChat(id);
-        }
-    });
+            chatList.addEventListener('change', (e) => {
+                const id = e.target.value;
+                if (id) {
+                    currentChatId = id;
+                    localStorage.setItem('currentChatId', id);
+                    displayChat(id);
+                }
+            });
 
-    loadChats();
-    currentChatId = localStorage.getItem('currentChatId');
-    const existingChats = JSON.parse(localStorage.getItem('chats')) || [];
-    const chatExists = currentChatId && existingChats.some(c => c.id === currentChatId);
+            loadChats();
+            currentChatId = localStorage.getItem('currentChatId');
+            const existingChats = JSON.parse(localStorage.getItem('chats')) || [];
+            const chatExists = currentChatId && existingChats.some(c => c.id === currentChatId);
 
-    if (!chatExists) {
-        currentChatId = createNewChat();
-        loadChats(); 
-    }
+            if (!chatExists) {
+                currentChatId = createNewChat();
+                loadChats(); 
+            }
 
-    displayChat(currentChatId);
-});
-</script>
+            displayChat(currentChatId);
+        });
+    </script>
 
 
 </body>

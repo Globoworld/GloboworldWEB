@@ -33,7 +33,7 @@ self.addEventListener("activate", event => {
 
 // Fetch: cache-first con fallback alla rete
 self.addEventListener("fetch", event => {
-  if (event.request.url.startsWith("https://globoworld.github.io/GloboworldWEB/")) {
+  if (event.request.url.startsWith("https://globoworld.github.io/")) {
     event.respondWith(
       caches.match(event.request).then(response => {
         return (
@@ -46,7 +46,7 @@ self.addEventListener("fetch", event => {
           }).catch(() => {
             // Fallback offline: mostra index.html per navigazioni
             if (event.request.mode === "navigate") {
-              return caches.match("/GloboworldWEB/index.html");
+              return caches.match("index.html");
             }
           })
         );

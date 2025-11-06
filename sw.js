@@ -3,8 +3,8 @@ const CACHE_NAME = "globoworld-cache-v1";
 
 // File precache (puoi aggiungere CSS, JS, immagini se vuoi)
 const PRECACHE_URLS = [
-  "/GloboworldWEB/",
-  "/GloboworldWEB/index.html"
+  "/",
+  "/index.html"
 ];
 
 // Install: precache delle risorse di base

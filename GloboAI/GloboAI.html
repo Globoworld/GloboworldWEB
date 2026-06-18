@@ -1,9 +1,264 @@
-<html>
-    <head>
-        <title>GloboAI is down!</title>
-        </head>
-        <body>
-            <h1>Maintenance Break!</h1>
-            <h2>GloboAI is temporarily disabled due to maintenance issues, we're working hard to bring it back on!</h2>
-        </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GloboAI is Back!</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root { --bg: #000; --card: #111; --accent: #2ecc71; --rp: #a29bfe; --text: #fff; --nav-h: 70px; --head-h: 60px; }
+        
+        body { top: 0 !important; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
+        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
+        .goog-te-gadget-simple { background-color: transparent !important; border: none !important; padding: 0 !important; }
+        .goog-te-menu-value span { color: transparent !important; font-size: 0 !important; }
+        #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        #header { height: var(--head-h); display: flex; align-items: center; padding: 0 20px; border-bottom: 1px solid #1a1a1a; justify-content: space-between; position: sticky; top: 0; background: var(--bg); z-index: 100; }
+        .back-btn { font-size: 24px; cursor: pointer; display: none; background: none; border: none; color: white; }
+        .logo { font-weight: 900; letter-spacing: -1px; font-size: 1.1rem; color: var(--accent); }
+
+        #home-view, #chat-view { height: calc(100vh - var(--nav-h) - var(--head-h)); overflow-y: auto; display: none; }
+        #home-view.active, #chat-view.active { display: block; }
+        
+        .chat-list-section { padding: 15px; }
+        .section-label { font-size: 0.65rem; color: #444; text-transform: uppercase; margin: 20px 0 10px 5px; font-weight: bold; letter-spacing: 1px; }
+        
+        .list-item { background: var(--card); margin-bottom: 10px; padding: 18px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1a1a1a; }
+        .chat-info { flex: 1; display: flex; flex-direction: column; cursor: pointer; overflow: hidden; }
+        .chat-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+        .chat-meta { font-size: 0.7rem; color: #555; }
+
+        .item-actions { display: flex; gap: 10px; }
+        .action-icon { background: none; border: none; color: white; opacity: 0.3; font-size: 1.1rem; padding: 5px; cursor: pointer; }
+
+        #chat-window { padding: 20px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 120px; }
+        .msg { max-width: 85%; padding: 14px 18px; border-radius: 20px; line-height: 1.5; font-size: 1rem; }
+        .msg.user { align-self: flex-end; background: #222; border: 1px solid #333; }
+        .msg.ai { align-self: flex-start; background: transparent; width: 100%; border-left: 2px solid #333; padding-left: 15px; border-radius: 0; }
+        .msg.rp-ai { border-left-color: var(--rp); font-style: italic; color: #ddd; }
+        
+        /* Thinking Block */
+        .thought { color: #ffa500; font-family: monospace; font-size: 0.8rem; margin-bottom: 10px; display: block; background: #1a140a; padding: 8px; border-radius: 8px; font-style: normal; }
+        .hide-thinking .thought { display: none; }
+
+        #bottom-bar { position: fixed; bottom: 0; width: 100%; height: var(--nav-h); background: #000; border-top: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 105; }
+        .nav-btn { background: none; border: none; color: white; font-size: 1.6rem; cursor: pointer; transition: 0.2s; }
+        .nav-btn:active { transform: scale(0.9); opacity: 0.7; }
+
+        #input-area { display: none; width: 100%; gap: 10px; padding: 10px 15px; background: #000; border-top: 1px solid #1a1a1a; position: fixed; bottom: var(--nav-h); z-index: 110; }
+        #input-area.active { display: flex; }
+        #userInput { flex: 1; background: #111; color: #fff; border: 1px solid #333; border-radius: 25px; padding: 12px 20px; outline: none; }
+        #sendBtn { background: var(--accent); color: #000; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 500; padding: 40px 20px; overflow-y: auto; }
+        .btn-act { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        .toggle-container { display: flex; align-items: center; gap: 10px; margin: 15px 0; background: #1a1a1a; padding: 12px; border-radius: 10px; border: 1px solid #333; }
+    </style>
+</head>
+<body>
+
+    <div id="header">
+        <button class="back-btn" id="backArrow" onclick="goHome()">←</button>
+        <div class="logo">GLOBO AI</div>
+        <div id="google_translate_element"></div>
+    </div>
+
+    <div id="home-view" class="active">
+        <div class="chat-list-section">
+            <div class="section-label">Normal Chats</div>
+            <div id="list-normal"></div>
+            <div class="section-label">Roleplay Hub</div>
+            <div id="list-rp"></div>
+        </div>
+    </div>
+
+    <div id="chat-view">
+        <div id="chat-window"></div>
+    </div>
+
+    <div id="input-area">
+        <input type="text" id="userInput" placeholder="Message...">
+        <button id="sendBtn">↑</button>
+    </div>
+
+    <div id="bottom-bar">
+        <button id="btn-plus" class="nav-btn" onclick="openModal('choice')">＋</button>
+        <button id="btn-home" class="nav-btn" onclick="goHome()">⌂</button>
+        
+        <button id="btn-regen" class="nav-btn" style="display:none" onclick="regenerateLast()">↻</button>
+        <button id="btn-think" class="nav-btn" style="display:none" onclick="toggleThinking()">◌</button>
+        
+        <button class="nav-btn" onclick="document.querySelector('.goog-te-gadget-simple').click()">🌐</button>
+    </div>
+
+    <div id="modal-choice" class="modal">
+        <h2 style="text-align:center">New Conversation</h2>
+        <button class="btn-act" style="background:var(--accent)" onclick="openModal('norm')">Normal Chat</button>
+        <button class="btn-act" style="background:var(--rp)" onclick="openModal('rp')">RolePlay Chat</button>
+        <button class="btn-act" style="background:#222; color:#fff" onclick="closeModals()">✕ Close</button>
+    </div>
+
+    <div id="modal-norm" class="modal">
+        <h2>Custom Rules</h2>
+        <textarea id="norm-prompt" rows="4" style="width:100%; background:#111; color:white; border:1px solid #333; padding:10px; border-radius:10px" placeholder="Example: Be concise..."></textarea>
+        <button class="btn-act" style="background:var(--accent)" onclick="createChat('normal')">Start</button>
+    </div>
+
+    <div id="modal-rp" class="modal">
+        <h2>Create Persona</h2>
+        <div class="toggle-container">
+            <input type="checkbox" id="better-rp" checked>
+            <label for="better-rp" style="font-size: 0.85rem; color: var(--accent); font-weight: bold;">Better Roleplay (EXP)</label>
+        </div>
+        <input type="text" id="rp-name" style="width:100%; background:#111; color:white; border:1px solid #333; padding:10px; border-radius:10px; margin-bottom:10px" placeholder="Name">
+        <textarea id="rp-desc" rows="4" style="width:100%; background:#111; color:white; border:1px solid #333; padding:10px; border-radius:10px; margin-bottom:10px" placeholder="Bio..."></textarea>
+        <textarea id="rp-greet" rows="2" style="width:100%; background:#111; color:white; border:1px solid #333; padding:10px; border-radius:10px" placeholder="Intro message..."></textarea>
+        <button class="btn-act" style="background:var(--rp)" onclick="createChat('rp')">Start</button>
+    </div>
+
+    <script>
+        const API_KEY = "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";
+        const MODEL = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free";
+        const ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+
+        let chats = JSON.parse(localStorage.getItem('globo_v11_chats')) || [];
+        let currentId = null;
+        let isThinkingHidden = false;
+
+        function save() { localStorage.setItem('globo_v11_chats', JSON.stringify(chats)); renderList(); }
+
+        function goHome() {
+            currentId = null;
+            document.getElementById('home-view').classList.add('active');
+            document.getElementById('chat-view').classList.remove('active');
+            document.getElementById('input-area').classList.remove('active');
+            document.getElementById('backArrow').style.display = 'none';
+            toggleNavIcons(false);
+            renderList();
+        }
+
+        function openChat(id) {
+            currentId = id;
+            document.getElementById('home-view').classList.remove('active');
+            document.getElementById('chat-view').classList.add('active');
+            document.getElementById('input-area').classList.add('active');
+            document.getElementById('backArrow').style.display = 'block';
+            toggleNavIcons(true);
+            renderMessages();
+        }
+
+        function toggleNavIcons(inChat) {
+            document.getElementById('btn-plus').style.display = inChat ? 'none' : 'block';
+            document.getElementById('btn-home').style.display = inChat ? 'none' : 'block';
+            document.getElementById('btn-regen').style.display = inChat ? 'block' : 'none';
+            document.getElementById('btn-think').style.display = inChat ? 'block' : 'none';
+        }
+
+        function toggleThinking() {
+            isThinkingHidden = !isThinkingHidden;
+            document.body.classList.toggle('hide-thinking', isThinkingHidden);
+            document.getElementById('btn-think').style.color = isThinkingHidden ? '#555' : 'white';
+        }
+
+        function openModal(m) { closeModals(); document.getElementById('modal-' + m).style.display = 'block'; }
+        function closeModals() { ['choice', 'norm', 'rp'].forEach(m => document.getElementById('modal-'+m).style.display='none'); }
+
+        function createChat(type) {
+            const id = Date.now().toString();
+            let newChat;
+            if(type === 'normal') {
+                newChat = { id, title: "New Chat", type, system: document.getElementById('norm-prompt').value, messages: [] };
+            } else {
+                const name = document.getElementById('rp-name').value || "Character";
+                let rpSys = `You are ${name}. ${document.getElementById('rp-desc').value}. 1. STAY IN CHARACTER. 2. NO OPTIONS.`;
+                if(document.getElementById('better-rp').checked) rpSys += " Avoid flowery metaphors and bizarre analogies. Stay grounded.";
+                newChat = { id, title: "🎭 " + name, type, system: rpSys, messages: document.getElementById('rp-greet').value ? [{role:"assistant", content: document.getElementById('rp-greet').value}] : [] };
+            }
+            chats.unshift(newChat); save(); closeModals(); openChat(id);
+        }
+
+        function deleteChat(id) { if(confirm("Delete?")) { chats = chats.filter(c => c.id !== id); save(); } }
+        function renameChat(id) { const c = chats.find(x => x.id === id); const nt = prompt("Rename:", c.title); if(nt){c.title=nt;save();}}
+
+        function renderList() {
+            const nl = document.getElementById('list-normal'), rl = document.getElementById('list-rp');
+            nl.innerHTML = ''; rl.innerHTML = '';
+            chats.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `<div class="chat-info" onclick="openChat('${c.id}')"><span class="chat-title">${c.title}</span><span class="chat-meta">${c.messages.length} msgs</span></div><div class="item-actions"><button class="action-icon" onclick="renameChat('${c.id}')">✎</button><button class="action-icon" onclick="deleteChat('${c.id}')">✕</button></div>`;
+                (c.type === 'rp' ? rl : nl).appendChild(div);
+            });
+        }
+
+        function renderMessages() {
+            const win = document.getElementById('chat-window'), chat = chats.find(c => c.id === currentId);
+            win.innerHTML = ''; if(!chat) return;
+            chat.messages.forEach(m => {
+                const d = document.createElement('div');
+                d.className = `msg ${m.role === 'user' ? 'user' : 'ai'} ${chat.type === 'rp' && m.role === 'assistant' ? 'rp-ai' : ''}`;
+                d.innerHTML = (m.reasoning ? `<span class="thought">◌ Thinking: ${m.reasoning}</span>` : '') + marked.parse(m.content || "");
+                win.appendChild(d);
+            });
+            win.scrollTop = win.scrollHeight;
+        }
+
+        async function streamAI(chat) {
+            const aiMsg = { role: "assistant", content: "" }; chat.messages.push(aiMsg);
+            const aiDiv = document.createElement('div'); aiDiv.className = `msg ai ${chat.type === 'rp' ? 'rp-ai' : ''}`;
+            document.getElementById('chat-window').appendChild(aiDiv);
+
+            const res = await fetch(ENDPOINT, {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ model: MODEL, messages: chat.system ? [{role:"system", content:chat.system}, ...chat.messages.slice(0,-1)] : chat.messages.slice(0,-1), stream: true, include_reasoning: true })
+            });
+
+            const reader = res.body.getReader(), decoder = new TextDecoder();
+            while(true) {
+                const {done, value} = await reader.read(); if(done) break;
+                decoder.decode(value).split('\n').forEach(l => {
+                    if(!l.startsWith('data: ')) return;
+                    const ds = l.slice(6).trim(); if(ds === '[DONE]') return;
+                    try {
+                        const d = JSON.parse(ds).choices[0].delta;
+                        if(d.reasoning_content || d.reasoning) aiMsg.reasoning = (aiMsg.reasoning || "") + (d.reasoning_content || d.reasoning);
+                        if(d.content) aiMsg.content += d.content;
+                        aiDiv.innerHTML = (aiMsg.reasoning ? `<span class="thought">◌ Thinking: ${aiMsg.reasoning}</span>` : '') + marked.parse(aiMsg.content);
+                        document.getElementById('chat-view').scrollTop = document.getElementById('chat-view').scrollHeight;
+                    } catch(e){}
+                });
+            }
+            save();
+        }
+
+        async function regenerateLast() {
+            const chat = chats.find(c => c.id === currentId);
+            if(!chat || chat.messages.length < 1) return;
+            if(chat.messages[chat.messages.length - 1].role === "assistant") chat.messages.pop();
+            renderMessages();
+            await streamAI(chat);
+        }
+
+        document.getElementById('sendBtn').addEventListener('click', async () => {
+            const input = document.getElementById('userInput'), text = input.value.trim(), chat = chats.find(c => c.id === currentId);
+            if(!text || !chat) return;
+            const isFirst = chat.type === 'normal' && chat.messages.length === 0;
+            chat.messages.push({ role: "user", content: text }); input.value = ''; renderMessages();
+            await streamAI(chat);
+            if(isFirst) {
+                const r = await fetch(ENDPOINT, { method: "POST", headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" }, body: JSON.stringify({ model: MODEL, messages: [{role:"user", content: "Title in 3 words: " + text}] }) });
+                const d = await r.json(); chat.title = d.choices[0].message.content.replace(/[".]/g, ""); save();
+            }
+        });
+
+        function googleTranslateElementInit() { new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element'); }
+        renderList();
+    </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
 </html>
